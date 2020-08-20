@@ -41,35 +41,10 @@ class SignInScreen extends Component {
   }
 
   handleSubmit(values, actions) {
-    console.tron.log('onSubmit ', values, actions)
-    alert('as')
-  }
-
-  onSubmit = () => {
-    const { phoneCode, phoneNumber, password } = this.state
-
-    phoneNumber === '' ? this.setState({ errorPhoneNumber: true }) : this.setState({ errorPhoneNumber: false })
-    password === '' ? this.setState({ errorPassword: true }) : this.setState({ errorPassword: false })
-
-    if (phoneNumber !== '' && password !== '') {
-      const params = {
-        phone: phoneCode + phoneNumber,
-        password: password
-      }
-
-      this.props.navigation.navigate('App')
-      console.log(params)
-    }
+    this.props.navigation.navigate('App')
   }
 
   renderForm = (props) => {
-    // const {
-    //   phoneCode,
-    //   phoneNumber,
-    //   password,
-    //   errorPhoneNumber,
-    //   errorPassword
-    // } = this.state
     return (
       <KeyboardAwareScrollView extraScrollHeight={40} style={{ marginHorizontal: 25 }}>
         <Styled.Container padded style={{ borderRadius: 10 }}>
