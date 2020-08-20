@@ -34,5 +34,8 @@
    },
    "location": {
       "location": "Location"
+   },
+   "sales": {
+      "sales": "Sales"
    }
 }

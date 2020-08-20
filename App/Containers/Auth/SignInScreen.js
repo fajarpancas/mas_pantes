@@ -41,7 +41,7 @@ class SignInScreen extends Component {
   }
 
   handleSubmit(values, actions) {
-    this.props.navigation.navigate('App')
+    this.props.navigation.navigate('AppSales')
   }
 
   renderForm = (props) => {
@@ -66,6 +66,7 @@ class SignInScreen extends Component {
               renderLeft={() => {
                 return (
                   <PhoneRegion
+                    editable={false}
                     value={props.values.phoneCode}
                     onSubmit={({ label, value }) => {
                       console.tron.log('onSubmit ', label, value)
