@@ -14,6 +14,19 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Styled } from 'react-native-awesome-component'
 import PhoneRegion from './PhoneRegion'
 import images from '../../Themes/Images'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+
+const schema = Yup.object().shape({
+  phoneNumber: Yup.string()
+    .required("No. Telepon harus diisi."),
+  password: Yup.string()
+    .required("Kata sandi harus diisi.")
+})
+
+const initialValue = {
+  phoneCode: '+62',
+}
 
 class SignInScreen extends Component {
   constructor(props) {
@@ -25,6 +38,11 @@ class SignInScreen extends Component {
       errorPhoneNumber: false,
       errorPassword: false
     }
+  }
+
+  handleSubmit(values, actions) {
+    console.tron.log('onSubmit ', values, actions)
+    alert('as')
   }
 
   onSubmit = () => {
@@ -44,14 +62,14 @@ class SignInScreen extends Component {
     }
   }
 
-  renderForm = () => {
-    const {
-      phoneCode,
-      phoneNumber,
-      password,
-      errorPhoneNumber,
-      errorPassword
-    } = this.state
+  renderForm = (props) => {
+    // const {
+    //   phoneCode,
+    //   phoneNumber,
+    //   password,
+    //   errorPhoneNumber,
+    //   errorPassword
+    // } = this.state
     return (
       <KeyboardAwareScrollView extraScrollHeight={40} style={{ marginHorizontal: 25 }}>
         <Styled.Container padded style={{ borderRadius: 10 }}>
@@ -64,29 +82,24 @@ class SignInScreen extends Component {
               returnKeyType="go"
               keyboardType="numeric"
               maxLength={15}
-              setFieldValue={(label, value) => this.setState({ phoneNumber: value })}
+              setFieldValue={props.setFieldValue}
               placeholder={'Masukkan nomor telepon'}
-              value={phoneNumber}
-              error={true}
+              value={props.values.phoneNumber}
+              error={props.errors.phoneNumber}
               styleTitle={styles.formLabelText}
               styleInputText={styles.formPlacholderText}
               renderLeft={() => {
                 return (
                   <PhoneRegion
-                    value={phoneCode}
+                    value={props.values.phoneCode}
                     onSubmit={({ label, value }) => {
                       console.tron.log('onSubmit ', label, value)
-                      this.setState({ phoneCode: value })
+                      props.setFieldValue('phoneCode', value)
                     }}
                   />
                 )
               }}
             />
-            <Text style={styles.textError}>
-              {errorPhoneNumber ?
-                'Nomor telepon tidak boleh dikosongkan'
-                : ''}
-            </Text>
 
             <CustomInput
               label
@@ -96,24 +109,19 @@ class SignInScreen extends Component {
               returnKeyType="go"
               maxLength={15}
               placeholder={'Masukkan kata sandi'}
-              setFieldValue={(label, value) => this.setState({ password: value })}
               secureTextEntry={true}
-              value={password}
-              error={true}
+              setFieldValue={props.setFieldValue}
+              value={props.values.password}
+              error={props.errors.password}
               toggleShowPassword
               styleTitle={styles.formLabelText}
               styleInputText={styles.formPlacholderText}
             />
-            <Text style={styles.textError}>
-              {errorPassword ?
-                'Password tidak boleh dikosongkan'
-                : ''}
-            </Text>
 
             {false
               ? <ActivityIndicator style={{ marginVertical: 10 }} />
               :
-              <TouchableOpacity style={styles.signInBtn} onPress={this.onSubmit}>
+              <TouchableOpacity style={styles.signInBtn} onPress={props.handleSubmit}>
                 <Text style={styles.signInButtonText}>
                   Masuk
               </Text>
@@ -132,7 +140,15 @@ class SignInScreen extends Component {
         <StatusBar translucent={false} hidden={false} barStyle="light-content" backgroundColor={'#512f25'} />
         <Image source={images.pantes} style={styles.logoPantes} />
         <View style={{ height: 'auto' }}>
-          {this.renderForm()}
+          <Formik
+            ref={ref => { this.formik = ref }}
+            onSubmit={this.handleSubmit.bind(this)}
+            validationSchema={schema}
+            render={this.renderForm.bind(this)}
+            validateOnChange={false}
+            initialValues={initialValue}
+          />
+          {/* {this.renderForm()} */}
         </View>
       </View>
     )

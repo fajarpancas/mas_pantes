@@ -82,11 +82,11 @@ export class CustomInput extends Component {
             }
 
           </View>
-          {/* {
+          {
             showError
             ? <Text style={Styles.textError}>{this.props.error}</Text>
             : <Text style={Styles.textError}></Text>
-          } */}
+          }
         </View>
       )
   }
