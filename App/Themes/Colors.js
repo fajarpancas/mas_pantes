@@ -1,0 +1,38 @@
+const colors = {
+  white: '#FFFFFF',
+  black: '#000000',
+  turqoise: '#1abc9c',
+  carara: '#EBEBE4',
+  slate_grey: '#58595b',
+  warm_grey: '#888888',
+  light_navy: '#16558f',
+  very_light_pink: '#dddddd',
+  dark_slate_blue: '#224a71',
+  very_light_pink_two: '#eaeaea',
+  very_light_pink_three: '#f2f2f2',
+  very_light_pink_four: '#c5c5c5',
+  very_light_pink_five: '#bbbbbb',
+  kermit_green: '#67c100',
+  pastel_red: '#ea5f54',
+
+  alertSuccess: '#32A54A',
+  alertError: '#cc3232',
+  alertInfo: '#2B73B6',
+  baseColor: '#4DA3A4',
+  lightGreen: '#EDF5F5',
+  secondBaseColor: '#3BA39F',
+  statusBarColor: '#4da9a6',
+  greyBackground: '#F0F2F6',
+  blueOceanBackground: '#F0F7FF',
+  notifMarkRed: '#DD2727',
+  borderGrey: '#E4E4E7',
+  purple: '#2F2B6C',
+  darkBlue: '#2e2b6c',
+  textBlack: '#222222',
+  textRed: '#EB4A58',
+  textGrey: '#777777',
+  goldBasic: '#ccb102',
+  tosca: '#63ccc5'
+}
+
+export default colors
