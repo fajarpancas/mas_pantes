@@ -1,20 +1,58 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, KeyboardAvoidingView } from 'react-native'
+import { View, Text, KeyboardAvoidingView, Alert, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
-
-// Styles
-import styles from '../../Styles/SalesScreenStyle'
+import BarcodeScannerScreen from './BarcodeScanner'
+import { Colors, Fonts } from '../../../Themes'
 
 class SalesScreen extends Component {
-  render () {
+  static navigationOptions = ({ navigation }) => ({
+    headerTitle: 'Laporan',
+    headerTitleStyle: {
+      color: Colors.white,
+      fontSize: 16,
+      fontWeight: '600',
+      fontFamily: Fonts.type.acuminProSemiBold,
+      textTransform: 'uppercase',
+    },
+    headerStyle: {
+      backgroundColor: '#ccb102',
+      elevation: 0,
+      shadowOpacity: 0,
+      borderBottomWidth: 0
+    }
+  })
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      barcodeOpen: false,
+      dataBarcode: 'No data barcode'
+    }
+  }
+
+  openCloseBarcode = () => {
+    this.setState({ barcodeOpen: !this.state.barcodeOpen })
+  }
+
+  setData = (value) => {
+    this.setState({ dataBarcode: value })
+  }
+
+  render() {
+    const { barcodeOpen } = this.state
     return (
-      <ScrollView style={styles.container}>
-        <KeyboardAvoidingView behavior='position'>
-          <Text>SalesScreen</Text>
-        </KeyboardAvoidingView>
-      </ScrollView>
+      <View style={{ justifyContent: 'center', flex: 1, backgroundColor: Colors.white }}>
+        {barcodeOpen ?
+          <BarcodeScannerScreen closeScanner={this.openCloseBarcode} dataScanner={(value) => this.setData(value)} />
+          :
+          <View>
+            <TouchableOpacity onPress={this.openCloseBarcode}>
+              <Text style={{ alignSelf: 'center' }}>SCAN</Text>
+            </TouchableOpacity>
+            <Text style={{ alignSelf: 'center' }}>{this.state.dataBarcode}</Text>
+          </View>
+        }
+      </View>
     )
   }
 }
