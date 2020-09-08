@@ -16,3 +16,10 @@ export const DEFAULT_COUNTRY_VALUE = __DEV__
         callingCode: '62',
 
     };
+
+export const DEFAULT_STATE = {
+    fetching: undefined,
+    data: undefined,
+    payload: undefined,
+    error: undefined
+}

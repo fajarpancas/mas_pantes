@@ -42,7 +42,7 @@ const stackNav = screen =>
                     fontWeight: '600',
                     textTransform: 'capitalize',
                 },
-                headerTitleAlign: 'left',
+                headerTitleAlign: 'center',
                 headerStyle: {
                     //   backgroundColor: Colors.blueBasic,
                     elevation: 0,
@@ -66,9 +66,9 @@ const SalesBottomTabNavigation = createBottomTabNavigator(
         Sales: {
             screen: stackNav(SalesScreen),
             navigationOptions: () => ({
-                title: I18n.t('sales.sales'),
+                title: I18n.t('laporan.laporan'),
                 tabBarIcon: ({ focused, tintColor }) => (
-                    <Icon name="history" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
+                    <Icon name="payment" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
                 ),
             }),
         },

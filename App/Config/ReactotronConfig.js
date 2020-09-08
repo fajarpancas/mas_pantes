@@ -7,7 +7,7 @@ import sagaPlugin from 'reactotron-redux-saga'
 if (Config.useReactotron) {
   // https://github.com/infinitered/reactotron for more options!
   Reactotron
-    .configure({ name: 'mas pantes App', host: '192.168.1.5' })
+    .configure({ name: 'mas pantes App', host: '10.100.77.11' })
     .useReactNative()
     .use(reduxPlugin({ onRestore: Immutable }))
     .use(sagaPlugin())

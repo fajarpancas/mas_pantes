@@ -12,6 +12,7 @@ BarcodeScanner,
     pauseScanner,
     resumeScanner
 } from 'react-native-barcode-scanner-google';
+import { Method } from 'react-native-awesome-component';
 import styles from '../../Styles/SalesScreenStyle'
 import { RNCamera } from 'react-native-camera'
 import Icons from 'react-native-vector-icons/MaterialIcons'
@@ -63,6 +64,7 @@ class BarcodeScannerScreen extends Component {
     }
 
     onGetData = (data) => {
+        Method.LoadingHelper.showLoading()
         this.props.closeScanner()
         this.props.dataScanner(data)
     }

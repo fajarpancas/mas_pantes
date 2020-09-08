@@ -107,15 +107,15 @@ const styles = {
         flex: 1
     },
     contentPicker: {
-        height: 40,
-        width: 55,
-        marginRight: 10,
+        height: 25,
+        width: 40,
+        marginRight: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
     },
     textRegion: {
-        fontSize: 14,
+        fontSize: 12,
         fontWeight: '400',
         color: Colors.textBlack
     },
