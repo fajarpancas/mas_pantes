@@ -13,6 +13,7 @@
 import { Method } from 'react-native-awesome-component';
 import { call, put } from 'redux-saga/effects'
 import OrderActions from '../Redux/OrderRedux'
+import { DropDownHolder } from '../Components'
 // import { OrderSelectors } from '../Redux/OrderRedux'
 
 export function* getOrder(api, action) {
@@ -40,10 +41,13 @@ export function* getBarang(api, action) {
       yield put(OrderActions.getBarangSuccess(response.data.data))
       Method.LoadingHelper.hideLoading()
     } else {
+      DropDownHolder.alert('error', 'Gagal', `Barang dengan kode ${data.Kode_Barcode} tidak ditemukan.`)
       Method.LoadingHelper.hideLoading()
       yield put(OrderActions.getBarangFailure())
+
     }
   } catch (err) {
+    DropDownHolder.alert('error', 'Gagal', err.message)
     Method.LoadingHelper.hideLoading()
     console.tron.error({ err: err.message })
   }

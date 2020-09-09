@@ -7,6 +7,7 @@ import styles from '../../Styles/SalesScreenStyle'
 import { CustomInput } from '../../../Components'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
+import { DropDownHolder } from '../../../Components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Styled } from 'react-native-awesome-component'
 import PhoneRegion from '../../Auth/PhoneRegion'
@@ -51,26 +52,7 @@ const initialValue = {
 
 class SalesScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: () => {
-      return (
-        <View style={styles.headerWrapper}>
-          <Text style={styles.textTokoMas}>TOKO MAS PANTES</Text>
-        </View>
-      )
-    },
-    headerTitleStyle: {
-      color: Colors.white,
-      fontSize: 16,
-      fontFamily: Fonts.type.acuminProSemiBold,
-      textTransform: 'uppercase',
-      flex: 1,
-    },
-    headerStyle: {
-      backgroundColor: '#ccb102',
-      elevation: 0,
-      shadowOpacity: 0,
-      borderBottomWidth: 0
-    }
+    header: null
   })
 
   constructor(props) {
@@ -319,7 +301,7 @@ class SalesScreen extends Component {
         flexDirection: 'row',
         height: Scale(40),
         marginHorizontal: 12,
-        marginVertical: 10,
+        marginBottom: 10,
         justifyContent: 'space-between'
       }}>
         <TextInput
@@ -352,6 +334,9 @@ class SalesScreen extends Component {
           :
           <View style={{ flex: 1 }}>
             <View style={{ flex: 1 }}>
+              <View style={styles.headerWrapper}>
+                <Text style={styles.textTokoMas}>TOKO MAS PANTES</Text>
+              </View>
               <View style={styles.headerWrapperCabang}>
                 <Text style={styles.textCabang}>Cabang : Garage City Mall</Text>
               </View>
@@ -375,13 +360,18 @@ class SalesScreen extends Component {
                 paddingVertical: 10,
                 justifyContent: 'center',
               }}>
-                <TouchableOpacity style={styles.addButton}>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('TambahBarang')}
+                  style={styles.addButton}>
                   <Text style={styles.addText}>Tambah</Text>
                 </TouchableOpacity>
                 {/* <TouchableOpacity style={styles.scanButton} onPress={this.openCloseBarcode}>
                   <Text style={styles.scanText}>SCAN</Text>
                 </TouchableOpacity> */}
-                <TouchableOpacity style={styles.scanButton} onPress={this.props.resetBarang}>
+                <TouchableOpacity
+                  // onPress={this.props.resetBarang}
+                  style={styles.scanButton}
+                >
                   <Text style={styles.scanText}>Reset</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.kemasButton}>

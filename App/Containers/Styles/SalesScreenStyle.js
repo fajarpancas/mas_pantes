@@ -60,29 +60,25 @@ export default StyleSheet.create({
     fontFamily: Fonts.type.acuminProBold,
   },
   headerWrapper: {
-    paddingVertical: 8,
-    borderBottomColor: Colors.goldBasic,
-    borderBottomWidth: 1,
-    width: Scale(375),
-    height: '100%',
+    paddingTop: 8,
+    backgroundColor: Colors.goldBasic
   },
   headerWrapperCabang: {
-    paddingBottom: 20,
+    paddingBottom: 10,
     backgroundColor: Colors.goldBasic,
     borderBottomColor: Colors.goldBasic,
     borderBottomWidth: 1
   },
   textTokoMas: {
-    position: 'absolute',
-    bottom: 5,
     alignSelf: 'center',
+    marginTop: 5,
     fontSize: 18,
     fontFamily: Fonts.type.acuminProBold,
     color: Colors.white
   },
   textCabang: {
     textAlign: 'center',
-    fontSize: 13,
+    fontSize: 14,
     fontFamily: Fonts.type.acuminProRegular,
     color: Colors.white
   },
@@ -243,4 +239,22 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  formPlacholderTextTambah: {
+    height: 36,
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: Fonts.size.medium,
+    padding: 0,
+  },
+  formLabelTextTambah: {
+    fontFamily: Fonts.type.acuminProBold,
+    fontSize: Fonts.size.h9,
+    color: '#222222',
+  },
+  tambahButton: {
+    backgroundColor: Colors.goldBasic,
+    marginHorizontal: 15,
+    marginBottom: 15,
+    height: Scale(40),
+    justifyContent: 'center'
+  }
 })

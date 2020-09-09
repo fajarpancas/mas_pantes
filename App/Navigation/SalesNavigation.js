@@ -2,6 +2,7 @@ import { Fonts, Colors } from '../Themes';
 import { createStackNavigator } from 'react-navigation-stack';
 import SalesBottomTabNavigation from './SalesBottomTabNavigation'
 import { createAppContainer } from 'react-navigation'
+import TambahBarang from '../Containers/SalesAppSection/Sales/TambahBarang'
 
 const AppSalesStack = createStackNavigator(
     {
@@ -9,6 +10,9 @@ const AppSalesStack = createStackNavigator(
             screen: SalesBottomTabNavigation,
             navigationOptions: { header: null }
         },
+        TambahBarang: {
+            screen: TambahBarang,
+        }
     },
     {
         initialRouteName: 'MainScreen',
