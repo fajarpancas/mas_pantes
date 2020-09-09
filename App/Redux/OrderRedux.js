@@ -7,7 +7,8 @@ import { mergeAndReplace } from '../Lib/Helper'
 const { Types, Creators } = createActions({
   getBarangRequest: ['data'],
   getBarangSuccess: ['payload'],
-  getBarangFailure: null
+  getBarangFailure: null,
+  resetBarang: null
 })
 
 export const OrderTypes = Types
@@ -46,10 +47,14 @@ export const getBarangSuccess = (state, action) => {
 export const getBarangFailure = state =>
   state.merge({ ...state, getBarang: { fetching: false, error: true, payload: null } })
 
+export const resetBarang = state =>
+  state.merge({ ...INITIAL_STATE })
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.GET_BARANG_REQUEST]: getBarangRequest,
   [Types.GET_BARANG_SUCCESS]: getBarangSuccess,
-  [Types.GET_BARANG_FAILURE]: getBarangFailure
+  [Types.GET_BARANG_FAILURE]: getBarangFailure,
+  [Types.RESET_BARANG]: resetBarang
 })

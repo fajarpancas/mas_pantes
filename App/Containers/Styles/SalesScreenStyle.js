@@ -47,9 +47,17 @@ export default StyleSheet.create({
   textInputStyle: {
     fontFamily: Fonts.type.acuminProBold,
     fontSize: 14,
+    padding: 0,
+    paddingLeft: 10,
     color: '#222222',
     flex: 1,
     backgroundColor: Colors.lightGreen
+  },
+  cariText: {
+    color: 'white',
+    alignSelf: 'center',
+    fontSize: 14,
+    fontFamily: Fonts.type.acuminProBold,
   },
   headerWrapper: {
     paddingVertical: 8,
@@ -109,7 +117,7 @@ export default StyleSheet.create({
   scanButton: {
     height: Scale(30),
     width: Scale(100),
-    backgroundColor: 'orange',
+    backgroundColor: 'red',
     borderRadius: 4,
     justifyContent: 'center',
     marginHorizontal: 10

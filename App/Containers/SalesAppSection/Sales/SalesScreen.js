@@ -141,7 +141,7 @@ class SalesScreen extends Component {
     )
   }
 
-  renderTableValue = ({no, Nama_Barang }) => {
+  renderTableValue = ({ no, Nama_Barang }) => {
     return (
       <View style={styles.headerTable}>
         <View style={styles.borderTableNoValue}>
@@ -304,11 +304,42 @@ class SalesScreen extends Component {
               </View>
             </View>
           </View>
+          {this.renderSearchBar()}
           {this.renderTableHeader()}
           {barang.map(this.renderTableValue)}
           {this.renderTableTotal()}
         </Styled.Container>
       </KeyboardAwareScrollView>
+    )
+  }
+
+  renderSearchBar = () => {
+    return (
+      <View style={{
+        flexDirection: 'row',
+        height: Scale(40),
+        marginHorizontal: 12,
+        marginVertical: 10,
+        justifyContent: 'space-between'
+      }}>
+        <TextInput
+          placeholder={'kode barcode'}
+          defaultValue={this.state.kodeBarcode}
+          style={styles.textInputStyle}
+          onChangeText={(value) => this.setState({ kodeBarcode: value })}
+        />
+        <TouchableOpacity
+          onPress={this.cariBarang}
+          style={{
+            width: Scale(100),
+            justifyContent: 'center',
+            backgroundColor: Colors.goldBasic
+          }}>
+          <Text style={styles.cariText}>
+            Cari
+              </Text>
+        </TouchableOpacity>
+      </View>
     )
   }
 
@@ -323,25 +354,6 @@ class SalesScreen extends Component {
             <View style={{ flex: 1 }}>
               <View style={styles.headerWrapperCabang}>
                 <Text style={styles.textCabang}>Cabang : Garage City Mall</Text>
-              </View>
-              <View style={{ flexDirection: 'row', marginHorizontal: 12, justifyContent: 'space-between' }}>
-                <TextInput
-                  placeholder={'kode barcode'}
-                  defaultValue={this.state.kodeBarcode}
-                  style={styles.textInputStyle}
-                  onChangeText={(value) => this.setState({ kodeBarcode: value })}
-                />
-                <TouchableOpacity
-                  onPress={this.cariBarang}
-                  style={{
-                    width: Scale(100),
-                    justifyContent: 'center',
-                    backgroundColor: 'orange'
-                  }}>
-                  <Text style={{ color: 'white', alignSelf: 'center' }}>
-                    Cari
-                  </Text>
-                </TouchableOpacity>
               </View>
               <View style={{ flex: 1, paddingBottom: 5 }}>
                 <Formik
@@ -366,14 +378,16 @@ class SalesScreen extends Component {
                 <TouchableOpacity style={styles.addButton}>
                   <Text style={styles.addText}>Tambah</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.scanButton} onPress={this.openCloseBarcode}>
+                {/* <TouchableOpacity style={styles.scanButton} onPress={this.openCloseBarcode}>
                   <Text style={styles.scanText}>SCAN</Text>
+                </TouchableOpacity> */}
+                <TouchableOpacity style={styles.scanButton} onPress={this.props.resetBarang}>
+                  <Text style={styles.scanText}>Reset</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.kemasButton}>
                   <Text style={styles.kemasText}>Kemas</Text>
                 </TouchableOpacity>
               </View>
-              <Text style={{ alignSelf: 'center' }}>{this.state.dataBarcode}</Text>
             </View>
           </View>
         }
@@ -401,7 +415,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getBarangRequest: (param) => dispatch(OrderActions.getBarangRequest(param))
+    getBarangRequest: (param) => dispatch(OrderActions.getBarangRequest(param)),
+    resetBarangRequest: (param) => dispatch(OrderActions.resetBarang(param))
   }
 }
 
