@@ -4,6 +4,7 @@ import LaunchScreen from '../Containers/LaunchScreen'
 import SignInScreen from '../Containers/Auth/SignInScreen'
 import AppCustomerStack from './CustomerNavigation'
 import AppSalesStack from './SalesNavigation'
+import AppKurirStack from './KurirNavigation'
 import styles from './Styles/NavigationStyles'
 
 const AuthStack = createStackNavigator(
@@ -24,7 +25,8 @@ const PrimaryNav = createSwitchNavigator({
   Splash: LaunchScreen,
   Auth: AuthStack,
   App: AppCustomerStack,
-  AppSales: AppSalesStack
+  AppSales: AppSalesStack,
+  AppKurir: AppKurirStack
 }, {
   // Default config for all screens
   headerMode: 'none',

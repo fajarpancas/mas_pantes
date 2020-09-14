@@ -22,7 +22,9 @@ const images = {
   closeButton: require('../Images/Icons/close-button.png'),
   tokoemas: require('../Images/tokoemas.png'),
   gold: require('../Images/gold.png'),
-  pantes: require('../Images/pantes.jpg')
+  pantes: require('../Images/pantes.jpg'),
+  emptyTrans: require('../Images/empty-transactions.png'),
+  iconHistory: require('../Images/icon-medical-history.png')
 }
 
 export default images

@@ -13,6 +13,8 @@ import { Styled } from 'react-native-awesome-component'
 import PhoneRegion from '../../Auth/PhoneRegion'
 import Scale from '../../../Transforms/Scale'
 import OrderActions from '../../../Redux/OrderRedux'
+import HeaderMasPantes from '../../../Components/HeaderMasPantes'
+import CustomTableRow from '../../../Components/CustomTableRow'
 
 const schema = Yup.object().shape({
   noFaktur: Yup.string()
@@ -89,57 +91,6 @@ class SalesScreen extends Component {
     }
 
     getBarangRequest(param)
-  }
-
-  renderTableHeader = () => {
-    return (
-      <View style={styles.headerTable}>
-        <View style={styles.borderTableNo}>
-          <Text style={styles.valueTable}>No</Text>
-        </View>
-        <View style={styles.borderTableNamaBarang}>
-          <Text style={styles.valueTable}>Nama barang</Text>
-        </View>
-        <View style={styles.borderTableHarga}>
-          <Text style={styles.valueTable}>Harga</Text>
-        </View>
-        <View style={styles.borderTableFoto}>
-          <Text style={styles.valueTable}>Foto</Text>
-        </View>
-      </View>
-    )
-  }
-
-  renderTableTotal = () => {
-    return (
-      <View style={styles.headerTable}>
-        <View style={styles.borderTableTotal}>
-          <Text style={styles.valueTable}>Total</Text>
-        </View>
-        <View style={styles.borderTableTotal}>
-          <Text style={styles.valueTable}>9000000000</Text>
-        </View>
-      </View>
-    )
-  }
-
-  renderTableValue = ({ no, Nama_Barang }) => {
-    return (
-      <View style={styles.headerTable}>
-        <View style={styles.borderTableNoValue}>
-          <Text style={styles.valueTableFill}>{no}</Text>
-        </View>
-        <View style={styles.borderTableNamaBarangValue}>
-          <Text style={styles.valueTableFill}>{Nama_Barang}</Text>
-        </View>
-        <View style={styles.borderTableHargaValue}>
-          <Text style={styles.valueTableFill}>-</Text>
-        </View>
-        <View style={styles.borderTableFotoValue}>
-          <Text style={styles.valueTableFill}></Text>
-        </View>
-      </View>
-    )
   }
 
   renderForm = (props) => {
@@ -286,10 +237,8 @@ class SalesScreen extends Component {
               </View>
             </View>
           </View>
-          {this.renderSearchBar()}
-          {this.renderTableHeader()}
-          {barang.map(this.renderTableValue)}
-          {this.renderTableTotal()}
+          {/* {this.renderSearchBar()} */}
+          <CustomTableRow data={barang} />
         </Styled.Container>
       </KeyboardAwareScrollView>
     )
@@ -334,12 +283,7 @@ class SalesScreen extends Component {
           :
           <View style={{ flex: 1 }}>
             <View style={{ flex: 1 }}>
-              <View style={styles.headerWrapper}>
-                <Text style={styles.textTokoMas}>TOKO MAS PANTES</Text>
-              </View>
-              <View style={styles.headerWrapperCabang}>
-                <Text style={styles.textCabang}>Cabang : Garage City Mall</Text>
-              </View>
+              <HeaderMasPantes />
               <View style={{ flex: 1, paddingBottom: 5 }}>
                 <Formik
                   ref={ref => { this.formik = ref }}
