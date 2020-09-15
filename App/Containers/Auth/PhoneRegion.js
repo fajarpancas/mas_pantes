@@ -82,10 +82,10 @@ export default class PhoneRegion extends Component {
     }
 
     render() {
-
+        const { editable } = this.props
         return (
             <View>
-                <TouchableOpacity style={styles.contentPicker} onPress={this.showModal}>
+                <TouchableOpacity style={styles.contentPicker} disabled={!editable} onPress={this.showModal}>
                     <Text style={styles.textRegion}>{this.props.value}</Text>
                     <Icon name="arrow-drop-down" size={20} />
                 </TouchableOpacity>
@@ -107,15 +107,16 @@ const styles = {
         flex: 1
     },
     contentPicker: {
-        height: 40,
-        width: 55,
-        marginRight: 10,
+        paddingLeft: 5,
+        height: 25,
+        width: 40,
+        marginRight: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
     },
     textRegion: {
-        fontSize: 14,
+        fontSize: 12,
         fontWeight: '400',
         color: Colors.textBlack
     },

@@ -12,7 +12,7 @@ const styles = {
     fontFamily: Fonts.style.acuminProBold
   },
   textRequired: {
-    fontSize: 13,
+    fontSize: 132,
     fontWeight: '700',
     color: Colors.textRed,
     fontFamily: Fonts.style.acuminProBold
@@ -41,7 +41,7 @@ const styles = {
   },
   inputText: {
     flex:1,
-    fontSize: 14,
+    fontSize: 13,
     color: Colors.textBlack,
     fontFamily: Fonts.style.acuminProRegular,
     // borderRadius: 10,
@@ -50,7 +50,7 @@ const styles = {
   },
   textValue: {
     textAlign: 'left',
-    fontSize: 14,
+    fontSize: 13,
     fontFamily: Fonts.type.acuminProRegular,
     color: Colors.textBlack
   },
@@ -64,7 +64,7 @@ const styles = {
     textAlign: 'left',
     fontSize: 10,
     color: 'red',
-    marginVertical: 5,
+    marginVertical: 2,
     fontFamily: Fonts.type.acuminProRegular,
   },
   btnToggleShowPassword: {
