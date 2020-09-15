@@ -8,6 +8,8 @@ const { Types, Creators } = createActions({
   getBarangRequest: ['data'],
   getBarangSuccess: ['payload'],
   getBarangFailure: null,
+  addBarangRequest: ['data'],
+  addBarangSuccess: ['payload'],
   resetBarang: null
 })
 
@@ -18,6 +20,7 @@ export default Creators
 
 export const INITIAL_STATE = Immutable({
   getBarang: DEFAULT_STATE,
+  addBarang: DEFAULT_STATE,
   listBarang: []
 })
 
@@ -47,6 +50,17 @@ export const getBarangSuccess = (state, action) => {
 export const getBarangFailure = state =>
   state.merge({ ...state, getBarang: { fetching: false, error: true, payload: null } })
 
+export const addBarangRequest = (state, { data }) => {
+  console.tron.error({ data })
+  return state.merge({ ...state, addBarang: { data } })
+}
+
+export const addBarangSuccess = (state, { payload }) => {
+  let newList = [...state.listBarang]
+  newList = newList.concat(payload)
+  return state.merge({ ...state, addBarang: { payload }, listBarang: newList })
+}
+
 export const resetBarang = state =>
   state.merge({ ...INITIAL_STATE })
 
@@ -56,5 +70,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.GET_BARANG_REQUEST]: getBarangRequest,
   [Types.GET_BARANG_SUCCESS]: getBarangSuccess,
   [Types.GET_BARANG_FAILURE]: getBarangFailure,
+  [Types.ADD_BARANG_REQUEST]: addBarangRequest,
+  [Types.ADD_BARANG_SUCCESS]: addBarangSuccess,
   [Types.RESET_BARANG]: resetBarang
 })

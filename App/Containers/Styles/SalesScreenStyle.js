@@ -36,13 +36,40 @@ export default StyleSheet.create({
   formPlacholderText: {
     height: Scale(23),
     fontFamily: Fonts.type.acuminProRegular,
+    paddingHorizontal: 5,
     fontSize: 13,
     padding: 0
+  },
+  formAlamat: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 13,
+    paddingHorizontal: 5,
+    padding: 0,
+    height: Scale(45),
+    lineHeight: 18,
+    borderBottomColor: '#DDDDDD',
+    borderBottomWidth: 1,
+    paddingVertical: 5,
+    textAlignVertical: 'top',
+    marginBottom: 10
   },
   formLabelText: {
     fontFamily: Fonts.type.acuminProBold,
     fontSize: 9,
     color: '#222222'
+  },
+  formPlacholderTextDisable: {
+    height: Scale(23),
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 13,
+    backgroundColor: Colors.borderGrey,
+    paddingHorizontal: 5,
+    padding: 0
+  },
+  formLabelTextDisable: {
+    fontFamily: Fonts.type.acuminProBold,
+    fontSize: 9,
+    color: '#222222',
   },
   textInputStyle: {
     fontFamily: Fonts.type.acuminProBold,

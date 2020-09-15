@@ -107,6 +107,7 @@ const styles = {
         flex: 1
     },
     contentPicker: {
+        paddingLeft: 5,
         height: 25,
         width: 40,
         marginRight: 5,

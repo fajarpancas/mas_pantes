@@ -6,6 +6,7 @@ import {
 } from 'react-native'
 import { Colors, Fonts, Images } from '../Themes'
 import Scale from '../Transforms/Scale'
+import { EmptyContent } from '../Components'
 
 class CustomTableRow extends Component {
     renderTableHeader = () => {
@@ -18,29 +19,29 @@ class CustomTableRow extends Component {
                     <Text style={styles.valueTable}>Nama barang</Text>
                 </View>
                 <View style={styles.borderTableHarga}>
-                    <Text style={styles.valueTable}>Harga</Text>
+                    <Text style={styles.valueTable}>Harga(Rp.)</Text>
                 </View>
                 <View style={styles.borderTableFoto}>
-                    <Text style={styles.valueTable}>Foto</Text>
+                    <Text style={styles.valueTable}>Aksi</Text>
                 </View>
             </View>
         )
     }
 
-    renderTableTotal = () => {
+    renderTableTotal = (total) => {
         return (
             <View style={styles.headerTable}>
                 <View style={styles.borderTableTotal}>
                     <Text style={styles.valueTable}>Total</Text>
                 </View>
                 <View style={styles.borderTableTotal}>
-                    <Text style={styles.valueTable}>9000000000</Text>
+                    <Text style={styles.valueTable}>Rp. {total}</Text>
                 </View>
             </View>
         )
     }
 
-    renderTableValue = ({ no, Nama_Barang }) => {
+    renderTableValue = ({ no, Nama_Barang, harga }) => {
         return (
             <View style={styles.headerTable}>
                 <View style={styles.borderTableNoValue}>
@@ -50,7 +51,7 @@ class CustomTableRow extends Component {
                     <Text style={styles.valueTableFill}>{Nama_Barang}</Text>
                 </View>
                 <View style={styles.borderTableHargaValue}>
-                    <Text style={styles.valueTableFill}>-</Text>
+                    <Text style={styles.valueTableFill}>{harga}</Text>
                 </View>
                 <View style={styles.borderTableFotoValue}>
                     <Text style={styles.valueTableFill}></Text>
@@ -61,24 +62,33 @@ class CustomTableRow extends Component {
 
     renderEmpty = () => {
         return (
-            <View>
-                <Image
-                    source={Images.emptyTrans}
-                    resizeMethod={'resize'}
-                    resizeMode={'contain'}
-                    style={{ width: Scale(100) }} />
+            <View style={{
+                flex: 1,
+                marginHorizontal: Scale(10),
+                borderLeftColor: Colors.borderGrey,
+                borderRightColor: Colors.borderGrey,
+                borderLeftWidth: 1,
+                borderRightWidth: 1,
+            }}>
+                <EmptyContent title={'Tidak Ada Data'} message={'Data barang masih kosong'} />
             </View>
         )
     }
 
     render() {
         const { data } = this.props
+        let total = 0
+
+        for (let i = 0; i < data.length; i++) {
+            total = total + parseInt(data[i].harga)
+        }
+
         return (
             <View>
                 {this.renderTableHeader()}
                 {data.length > 0 ? data.map(this.renderTableValue) :
                     this.renderEmpty()}
-                {this.renderTableTotal()}
+                {this.renderTableTotal(total)}
             </View>
         )
     }
@@ -105,7 +115,7 @@ const styles = {
         backgroundColor: Colors.goldBasic,
         paddingVertical: 10,
         borderWidth: 1,
-        width: Scale(150),
+        width: Scale(130),
         justifyContent: 'center',
     },
     borderTableFoto: {
@@ -114,7 +124,7 @@ const styles = {
         backgroundColor: Colors.goldBasic,
         paddingVertical: 10,
         borderWidth: 1,
-        width: Scale(80),
+        width: Scale(100),
         justifyContent: 'center',
     },
     borderTableHarga: {
@@ -153,7 +163,7 @@ const styles = {
         borderBottomWidth: 1,
         borderLeftWidth: 1,
         borderRightWidth: 1,
-        width: Scale(150),
+        width: Scale(130),
         justifyContent: 'center',
     },
     borderTableFotoValue: {
@@ -165,7 +175,7 @@ const styles = {
         borderBottomWidth: 1,
         borderLeftWidth: 1,
         borderRightWidth: 1,
-        width: Scale(80),
+        width: Scale(100),
         justifyContent: 'center',
     },
     borderTableHargaValue: {
@@ -199,6 +209,12 @@ const styles = {
         flex: 1,
         justifyContent: 'center',
     },
+    emptyBarang: {
+        fontFamily: Fonts.type.acuminProMedium,
+        color: Colors.textGrey,
+        textAlign: 'center',
+        marginTop: 5
+    }
 }
 
 export default CustomTableRow;

@@ -40,48 +40,56 @@ class TambahBarang extends Component {
     })
 
     handleSubmit(values, actions) {
+        const params = {
+            Nama_Barang: values.namaBarang,
+            harga: values.harga
+        }
+        console.tron.error({ params })
 
+        this.props.addBarangRequest(params)
     }
 
     renderForm = (props) => {
         console.tron.error({ props })
         return (
-            <KeyboardAwareScrollView extraScrollHeight={40}>
-                <Styled.Container style={{ borderRadius: 10, marginHorizontal: 5, marginTop: 5 }}>
-                    <View style={{ paddingHorizontal: 15, paddingTop: 15 }}>
-                        <CustomInput
-                            label
-                            name="namaBarang"
-                            title={'Nama Barang'}
-                            autoCapitalize="none"
-                            returnKeyType="go"
-                            maxLength={15}
-                            placeholder={'Masukkan nama barang'}
-                            secureTextEntry={true}
-                            setFieldValue={props.setFieldValue}
-                            value={props.values.namaBarang}
-                            error={props.errors.namaBarang}
-                            styleTitle={styles.formLabelTextTambah}
-                            styleInputText={styles.formPlacholderTextTambah}
-                        />
-                        <CustomInput
-                            label
-                            name="harga"
-                            title={'Harga Barang'}
-                            autoCapitalize="none"
-                            returnKeyType="go"
-                            maxLength={15}
-                            placeholder={'Masukkan harga barang'}
-                            secureTextEntry={true}
-                            setFieldValue={props.setFieldValue}
-                            value={props.values.harga}
-                            error={props.errors.harga}
-                            styleTitle={styles.formLabelTextTambah}
-                            styleInputText={styles.formPlacholderTextTambah}
-                        />
-                    </View>
-                </Styled.Container>
-            </KeyboardAwareScrollView>
+            <View style={{ flex: 1 }}>
+                <View style={{ paddingHorizontal: 15, flex: 1, paddingTop: 15 }}>
+                    <KeyboardAwareScrollView extraScrollHeight={40}>
+                        <Styled.Container style={{ borderRadius: 10, marginHorizontal: 5, marginTop: 5 }}>
+                            <CustomInput
+                                label
+                                name="namaBarang"
+                                title={'Nama Barang'}
+                                returnKeyType="go"
+                                maxLength={15}
+                                placeholder={'Masukkan nama barang'}
+                                setFieldValue={props.setFieldValue}
+                                value={props.values.namaBarang}
+                                error={props.errors.namaBarang}
+                                styleTitle={styles.formLabelTextTambah}
+                                styleInputText={styles.formPlacholderTextTambah}
+                            />
+                            <CustomInput
+                                label
+                                name="harga"
+                                keyboardType={'numeric'}
+                                title={'Harga Barang'}
+                                returnKeyType="go"
+                                maxLength={15}
+                                placeholder={'Masukkan harga barang'}
+                                setFieldValue={props.setFieldValue}
+                                value={props.values.harga}
+                                error={props.errors.harga}
+                                styleTitle={styles.formLabelTextTambah}
+                                styleInputText={styles.formPlacholderTextTambah}
+                            />
+                        </Styled.Container>
+                    </KeyboardAwareScrollView>
+                </View>
+                <TouchableOpacity onPress={props.handleSubmit} style={styles.tambahButton}>
+                    <Text style={styles.cariText}>TAMBAH</Text>
+                </TouchableOpacity>
+            </View>
         )
     }
 
@@ -98,9 +106,6 @@ class TambahBarang extends Component {
                         initialValues={initialValue}
                     />
                 </View>
-                <TouchableOpacity style={styles.tambahButton}>
-                    <Text style={styles.cariText}>TAMBAH</Text>
-                </TouchableOpacity>
             </View>
         )
     }
@@ -113,6 +118,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        addBarangRequest: (params) => dispatch(OrderActions.addBarangRequest(params))
     }
 }
 

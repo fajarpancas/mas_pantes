@@ -9,16 +9,18 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { DropDownHolder } from '../../../Components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { Styled } from 'react-native-awesome-component'
+import { Styled, CustomDatepicker } from 'react-native-awesome-component'
 import PhoneRegion from '../../Auth/PhoneRegion'
 import Scale from '../../../Transforms/Scale'
 import OrderActions from '../../../Redux/OrderRedux'
 import HeaderMasPantes from '../../../Components/HeaderMasPantes'
 import CustomTableRow from '../../../Components/CustomTableRow'
+import moment from 'moment'
+import Icons from 'react-native-vector-icons/MaterialIcons' 
 
 const schema = Yup.object().shape({
-  noFaktur: Yup.string()
-    .required("No. Telepon harus diisi."),
+  noFaktur: Yup.string(),
+  tanggal: Yup.string(),
   namaCustomer: Yup.string()
     .required("Nama Customer harus diisi."),
   sales: Yup.string()
@@ -35,21 +37,19 @@ const schema = Yup.object().shape({
     .required("Nama kurir harus diisi."),
 })
 
-const dummyData = [
-  { key: 1, no: 1, name: 'Mas Antam', harga: '800.000', foto: 'foto' },
-  { key: 2, no: 2, name: 'Mas Murni', harga: '600.000', foto: 'foto' },
-  { key: 3, no: 3, name: 'Mas Antam 2', harga: '500.000', foto: 'foto' },
-  { key: 4, no: 4, name: 'Mas Antam 3', harga: '300.000', foto: 'foto' },
-  { key: 5, no: 5, name: 'Mas Antam', harga: '800.000', foto: 'foto' },
-  { key: 6, no: 6, name: 'Mas Murni', harga: '600.000', foto: 'foto' },
-  { key: 7, no: 7, name: 'Mas Antam 2', harga: '500.000', foto: 'foto' },
-  { key: 8, no: 8, name: 'Mas Antam 3', harga: '300.000', foto: 'foto' },
-  { key: 9, no: 9, name: 'Mas Murni', harga: '600.000', foto: 'foto' },
-  { key: 10, no: 10, name: 'Mas Antam 2', harga: '500.000', foto: 'foto' },
-]
+const randomA = Math.floor(Math.random() * 100000) + 1
+const randomB = Math.floor(Math.random() * 100000) + 1
 
 const initialValue = {
+  noFaktur: randomA.toString() + randomB.toString(),
   phoneCode: '+62',
+  tanggal: moment(new Date()).format('DD-MM-YYYY'),
+  namaCustomer: 'Fajar',
+  sales: 'Panca',
+  telephone: '87847635259',
+  keterangan: 'abcd',
+  kurir: 'Akmal',
+  alamat: 'Jl. Golf Cipanjalu no.42 RT.01 RW.11, Kec. Arcamanik, Kel.Cisaranten Binaharapan, Kota Bandung'
 }
 
 class SalesScreen extends Component {
@@ -101,23 +101,22 @@ class SalesScreen extends Component {
           <View style={{ paddingHorizontal: 15, paddingTop: 5 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.labelStyle}>No. Faktur </Text>
+                <Text style={styles.labelStyle}>No. Nota </Text>
                 <Text style={styles.labelStyle2}>:</Text>
               </View>
               <View style={{ flex: 1 }}>
                 <CustomInput
                   editable={false}
                   name="noFaktur"
-                  title={'No. Faktur'}
-                  autoCapitalize="none"
+                  title={'No. Nota'}
                   returnKeyType="go"
                   maxLength={15}
-                  placeholder={'Nomor faktur'}
+                  placeholder={'Nomor Nota'}
                   setFieldValue={props.setFieldValue}
                   value={props.values.noFaktur}
                   error={props.errors.noFaktur}
-                  styleTitle={styles.formLabelText}
-                  styleInputText={styles.formPlacholderText}
+                  styleTitle={styles.formLabelTextDisable}
+                  styleInputText={styles.formPlacholderTextDisable}
                 />
               </View>
             </View>
@@ -129,7 +128,6 @@ class SalesScreen extends Component {
               <View style={{ flex: 1 }}>
                 <CustomInput
                   name="namaCustomer"
-                  autoCapitalize="none"
                   returnKeyType="go"
                   maxLength={15}
                   placeholder={'Nama Customer'}
@@ -150,7 +148,6 @@ class SalesScreen extends Component {
                 <CustomInput
                   name="sales"
                   title={'sales'}
-                  autoCapitalize="none"
                   returnKeyType="go"
                   maxLength={15}
                   placeholder={'Nama Sales'}
@@ -159,6 +156,42 @@ class SalesScreen extends Component {
                   error={props.errors.sales}
                   styleTitle={styles.formLabelText}
                   styleInputText={styles.formPlacholderText}
+                />
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.labelStyle}>Tanggal</Text>
+                <Text style={styles.labelStyle2}>:</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <CustomInput
+                  name="tanggal"
+                  title={'Tanggal'}
+                  returnKeyType="go"
+                  maxLength={15}
+                  placeholder={'Tanggal'}
+                  setFieldValue={props.setFieldValue}
+                  value={props.values.tanggal}
+                  error={props.errors.tanggal}
+                  styleTitle={styles.formLabelTextDisable}
+                  styleInputText={styles.formPlacholderTextDisable}
+                />
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: 'row', paddingTop: 5 }}>
+                <Text style={styles.labelStyle}>Alamat</Text>
+                <Text style={styles.labelStyle2}>:</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <TextInput
+                  style={styles.formAlamat}
+                  placeholder='Alamat'
+                  multiline={true}
+                  autoCorrect={false}
+                  defaultValue={props.values.alamat}
+                  onChangeText={(value) => props.setFieldValue('alamat', value)}
                 />
               </View>
             </View>
@@ -203,7 +236,6 @@ class SalesScreen extends Component {
               <View style={{ flex: 1 }}>
                 <CustomInput
                   name="keterangan"
-                  autoCapitalize="none"
                   returnKeyType="go"
                   maxLength={15}
                   placeholder={'Keterangan'}
@@ -224,13 +256,12 @@ class SalesScreen extends Component {
                 <CustomInput
                   name="kurir"
                   title={'kurir'}
-                  autoCapitalize="none"
                   returnKeyType="go"
                   maxLength={15}
                   placeholder={'Nama kurir'}
                   setFieldValue={props.setFieldValue}
-                  value={props.values.noFaktur}
-                  error={props.errors.noFaktur}
+                  value={props.values.kurir}
+                  error={props.errors.kurir}
                   styleTitle={styles.formLabelText}
                   styleInputText={styles.formPlacholderText}
                 />
@@ -313,7 +344,7 @@ class SalesScreen extends Component {
                   <Text style={styles.scanText}>SCAN</Text>
                 </TouchableOpacity> */}
                 <TouchableOpacity
-                  // onPress={this.props.resetBarang}
+                  onPress={() => this.props.resetBarangRequest()}
                   style={styles.scanButton}
                 >
                   <Text style={styles.scanText}>Reset</Text>

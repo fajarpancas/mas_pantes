@@ -14,6 +14,7 @@ import { Method } from 'react-native-awesome-component';
 import { call, put } from 'redux-saga/effects'
 import OrderActions from '../Redux/OrderRedux'
 import { DropDownHolder } from '../Components'
+import NavigationService from '../Services/NavigationServices'
 // import { OrderSelectors } from '../Redux/OrderRedux'
 
 export function* getOrder(api, action) {
@@ -51,4 +52,9 @@ export function* getBarang(api, action) {
     Method.LoadingHelper.hideLoading()
     console.tron.error({ err: err.message })
   }
+}
+
+export function* addBarang(api, action) {
+  yield put(OrderActions.addBarangSuccess(action.data))
+  NavigationService.goBack()
 }
