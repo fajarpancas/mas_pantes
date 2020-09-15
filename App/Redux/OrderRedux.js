@@ -10,6 +10,8 @@ const { Types, Creators } = createActions({
   getBarangFailure: null,
   addBarangRequest: ['data'],
   addBarangSuccess: ['payload'],
+  deleteBarangRequest: ['data'],
+  deleteBarangSuccess: ['payload'],
   resetBarang: null
 })
 
@@ -21,13 +23,14 @@ export default Creators
 export const INITIAL_STATE = Immutable({
   getBarang: DEFAULT_STATE,
   addBarang: DEFAULT_STATE,
-  listBarang: []
+  deleteBarang: DEFAULT_STATE,
+  listBarang: [],
 })
 
 /* ------------- Selectors ------------- */
 
 export const OrderSelectors = {
-  getData: state => state.data
+  getData: state => state.order.listBarang
 }
 
 /* ------------- Reducers ------------- */
@@ -61,6 +64,14 @@ export const addBarangSuccess = (state, { payload }) => {
   return state.merge({ ...state, addBarang: { payload }, listBarang: newList })
 }
 
+export const deleteBarangRequest = (state, { data }) => {
+  return state.merge({ ...state, deleteBarang: { data } })
+}
+
+export const deleteBarangSuccess = (state, { payload }) => {
+  return state.merge({ ...state, deleteBarang: { payload }, listBarang: payload })
+}
+
 export const resetBarang = state =>
   state.merge({ ...INITIAL_STATE })
 
@@ -72,5 +83,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.GET_BARANG_FAILURE]: getBarangFailure,
   [Types.ADD_BARANG_REQUEST]: addBarangRequest,
   [Types.ADD_BARANG_SUCCESS]: addBarangSuccess,
+  [Types.DELETE_BARANG_SUCCESS]: deleteBarangSuccess,
+  [Types.DELETE_BARANG_SUCCESS]: deleteBarangSuccess,
   [Types.RESET_BARANG]: resetBarang
 })

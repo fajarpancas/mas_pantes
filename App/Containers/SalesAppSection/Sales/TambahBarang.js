@@ -40,7 +40,11 @@ class TambahBarang extends Component {
     })
 
     handleSubmit(values, actions) {
+        const randomA = Math.floor(Math.random() * 100000) + 1
+        const randomB = Math.floor(Math.random() * 100000) + 1
+
         const params = {
+            id: 'B' + randomA.toString() + randomB.toString(),
             Nama_Barang: values.namaBarang,
             harga: values.harga
         }

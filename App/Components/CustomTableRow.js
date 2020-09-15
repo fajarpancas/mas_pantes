@@ -2,13 +2,34 @@ import React, { Component } from 'react'
 import {
     View,
     Text,
-    Image
+    Image, TouchableOpacity
 } from 'react-native'
 import { Colors, Fonts, Images } from '../Themes'
 import Scale from '../Transforms/Scale'
+import Icons from 'react-native-vector-icons/MaterialIcons'
 import { EmptyContent } from '../Components'
+import CustomModalDelete from '../Components/CustomModalDelete'
 
 class CustomTableRow extends Component {
+    deleteModal = undefined
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            idBarang: undefined
+        }
+    }
+
+    showPopUp = (id) => {
+        this.setState({ idBarang: id }, () => {
+            this.deleteModal.show()
+        })
+    }
+
+    deleteData = (id) => {
+        this.props.onDeleteData(id)
+    }
+
     renderTableHeader = () => {
         return (
             <View style={styles.headerTable}>
@@ -41,7 +62,7 @@ class CustomTableRow extends Component {
         )
     }
 
-    renderTableValue = ({ no, Nama_Barang, harga }) => {
+    renderTableValue = ({ id, no, Nama_Barang, harga }) => {
         return (
             <View style={styles.headerTable}>
                 <View style={styles.borderTableNoValue}>
@@ -54,9 +75,16 @@ class CustomTableRow extends Component {
                     <Text style={styles.valueTableFill}>{harga}</Text>
                 </View>
                 <View style={styles.borderTableFotoValue}>
-                    <Text style={styles.valueTableFill}></Text>
+                    <TouchableOpacity
+                        style={{ marginRight: 10 }}>
+                        <Icons name='edit' size={20} color={'lightgrey'} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => this.showPopUp(id)}>
+                        <Icons name='delete' size={20} color={'lightgrey'} />
+                    </TouchableOpacity>
                 </View>
-            </View>
+            </View >
         )
     }
 
@@ -89,6 +117,16 @@ class CustomTableRow extends Component {
                 {data.length > 0 ? data.map(this.renderTableValue) :
                     this.renderEmpty()}
                 {this.renderTableTotal(total)}
+
+                <CustomModalDelete
+                    type={'delete'}
+                    title={'Hapus Barang'}
+                    confirmText={'Ya, Hapus'}
+                    onConfirm={() => this.deleteData(this.state.idBarang)}
+                    idBarang={this.state.idBarang}
+                    message={'Apakah anda yakin ingin menghapus barang ini?'}
+                    setRef={r => this.deleteModal = r}
+                />
             </View>
         )
     }
@@ -177,6 +215,7 @@ const styles = {
         borderRightWidth: 1,
         width: Scale(100),
         justifyContent: 'center',
+        flexDirection: 'row'
     },
     borderTableHargaValue: {
         marginHorizontal: Scale(-0.5),

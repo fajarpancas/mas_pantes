@@ -11,8 +11,8 @@
 *************************************************************/
 
 import { Method } from 'react-native-awesome-component';
-import { call, put } from 'redux-saga/effects'
-import OrderActions from '../Redux/OrderRedux'
+import { call, put, select } from 'redux-saga/effects'
+import OrderActions, { OrderSelectors } from '../Redux/OrderRedux'
 import { DropDownHolder } from '../Components'
 import NavigationService from '../Services/NavigationServices'
 // import { OrderSelectors } from '../Redux/OrderRedux'
@@ -57,4 +57,12 @@ export function* getBarang(api, action) {
 export function* addBarang(api, action) {
   yield put(OrderActions.addBarangSuccess(action.data))
   NavigationService.goBack()
+}
+
+export function* deleteBarang(api, action) {
+  const dataBarang = yield select(OrderSelectors.getData)
+  const { data } = action
+
+  const newDataBarang = dataBarang.filter(obj => obj.id !== data.id)
+  yield put(OrderActions.deleteBarangSuccess(newDataBarang))
 }

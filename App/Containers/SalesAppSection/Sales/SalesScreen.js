@@ -16,7 +16,6 @@ import OrderActions from '../../../Redux/OrderRedux'
 import HeaderMasPantes from '../../../Components/HeaderMasPantes'
 import CustomTableRow from '../../../Components/CustomTableRow'
 import moment from 'moment'
-import Icons from 'react-native-vector-icons/MaterialIcons' 
 
 const schema = Yup.object().shape({
   noFaktur: Yup.string(),
@@ -77,6 +76,14 @@ class SalesScreen extends Component {
     }
 
     getBarangRequest(param)
+  }
+
+  deleteDataBarang = (id) => {
+    const param = {
+      id
+    }
+
+    this.props.deleteBarangRequest(param)
   }
 
   handleSubmit(values, actions) {
@@ -269,7 +276,9 @@ class SalesScreen extends Component {
             </View>
           </View>
           {/* {this.renderSearchBar()} */}
-          <CustomTableRow data={barang} />
+          <CustomTableRow
+            onDeleteData={(id) => this.deleteDataBarang(id)}
+            data={barang} />
         </Styled.Container>
       </KeyboardAwareScrollView>
     )
@@ -381,6 +390,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getBarangRequest: (param) => dispatch(OrderActions.getBarangRequest(param)),
+    deleteBarangRequest: (param) => dispatch(OrderActions.deleteBarangRequest(param)),
     resetBarangRequest: (param) => dispatch(OrderActions.resetBarang(param))
   }
 }
