@@ -19,7 +19,8 @@ export default StyleSheet.create({
         fontSize: 14,
         color: Colors.textGrey,
         textAlign: 'center',
-        lineHeight: 18
+        lineHeight: 20,
+        marginHorizontal: 30
     },
     title: {
         fontFamily: Fonts.type.acuminProBold,

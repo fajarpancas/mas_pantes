@@ -67,5 +67,83 @@ export default StyleSheet.create({
     fontSize: 14,
     color: Colors.textBlack,
     textAlign: 'center'
+  },
+  profilWrapper: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: Colors.white,
+    marginTop: 10,
+    padding: 15,
+    elevation: 1,
+  },
+  namaSales: {
+    fontSize: 13,
+    marginLeft: 3,
+    color: Colors.textGrey,
+    fontFamily: Fonts.type.acuminProRegular
+  },
+  namaToko: {
+    fontSize: 13,
+    color: Colors.textBlack,
+    fontFamily: Fonts.type.acuminProMedium
+  },
+  sales: {
+    fontFamily: Fonts.type.acuminProItalic
+  },
+  wrapper: {
+    backgroundColor: Colors.white,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 15,
+    paddingRight: 15,
+    borderBottomColor: Colors.borderGrey,
+    borderBottomWidth: 1,
+    paddingVertical: 10
+  },
+  textList: {
+    fontFamily: Fonts.type.acuminProRegular,
+    color: Colors.textBlack,
+    flex: 1
+  },
+  copyright: {
+    fontFamily: Fonts.type.acuminProRegular,
+    color: Colors.textGrey,
+    textAlign: 'center',
+    fontSize: 12
+  },
+  logoutButton: {
+    marginTop: 15,
+    height: Scale(40),
+    backgroundColor: Colors.white,
+    justifyContent: 'center',
+    elevation: 1
+  },
+  logoutText: {
+    color: Colors.alertError,
+    textAlign: 'center',
+    fontFamily: Fonts.type.acuminProMedium
+  },
+  lihat: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 12,
+    color: Colors.alertInfo,
+    marginRight: 5
+  },
+  modalDeleteWrapper: {
+    width: Scale(300),
+    justifyContent: 'center',
+    height: 'auto',
+    paddingHorizontal: Scale(20),
+    paddingVertical: Scale(40),
+    backgroundColor: Colors.white,
+    alignSelf: 'center',
+    borderRadius: 10
+  },
+  qrValueText: {
+    fontFamily: Fonts.type.acuminProMedium,
+    color: Colors.textBlack,
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 15
   }
 })

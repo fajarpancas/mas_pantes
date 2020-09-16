@@ -327,6 +327,7 @@ class SalesScreen extends Component {
   }
 
   render() {
+    const { barang } = this.props
     const { barcodeOpen } = this.state
     return (
       <View style={{ flex: 1, backgroundColor: Colors.white }}>
@@ -365,7 +366,13 @@ class SalesScreen extends Component {
                   <Text style={styles.scanText}>SCAN</Text>
                 </TouchableOpacity> */}
                 <TouchableOpacity
-                  onPress={() => this.resetModal.show()}
+                  onPress={() =>{
+                    if(barang.length >0 ){
+                      this.resetModal.show()
+                    }else{
+                      DropDownHolder.alert('warn', 'Reset Tidak Tersedia', 'Belum ada data barang yang ditambahkan')
+                    }}
+                  } 
                   style={styles.scanButton}
                 >
                   <Text style={styles.scanText}>Reset</Text>

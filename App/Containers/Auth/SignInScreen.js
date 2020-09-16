@@ -35,7 +35,7 @@ class SignInScreen extends Component {
     super(props)
     this.state = {
       phoneCode: '+62',
-      phoneNumber: '',
+      phoneNumber: '',  
       password: '',
       errorPhoneNumber: false,
       errorPassword: false
@@ -43,7 +43,7 @@ class SignInScreen extends Component {
   }
 
   handleSubmit(values, actions) {
-    this.props.navigation.navigate('AppSales')
+    this.props.navigation.navigate('App')
   }
 
   renderForm = (props) => {

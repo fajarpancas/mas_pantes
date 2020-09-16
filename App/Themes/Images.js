@@ -24,6 +24,7 @@ const images = {
   gold: require('../Images/gold.png'),
   pantes: require('../Images/pantes.jpg'),
   emptyTrans: require('../Images/empty-transactions.png'),
+  DefaultAvatar: require('../Images/DefaultAvatar.png'),
   iconHistory: require('../Images/icon-medical-history.png')
 }
 
