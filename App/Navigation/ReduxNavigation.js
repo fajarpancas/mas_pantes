@@ -24,6 +24,12 @@ class ReduxNavigation extends React.Component {
       if (nav.routes.length === 1 && (nav.routes[0].routeName === 'LaunchScreen')) {
         return false
       }
+      if (NavigationServices.getActiveScreenAndParams().routeName === 'stack') {
+        return false
+      }
+      if (NavigationServices.getActiveScreenAndParams().routeName === 'SignInScreen') {
+        return false
+      }
       // if (shouldCloseApp(nav)) return false
       dispatch({ type: 'Navigation/BACK' })
       return true

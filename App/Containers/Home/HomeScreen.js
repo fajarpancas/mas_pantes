@@ -33,7 +33,7 @@ class HomeScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      qrValue: 'Pejuang Subuh'
+      qrValue: 'Fajar Panca Saputra'
     }
   }
 
@@ -41,7 +41,7 @@ class HomeScreen extends Component {
     headerLeft: () => (
       <View style={styles.headerLeft}>
         <Text style={styles.hiText}>Hai,</Text>
-        <Text style={styles.usernameText}>Pejuang Subuh</Text>
+        <Text style={styles.usernameText}>Fajar Panca Saputra</Text>
       </View>
     ),
     headerRight: () => (
@@ -69,36 +69,6 @@ class HomeScreen extends Component {
         <Text style={styles.listText}>{title}</Text>
       </TouchableOpacity>
     )
-  }
-
-  onButtonPress = () => {
-    BackHandler.exitApp()
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-  }
-
-  handleBackButton = () => {
-    Alert.alert(
-      'Exit App',
-      'Exiting the application?', [{
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel'
-      }, {
-        text: 'OK',
-        onPress: () => this.onButtonPress()
-      },], {
-      cancelable: false
-    }
-    )
-    return true;
-  }
-
-  componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-  }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   }
 
   render() {
