@@ -89,7 +89,7 @@ export default StyleSheet.create({
   kemasButton: {
     height: Scale(30),
     width: Scale(100),
-    backgroundColor: 'green',
+    backgroundColor: Colors.alertSuccess,
     borderRadius: 4,
     justifyContent: 'center'
   },
@@ -103,7 +103,7 @@ export default StyleSheet.create({
   addButton: {
     height: Scale(30),
     width: Scale(100),
-    backgroundColor: 'blue',
+    backgroundColor: Colors.alertInfo,
     borderRadius: 4,
     justifyContent: 'center'
   },
@@ -117,7 +117,7 @@ export default StyleSheet.create({
   scanButton: {
     height: Scale(30),
     width: Scale(100),
-    backgroundColor: 'red',
+    backgroundColor: Colors.alertError,
     borderRadius: 4,
     justifyContent: 'center',
     marginHorizontal: 10

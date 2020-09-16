@@ -12,6 +12,8 @@ const { Types, Creators } = createActions({
   addBarangSuccess: ['payload'],
   deleteBarangRequest: ['data'],
   deleteBarangSuccess: ['payload'],
+  editBarangRequest: ['data'],
+  editBarangSuccess: ['payload'],
   resetBarang: null
 })
 
@@ -24,6 +26,7 @@ export const INITIAL_STATE = Immutable({
   getBarang: DEFAULT_STATE,
   addBarang: DEFAULT_STATE,
   deleteBarang: DEFAULT_STATE,
+  editBarang: DEFAULT_STATE,
   listBarang: [],
 })
 
@@ -72,6 +75,14 @@ export const deleteBarangSuccess = (state, { payload }) => {
   return state.merge({ ...state, deleteBarang: { payload }, listBarang: payload })
 }
 
+export const editBarangRequest = (state, { data }) => {
+  return state.merge({ ...state, editBarang: { data } })
+}
+
+export const editBarangSuccess = (state, { payload }) => {
+  return state.merge({ ...state, editBarang: { payload }, listBarang: payload })
+}
+
 export const resetBarang = state =>
   state.merge({ ...INITIAL_STATE })
 
@@ -83,7 +94,9 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.GET_BARANG_FAILURE]: getBarangFailure,
   [Types.ADD_BARANG_REQUEST]: addBarangRequest,
   [Types.ADD_BARANG_SUCCESS]: addBarangSuccess,
+  [Types.DELETE_BARANG_REQUEST]: deleteBarangRequest,
   [Types.DELETE_BARANG_SUCCESS]: deleteBarangSuccess,
-  [Types.DELETE_BARANG_SUCCESS]: deleteBarangSuccess,
+  [Types.EDIT_BARANG_REQUEST]: editBarangRequest,
+  [Types.EDIT_BARANG_SUCCESS]: editBarangSuccess,
   [Types.RESET_BARANG]: resetBarang
 })

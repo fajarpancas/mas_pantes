@@ -13,7 +13,7 @@ import { OrderTypes } from '../Redux/OrderRedux'
 
 import { startup } from './StartupSagas'
 import { getUserAvatar } from './GithubSagas'
-import { addBarang, deleteBarang, getBarang } from './OrderSagas'
+import { addBarang, deleteBarang, editBarang, getBarang } from './OrderSagas'
 
 /* ------------- API ------------- */
 
@@ -30,6 +30,7 @@ export default function * root () {
     takeLatest(OrderTypes.GET_BARANG_REQUEST, getBarang, api),
     takeLatest(OrderTypes.ADD_BARANG_REQUEST, addBarang, api),
     takeLatest(OrderTypes.DELETE_BARANG_REQUEST, deleteBarang, api),
+    takeLatest(OrderTypes.EDIT_BARANG_REQUEST, editBarang, api),
 
     // some sagas receive extra parameters in addition to an action
     takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api)

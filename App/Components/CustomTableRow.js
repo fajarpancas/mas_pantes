@@ -30,6 +30,15 @@ class CustomTableRow extends Component {
         this.props.onDeleteData(id)
     }
 
+    toEditScreen = (id, nama, harga) => {
+        const data = {
+            id,
+            nama,
+            harga
+        }
+        this.props.onPressEdit(data)
+    }
+
     renderTableHeader = () => {
         return (
             <View style={styles.headerTable}>
@@ -76,12 +85,13 @@ class CustomTableRow extends Component {
                 </View>
                 <View style={styles.borderTableFotoValue}>
                     <TouchableOpacity
+                        onPress={() => this.toEditScreen(id, Nama_Barang, harga)}
                         style={{ marginRight: 10 }}>
-                        <Icons name='edit' size={20} color={'lightgrey'} />
+                        <Icons name='edit' size={20} color={'grey'} />
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => this.showPopUp(id)}>
-                        <Icons name='delete' size={20} color={'lightgrey'} />
+                        <Icons name='delete' size={20} color={'grey'} />
                     </TouchableOpacity>
                 </View>
             </View >

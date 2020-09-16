@@ -3,6 +3,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import SalesBottomTabNavigation from './SalesBottomTabNavigation'
 import { createAppContainer } from 'react-navigation'
 import TambahBarang from '../Containers/SalesAppSection/Sales/TambahBarang'
+import EditBarang from '../Containers/SalesAppSection/Sales/EditBarang'
 
 const AppSalesStack = createStackNavigator(
     {
@@ -12,6 +13,9 @@ const AppSalesStack = createStackNavigator(
         },
         TambahBarang: {
             screen: TambahBarang,
+        },
+        EditBarang: {
+            screen: EditBarang,
         }
     },
     {

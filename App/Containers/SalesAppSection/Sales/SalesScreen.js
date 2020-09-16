@@ -15,6 +15,7 @@ import Scale from '../../../Transforms/Scale'
 import OrderActions from '../../../Redux/OrderRedux'
 import HeaderMasPantes from '../../../Components/HeaderMasPantes'
 import CustomTableRow from '../../../Components/CustomTableRow'
+import CustomModalDelete from '../../../Components/CustomModalDelete'
 import moment from 'moment'
 
 const schema = Yup.object().shape({
@@ -52,6 +53,8 @@ const initialValue = {
 }
 
 class SalesScreen extends Component {
+  resetModal = undefined
+
   static navigationOptions = ({ navigation }) => ({
     header: null
   })
@@ -98,6 +101,14 @@ class SalesScreen extends Component {
     }
 
     getBarangRequest(param)
+  }
+
+  reset = () => {
+    this.props.resetBarangRequest()
+  }
+
+  kemas = () => {
+    DropDownHolder.alert('error', 'Gagal Mengemas', 'Mohon maaf, fungsi ini masih dalam tahap pengembangan, API belum tersedia')
   }
 
   renderForm = (props) => {
@@ -277,6 +288,7 @@ class SalesScreen extends Component {
           </View>
           {/* {this.renderSearchBar()} */}
           <CustomTableRow
+            onPressEdit={(data) => this.props.navigation.navigate('EditBarang', { data })}
             onDeleteData={(id) => this.deleteDataBarang(id)}
             data={barang} />
         </Styled.Container>
@@ -353,16 +365,25 @@ class SalesScreen extends Component {
                   <Text style={styles.scanText}>SCAN</Text>
                 </TouchableOpacity> */}
                 <TouchableOpacity
-                  onPress={() => this.props.resetBarangRequest()}
+                  onPress={() => this.resetModal.show()}
                   style={styles.scanButton}
                 >
                   <Text style={styles.scanText}>Reset</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.kemasButton}>
+                <TouchableOpacity onPress={this.kemas} style={styles.kemasButton}>
                   <Text style={styles.kemasText}>Kemas</Text>
                 </TouchableOpacity>
               </View>
             </View>
+            <CustomModalDelete
+              type={'delete'}
+              title={'Reset Data Barang'}
+              confirmText={'Ya, Reset'}
+              onConfirm={this.reset}
+              idBarang={this.state.idBarang}
+              message={'Apakah anda yakin ingin menghapus semua barang?'}
+              setRef={r => this.resetModal = r}
+            />
           </View>
         }
       </View>

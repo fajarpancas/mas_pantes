@@ -66,3 +66,19 @@ export function* deleteBarang(api, action) {
   const newDataBarang = dataBarang.filter(obj => obj.id !== data.id)
   yield put(OrderActions.deleteBarangSuccess(newDataBarang))
 }
+
+export function* editBarang(api, action) {
+  const dataBarang = yield select(OrderSelectors.getData)
+  const { data } = action
+
+  const newData = dataBarang.map(obj => {
+    if (obj.id === data.id) {
+      return data
+    } else {
+      return obj
+    }
+  })
+
+  yield put(OrderActions.editBarangSuccess(newData))
+  NavigationService.goBack()
+}
