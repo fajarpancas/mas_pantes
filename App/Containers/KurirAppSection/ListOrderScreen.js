@@ -7,12 +7,12 @@ import Scale from '../../Transforms/Scale';
 import { Colors, Fonts } from '../../Themes';
 
 const TabNavigator = createMaterialTopTabNavigator({
-  Avail: AvailOrderScreen,
-  Progress: ProgressOrderScreen,
-  Finish: FinishOrderScreen,
+  Tersedia: AvailOrderScreen,
+  Proses: ProgressOrderScreen,
+  History: FinishOrderScreen,
 },
   {
-    initialRouteName: 'Avail',
+    initialRouteName: 'Tersedia',
     tabBarOptions: {
       upperCaseLabel: false,
       activeTintColor: Colors.goldBasic,

@@ -25,7 +25,13 @@ const images = {
   pantes: require('../Images/pantes.jpg'),
   emptyTrans: require('../Images/empty-transactions.png'),
   DefaultAvatar: require('../Images/DefaultAvatar.png'),
-  iconHistory: require('../Images/icon-medical-history.png')
+  iconHistory: require('../Images/icon-medical-history.png'),
+  FlashOff: require('../Images/FlashOff.png'),
+  FlashOn: require('../Images/FlashOn.png'),
+  IconCancel: require('../Images/IconCancel.png'),
+  cameraClick: require('../Images/cameraClick.png'),
+  CameraSwitch: require('../Images/CameraSwitch.png'),
+  camera: require('../Images/camera.png'),
 }
 
 export default images

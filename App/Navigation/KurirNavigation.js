@@ -3,6 +3,10 @@ import { createStackNavigator } from 'react-navigation-stack';
 import KurirBottomTabNavigation from './KurirBottomTabNavigation'
 import DetailOrderScreen from '../Containers/KurirAppSection/DetailOrder'
 import { createAppContainer } from 'react-navigation'
+import BerikanPenilaianScreen from '../Containers/Profile/BerikanPenilaianScreen'
+import HubungiKamiScreen from '../Containers/Profile/HubungiKamiScreen'
+import KebijakanPrivasiScreen from '../Containers/Profile/KebijakanPrivasiScreen'
+import PelajariFaqScreen from '../Containers/Profile/PelajariFaqScreen'
 
 const AppKurirStack = createStackNavigator(
     {
@@ -11,9 +15,20 @@ const AppKurirStack = createStackNavigator(
             navigationOptions: { header: null }
         },
         DetailScreen: {
-            screen: DetailOrderScreen,
-            navigationOptions: { header: null }
+            screen: DetailOrderScreen
         },
+        PelajariFaqScreen: {
+            screen: PelajariFaqScreen,
+        },
+        HubungiKamiScreen: {
+            screen: HubungiKamiScreen,
+        },
+        KebijakanPrivasiScreen: {
+            screen: KebijakanPrivasiScreen,
+        },
+        BerikanPenilaianScreen: {
+            screen: BerikanPenilaianScreen,
+        }
     },
     {
         initialRouteName: 'MainScreen',

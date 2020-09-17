@@ -16,7 +16,7 @@ class ProgressOrderScreen extends Component {
         <View style={{ flex: 1 }}>
           {/* <HeaderMasPantes /> */}
 
-          <Text style={styles.namaKurir}>Progress Nama Kurir: Darman</Text>
+          <Text style={styles.namaKurir}>Nama Kurir: Akmal</Text>
 
           <View style={{ flex: 1 }}>
             <View style={styles.listOrderWrapper}>
@@ -25,7 +25,7 @@ class ProgressOrderScreen extends Component {
                 <Text style={styles.textInfo}>Tgl order</Text>
               </View>
               <Text style={styles.textInfo}>Nama</Text>
-              <Text style={styles.textInfo}>Jalan bgst</Text>
+              <Text style={styles.textInfo}>Alamat</Text>
               <View style={{ flexDirection: 'row' }}>
                 <Text style={[{ flex: 1 }, styles.textInfo]}>Telepon</Text>
                 <TouchableOpacity style={styles.detailButton} onPress={() => this.props.navigation.navigate('DetailScreen')}>

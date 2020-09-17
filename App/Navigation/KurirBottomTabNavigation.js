@@ -34,7 +34,7 @@ const stackNav = screen =>
             },
         },
         {
-            headerMode: 'none',
+            headerMode: 'screen',
             defaultNavigationOptions: {
                 title: '',
                 headerTitleStyle: {
@@ -43,9 +43,9 @@ const stackNav = screen =>
                     fontWeight: '600',
                     textTransform: 'capitalize',
                 },
-                headerTitleAlign: 'center',
+                headerTitleAlign: 'left',
                 headerStyle: {
-                    //   backgroundColor: Colors.blueBasic,
+                    backgroundColor: Colors.goldBasic,
                     elevation: 0,
                     borderBottomWidth: 0,
                 }
@@ -58,7 +58,7 @@ const KurirBottomTabNavigation = createBottomTabNavigator(
         Sales: {
             screen: stackNav(ListOrderScreen),
             navigationOptions: () => ({
-                title: I18n.t('List Orderan'),
+                title: 'List Orderan',
                 tabBarIcon: ({ focused, tintColor }) => (
                     <Icon name="list" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
                 ),

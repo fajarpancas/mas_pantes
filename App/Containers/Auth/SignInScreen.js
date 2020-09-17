@@ -27,8 +27,8 @@ const schema = Yup.object().shape({
 
 const initialValue = {
   phoneCode: '+62',
-  phoneNumber: '242424',
-  password: 'dasda'
+  // phoneNumber: '242424',
+  // password: 'dasda'
 }
 
 class SignInScreen extends Component {
@@ -114,7 +114,7 @@ class SignInScreen extends Component {
             <View style={{ flexDirection: 'column', marginBottom: 15 }}>
               <Text style={styles.formLabelText}>Masuk sebagai</Text>
               <TouchableOpacity style={styles.chooseButton} onPress={this.showOffModal}>
-                <Text style={styles.textUser}>{this.state.user} (mode develop only while waitin API)</Text>
+                <Text style={styles.textUser}>{this.state.user} (mode develop only while waiting API)</Text>
               </TouchableOpacity>
             </View>
             <CustomInput

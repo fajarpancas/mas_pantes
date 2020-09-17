@@ -83,17 +83,24 @@ class CustomTableRow extends Component {
                 <View style={styles.borderTableHargaValue}>
                     <Text style={styles.valueTableFill}>{harga}</Text>
                 </View>
-                <View style={styles.borderTableFotoValue}>
-                    <TouchableOpacity
-                        onPress={() => this.toEditScreen(id, Nama_Barang, harga)}
-                        style={{ marginRight: 10 }}>
-                        <Icons name='edit' size={20} color={'grey'} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => this.showPopUp(id)}>
-                        <Icons name='delete' size={20} color={'grey'} />
-                    </TouchableOpacity>
-                </View>
+                {this.props.disableEdit &&
+                    <View style={styles.borderTableFotoValue}>
+                        <Text style={styles.valueTableFill}>-</Text>
+                    </View>
+                }
+                {!this.props.disableEdit &&
+                    <View style={styles.borderTableFotoValue}>
+                        <TouchableOpacity
+                            onPress={() => this.toEditScreen(id, Nama_Barang, harga)}
+                            style={{ marginRight: 10 }}>
+                            <Icons name='edit' size={20} color={'grey'} />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => this.showPopUp(id)}>
+                            <Icons name='delete' size={20} color={'grey'} />
+                        </TouchableOpacity>
+                    </View>
+                }
             </View >
         )
     }

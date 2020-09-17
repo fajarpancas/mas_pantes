@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, ScrollView, Alert, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, StatusBar, Alert, TouchableOpacity, TextInput } from 'react-native'
 import { connect } from 'react-redux'
 import BarcodeScannerScreen from './BarcodeScanner'
 import { Colors, Fonts } from '../../../Themes'
@@ -331,6 +331,7 @@ class SalesScreen extends Component {
     const { barcodeOpen } = this.state
     return (
       <View style={{ flex: 1, backgroundColor: Colors.white }}>
+        <StatusBar translucent={false} hidden={false} barStyle="light-content" backgroundColor={'#ccb102'} />
         {barcodeOpen ?
           <BarcodeScannerScreen closeScanner={this.openCloseBarcode} dataScanner={(value) => this.setData(value)} />
           :
@@ -366,13 +367,14 @@ class SalesScreen extends Component {
                   <Text style={styles.scanText}>SCAN</Text>
                 </TouchableOpacity> */}
                 <TouchableOpacity
-                  onPress={() =>{
-                    if(barang.length >0 ){
+                  onPress={() => {
+                    if (barang.length > 0) {
                       this.resetModal.show()
-                    }else{
+                    } else {
                       DropDownHolder.alert('warn', 'Reset Tidak Tersedia', 'Belum ada data barang yang ditambahkan')
-                    }}
-                  } 
+                    }
+                  }
+                  }
                   style={styles.scanButton}
                 >
                   <Text style={styles.scanText}>Reset</Text>

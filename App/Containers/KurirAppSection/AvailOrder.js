@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity } from 'react-native'
+import { Text, View, TouchableOpacity, StatusBar } from 'react-native'
 import { connect } from 'react-redux'
 import HeaderMasPantes from '../../Components/HeaderMasPantes'
 import styles from '../Styles/ListOrderScreenStyle'
@@ -13,10 +13,11 @@ class AvailOrderScreen extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
+        <StatusBar translucent={false} hidden={false} barStyle="light-content" backgroundColor={'#ccb102'} />
         <View style={{ flex: 1 }}>
           {/* <HeaderMasPantes /> */}
 
-          <Text style={styles.namaKurir}>Avail Nama Kurir: Darman</Text>
+          <Text style={styles.namaKurir}>Nama Kurir: Akmal</Text>
 
           <View style={{ flex: 1 }}>
             <View style={styles.listOrderWrapper}>
@@ -25,10 +26,10 @@ class AvailOrderScreen extends Component {
                 <Text style={styles.textInfo}>Tgl order</Text>
               </View>
               <Text style={styles.textInfo}>Nama</Text>
-              <Text style={styles.textInfo}>Jalan bgst</Text>
+              <Text style={styles.textInfo}>Alamat</Text>
               <View style={{ flexDirection: 'row' }}>
                 <Text style={[{ flex: 1 }, styles.textInfo]}>Telepon</Text>
-                <TouchableOpacity style={styles.detailButton} onPress={()=> this.props.navigation.navigate('DetailScreen')}>
+                <TouchableOpacity style={styles.detailButton} onPress={() => this.props.navigation.navigate('DetailScreen')}>
                   <Text style={styles.detailText}>
                     Detail
                  </Text>

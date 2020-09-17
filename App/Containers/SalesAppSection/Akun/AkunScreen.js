@@ -84,7 +84,7 @@ class AkunScreen extends Component {
                             marginLeft: 10
                         }}>
                             <Text style={styles.namaSales}>Akmal M Kristatnto
-                                <Text style={styles.sales}> (Sales)</Text>
+                                <Text style={styles.sales}></Text>
                             </Text>
                             <Text style={styles.namaToko}>Cabang Garage City Mall</Text>
                         </View>
