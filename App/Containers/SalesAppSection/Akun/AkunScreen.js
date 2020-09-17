@@ -5,6 +5,7 @@ import { Colors, Images, Fonts } from '../../../Themes'
 import Scale from '../../../Transforms/Scale'
 import styles from '../../Styles/AkunScreenStyle'
 import Icons from 'react-native-vector-icons/MaterialIcons'
+import CustomModalDelete from '../../../Components/CustomModalDelete'
 
 const privacyInform = [
     {
@@ -30,6 +31,7 @@ const privacyInform = [
 ]
 
 class AkunScreen extends Component {
+    modalLogout = undefined
     static navigationOptions = ({ navigation }) => ({
         headerTitle: 'Akun Saya',
         headerTitleStyle: {
@@ -51,6 +53,10 @@ class AkunScreen extends Component {
         super(props)
         this.state = {
         }
+    }
+
+    logout = () => {
+        this.props.navigation.navigate('Auth')
     }
 
     renderList = ({ title, navigation }) => {
@@ -88,7 +94,9 @@ class AkunScreen extends Component {
                         {privacyInform.map(this.renderList)}
                     </View>
 
-                    <TouchableOpacity style={styles.logoutButton}>
+                    <TouchableOpacity
+                        onPress={() => this.modalLogout.show()}
+                        style={styles.logoutButton}>
                         <Text style={styles.logoutText}>KELUAR</Text>
                     </TouchableOpacity>
 
@@ -97,6 +105,13 @@ class AkunScreen extends Component {
                         <Text style={styles.copyright}>App Sales Section, App Version 1.0</Text>
                     </View>
                 </View>
+                <CustomModalDelete
+                    title={'Keluar'}
+                    confirmText={'Ya, Keluar'}
+                    onConfirm={this.logout}
+                    message={'Apakah anda yakin ingin keluar dari akun ini?'}
+                    setRef={r => this.modalLogout = r}
+                />
             </View >
         )
     }

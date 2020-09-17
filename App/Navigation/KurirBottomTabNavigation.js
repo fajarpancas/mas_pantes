@@ -6,6 +6,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import HomeKurirScreen from '../Containers/KurirAppSection/HomeKurirScreen';
 import ListOrderScreen from '../Containers/KurirAppSection/ListOrderScreen';
+import AkunScreen from '../Containers/SalesAppSection/Akun/AkunScreen';
 
 import I18n from '../I18n';
 import { Images, Colors, Fonts, ApplicationStyles } from '../Themes';
@@ -54,15 +55,6 @@ const stackNav = screen =>
 
 const KurirBottomTabNavigation = createBottomTabNavigator(
     {
-        HomeSales: {
-            screen: stackNav(HomeKurirScreen),
-            navigationOptions: navigation => ({
-                title: I18n.t('home.home'),
-                tabBarIcon: ({ focused, tintColor }) => (
-                    <Icon name="home" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
-                ),
-            }),
-        },
         Sales: {
             screen: stackNav(ListOrderScreen),
             navigationOptions: () => ({
@@ -72,9 +64,18 @@ const KurirBottomTabNavigation = createBottomTabNavigator(
                 ),
             }),
         },
+        Setting: {
+            screen: stackNav(AkunScreen),
+            navigationOptions: () => ({
+                title: 'Akun',
+                tabBarIcon: ({ focused, tintColor }) => (
+                    <Icon name="account-circle" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
+                ),
+            }),
+        },
     },
     {
-        initialRouteName: 'HomeSales',
+        initialRouteName: 'Sales',
         tabBarOptions: {
             activeTintColor: '#ccb102',
             labelStyle: {
