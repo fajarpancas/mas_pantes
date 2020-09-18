@@ -19,6 +19,12 @@ export default StyleSheet.create({
     flex: 1,
     textAlign: 'center'
   },
+  rupiah: {
+    fontSize: 14,
+    fontFamily: Fonts.type.acuminProBold,
+    color: Colors.textGrey,
+    width: Scale(30)
+  },
   labelStyle: {
     width: Scale(80),
     paddingBottom: Scale(15),

@@ -88,10 +88,10 @@ export default class CustomSelectOption extends Component {
     render() {
         const { label, title, defaultValue, error, errorMessage, disabled } = this.props
         return (
-            <View>
-                {label !== null ? (
+            <View style={{ flex: 1 }}>
+                {/* {label !== null ? (
                     < Text style={styles.label}>{label}</Text>
-                ) : null}
+                ) : null} */}
 
                 {label !== null ? (
                     <TouchableOpacity
@@ -155,6 +155,7 @@ const styles = {
         paddingVertical: 5,
         borderBottomColor: '#DDDDDD',
         borderBottomWidth: 1,
+        flex: 1,
         alignItems: 'center'
     },
     customFormInputDisabled: {
@@ -172,13 +173,15 @@ const styles = {
     placeholder: {
         flex: 1,
         fontFamily: Fonts.type.azoSansRegular,
-        fontSize: 14,
+        fontSize: 13,
+        paddingLeft: 5,
         color: '#999999'
     },
     value: {
         flex: 1,
         fontFamily: Fonts.type.azoSansRegular,
-        fontSize: 14,
+        paddingLeft: 5,
+        fontSize: 13,
         color: Colors.textBlack
     },
     radioIcon: {

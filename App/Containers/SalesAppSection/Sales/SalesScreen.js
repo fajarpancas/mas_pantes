@@ -317,18 +317,24 @@ class SalesScreen extends Component {
                 />
               </View>
             </View>
-            <CustomSelectOption
-              label='Pembayaran'
-              title='Pembayaran'
-              data={pembayaran}
-              defaultValue={this.state.jenisPembayaran}
-              // error={errorPembayaran}
-              error={false}
-              selectTitle={'Pilih pembayaran'}
-              errorMessage={'Pembayaran harus diisi'}
-              onSelect={(value) => this.setState({ jenisPembayaran: value })}
-              setFieldValue={(value) => props.setFieldValue('jenisPembayaran', value)}
-            />
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: 'row', paddingTop: 10 }}>
+                <Text style={styles.labelStyle}>Pembayaran</Text>
+                <Text style={styles.labelStyle2}>:</Text>
+              </View>
+              <CustomSelectOption
+                label='Jenis Pembayaran'
+                title='Jenis Pembayaran'
+                data={pembayaran}
+                defaultValue={this.state.jenisPembayaran}
+                // error={errorPembayaran}
+                error={false}
+                selectTitle={'Pilih pembayaran'}
+                errorMessage={'Pembayaran harus diisi'}
+                onSelect={(value) => this.setState({ jenisPembayaran: value })}
+                setFieldValue={(value) => props.setFieldValue('jenisPembayaran', value)}
+              />
+            </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View style={{ flexDirection: 'row' }}>
                 <Text style={styles.labelStyle}>Nama Toko</Text>

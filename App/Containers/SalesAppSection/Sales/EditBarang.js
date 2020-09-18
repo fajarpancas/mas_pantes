@@ -91,6 +91,11 @@ class EditBarang extends Component {
                                 error={props.errors.harga}
                                 styleTitle={styles.formLabelTextTambah}
                                 styleInputText={styles.formPlacholderTextTambah}
+                                renderLeft={() => {
+                                    return (
+                                        <Text style={styles.rupiah}>Rp. </Text>
+                                    )
+                                }}
                             />
                         </Styled.Container>
                     </KeyboardAwareScrollView>
