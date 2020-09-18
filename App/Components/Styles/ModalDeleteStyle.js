@@ -22,6 +22,14 @@ export default StyleSheet.create({
         lineHeight: 20,
         marginHorizontal: 30
     },
+    titleEstimasi: {
+        fontFamily: Fonts.type.acuminProRegular,
+        fontSize: 15,
+        color: Colors.textGrey,
+        textAlign: 'center',
+        lineHeight: 18,
+        marginBottom: 10
+    },
     title: {
         fontFamily: Fonts.type.acuminProBold,
         fontSize: 18,
@@ -54,5 +62,12 @@ export default StyleSheet.create({
         color: Colors.textGrey,
         fontSize: 13,
         textAlign: 'center'
+    },
+    submitButton: {
+        backgroundColor: Colors.alertSuccess,
+        marginTop: 20,
+        height: Scale(40),
+        borderRadius: 5,
+        justifyContent: 'center'
     }
 })

@@ -20,9 +20,70 @@ export default StyleSheet.create({
     borderRadius: 5,
     justifyContent: 'center'
   },
+  chevronRight: {
+    width: Scale(23),
+    height: Scale(27),
+  },
+  containerTimeslot: {
+    flexDirection: 'row',
+    height: 44,
+    borderBottomColor: '#EEEEEE',
+    borderBottomWidth: 1
+  },
+  submitText: {
+    fontFamily: Fonts.type.acuminProMedium,
+    color: Colors.white,
+    textTransform: 'uppercase',
+    fontSize: 14,
+    textAlign: 'center'
+  },
+  estimasiWrapper: {
+    padding: 10,
+    borderColor: Colors.borderGrey,
+    borderWidth: 1,
+    borderRadius: 4,
+    marginTop: 5
+  },
+  submitButton: {
+    backgroundColor: Colors.alertInfo,
+    borderRadius: 4,
+    height: 40,
+    justifyContent: 'center',
+    marginTop: 8
+  },
+  text: {
+    fontFamily: Fonts.type.azoSansRegular,
+    fontSize: 13,
+    color: Colors.textBlack
+  },
+  time: {
+    fontFamily: Fonts.type.azoSansRegular,
+    fontSize: 13,
+    paddingRight: 10,
+    color: Colors.textBlack
+  },
   detailText: {
     textAlign: 'center',
     color: Colors.textBlack,
+    fontFamily: Fonts.type.acuminProRegular
+  },
+  ambilButton: {
+    width: Scale(100),
+    backgroundColor: Colors.alertSuccess,
+    height: 30,
+    borderRadius: 5,
+    justifyContent: 'center'
+  },
+  cancelButton: {
+    width: Scale(100),
+    backgroundColor: Colors.alertError,
+    height: 30,
+    borderRadius: 5,
+    justifyContent: 'center'
+  },
+  ambilText: {
+    textAlign: 'center',
+    color: Colors.white,
     fontFamily: Fonts.type.acuminProRegular
   },
   kirimButton: {
@@ -62,10 +123,10 @@ export default StyleSheet.create({
     color: Colors.textBlack
   },
   formPlacholderText: {
-    height: Scale(23),
+    height: Scale(35),
     fontFamily: Fonts.type.acuminProRegular,
     fontSize: 13,
-    backgroundColor: Colors.borderGrey,
+    backgroundColor: '#f2f2f2',
     paddingHorizontal: 5,
     padding: 0
   },
@@ -74,14 +135,14 @@ export default StyleSheet.create({
     fontSize: 13,
     paddingHorizontal: 5,
     padding: 0,
-    height: Scale(45),
+    height: 'auto',
     color: Colors.textBlack,
     lineHeight: 18,
     borderBottomColor: '#DDDDDD',
     borderBottomWidth: 1,
     paddingVertical: 5,
     textAlignVertical: 'top',
-    backgroundColor: Colors.borderGrey,
+    backgroundColor: '#f2f2f2',
     marginBottom: 10
   },
   formLabelText: {
@@ -90,7 +151,7 @@ export default StyleSheet.create({
     color: '#222222'
   },
   formPlacholderTextDisable: {
-    height: Scale(23),
+    height: Scale(35),
     fontFamily: Fonts.type.acuminProRegular,
     paddingHorizontal: 5,
     fontSize: 13,
@@ -168,7 +229,9 @@ export default StyleSheet.create({
     textAlign: 'center'
   },
   terimaButton: {
-    backgroundColor: Colors.goldBasic,
+    backgroundColor: Colors.white,
+    borderColor: Colors.alertSuccess,
+    borderWidth: 1,
     width: Scale(335),
     height: 40,
     borderRadius: 5,
@@ -177,7 +240,9 @@ export default StyleSheet.create({
     marginTop: 10
   },
   rejectButton: {
-    backgroundColor: Colors.alertError,
+    backgroundColor: Colors.white,
+    borderColor: Colors.alertError,
+    borderWidth: 1,
     width: Scale(335),
     height: 40,
     borderRadius: 5,
@@ -188,7 +253,13 @@ export default StyleSheet.create({
   terimaText: {
     fontFamily: Fonts.type.acuminProMedium,
     fontSize: 14,
-    color: Colors.white,
+    color: Colors.alertSuccess,
+    textAlign: 'center'
+  },
+  rejectText: {
+    fontFamily: Fonts.type.acuminProMedium,
+    fontSize: 14,
+    color: Colors.alertError,
     textAlign: 'center'
   }
 })

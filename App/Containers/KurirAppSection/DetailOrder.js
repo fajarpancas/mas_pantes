@@ -11,7 +11,7 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import PhoneRegion from '../../Containers/Auth/PhoneRegion'
 import moment from 'moment'
-import { CustomInput } from '../../Components'
+import { CustomInput, DropDownHolder } from '../../Components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Styled, CustomDatepicker } from 'react-native-awesome-component'
 
@@ -73,6 +73,14 @@ class DetailOrderScreen extends Component {
 
     setDataCamera = (data) => {
         this.setState({ dataCamera: data, uri: data.uri })
+    }
+
+    confirm = () => {
+        DropDownHolder.alert('error', 'Function belum tersedia', 'Mohon maaf, fungsi ini masih dalam tahap pengembangan, API belum tersedia')
+    }
+
+    reject = () => {
+        DropDownHolder.alert('error', 'Function belum tersedia', 'Mohon maaf, fungsi ini masih dalam tahap pengembangan, API belum tersedia')
     }
 
     renderForm = (props) => {
@@ -245,12 +253,18 @@ class DetailOrderScreen extends Component {
                             }
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.terimaButton}>
-                        <Text style={styles.terimaText}>Terima</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.rejectButton}>
-                        <Text style={styles.terimaText}>Reject</Text>
-                    </TouchableOpacity>
+                    <View style={{ marginVertical: 20 }}>
+                        <TouchableOpacity
+                            onPress={this.confirm}
+                            style={styles.terimaButton}>
+                            <Text style={styles.terimaText}>Terima</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={this.reject}
+                            style={styles.rejectButton}>
+                            <Text style={styles.rejectText}>Reject</Text>
+                        </TouchableOpacity>
+                    </View>
                 </Styled.Container>
             </KeyboardAwareScrollView>
         )

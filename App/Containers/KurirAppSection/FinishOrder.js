@@ -28,7 +28,7 @@ class FinishOrderScreen extends Component {
               <Text style={styles.textInfo}>Alamat</Text>
               <View style={{ flexDirection: 'row' }}>
                 <Text style={[{ flex: 1 }, styles.textInfo]}>Telepon</Text>
-                <TouchableOpacity style={styles.detailButton} onPress={()=> this.props.navigation.navigate('DetailScreen')}>
+                <TouchableOpacity style={styles.detailButton} onPress={() => this.props.navigation.navigate('DetailScreen')}>
                   <Text style={styles.detailText}>
                     Detail
                  </Text>
@@ -37,7 +37,23 @@ class FinishOrderScreen extends Component {
             </View>
           </View>
 
-        </View> 
+          <View style={{
+            paddingVertical: 15,
+            paddingHorizontal: 15,
+            backgroundColor: Colors.white
+          }}>
+            <Text style={styles.textInfo}>Total Order :</Text>
+            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+              <Text style={[{ flex: 1 }, styles.textInfo]}>Jumlah Order</Text>
+              <Text style={styles.textInfo}>Nilai Order</Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={[{ flex: 1 }, styles.textInfo]}>Jumlah Terima</Text>
+              <Text style={styles.textInfo}>Nilai Terima</Text>
+            </View>
+
+          </View>
+        </View>
       </View>
     )
   }
