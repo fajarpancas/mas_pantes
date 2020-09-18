@@ -32,6 +32,9 @@ const images = {
   cameraClick: require('../Images/cameraClick.png'),
   CameraSwitch: require('../Images/CameraSwitch.png'),
   camera: require('../Images/camera.png'),
+  iconDropdown: require('../Images/icon-dropdown.png'),
+  radioActive: require('../Images/radio-active.png'),
+  radio: require('../Images/radio.png'),
 }
 
 export default images

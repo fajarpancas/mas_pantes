@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import { View, Text, KeyboardAvoidingView, Alert, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
-import
-BarcodeScanner,
-{
-    Exception,
-    FocusMode,
-    TorchMode,
-    CameraFillMode,
-    BarcodeType,
-    pauseScanner,
-    resumeScanner
-} from 'react-native-barcode-scanner-google';
+// import
+// BarcodeScanner,
+// {
+//     Exception,
+//     FocusMode,
+//     TorchMode,
+//     CameraFillMode,
+//     BarcodeType,
+//     pauseScanner,
+//     resumeScanner
+// } from 'react-native-barcode-scanner-google';
 import { Method } from 'react-native-awesome-component';
 import styles from '../../Styles/SalesScreenStyle'
 import { RNCamera } from 'react-native-camera'

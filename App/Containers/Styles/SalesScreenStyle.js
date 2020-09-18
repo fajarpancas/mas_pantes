@@ -34,7 +34,7 @@ export default StyleSheet.create({
     color: Colors.textBlack
   },
   formPlacholderText: {
-    height: Scale(23),
+    height: Scale(35),
     fontFamily: Fonts.type.acuminProRegular,
     paddingHorizontal: 5,
     fontSize: 13,
@@ -62,7 +62,7 @@ export default StyleSheet.create({
     height: Scale(23),
     fontFamily: Fonts.type.acuminProRegular,
     fontSize: 13,
-    backgroundColor: Colors.borderGrey,
+    backgroundColor: '#f2f2f2',
     paddingHorizontal: 5,
     padding: 0
   },

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, StatusBar, Alert, TouchableOpacity, TextInput } from 'react-native'
 import { connect } from 'react-redux'
-import BarcodeScannerScreen from './BarcodeScanner'
+// import BarcodeScannerScreen from './BarcodeScanner'
 import { Colors, Fonts } from '../../../Themes'
 import styles from '../../Styles/SalesScreenStyle'
 import { CustomInput } from '../../../Components'
@@ -16,6 +16,7 @@ import OrderActions from '../../../Redux/OrderRedux'
 import HeaderMasPantes from '../../../Components/HeaderMasPantes'
 import CustomTableRow from '../../../Components/CustomTableRow'
 import CustomModalDelete from '../../../Components/CustomModalDelete'
+import CustomSelectOption from '../../../Components/CustomSelectOption'
 import moment from 'moment'
 
 const schema = Yup.object().shape({
@@ -35,6 +36,11 @@ const schema = Yup.object().shape({
     .required("Keterangan harus diisi."),
   kurir: Yup.string()
     .required("Nama kurir harus diisi."),
+  ongkir: Yup.string()
+    .required("Ongkos kirim harus diisi."),
+  jenisPembayaran: Yup.string(),
+  namaToko: Yup.string()
+    .required("Nama Toko harus diisi."),
 })
 
 const randomA = Math.floor(Math.random() * 100000) + 1
@@ -44,13 +50,18 @@ const initialValue = {
   noFaktur: randomA.toString() + randomB.toString(),
   phoneCode: '+62',
   tanggal: moment(new Date()).format('DD-MM-YYYY'),
-  namaCustomer: 'Fajar',
-  sales: 'Panca',
-  telephone: '87847635259',
-  keterangan: 'abcd',
-  kurir: 'Akmal',
-  alamat: 'Jl. Golf Cipanjalu no.42 RT.01 RW.11, Kec. Arcamanik, Kel.Cisaranten Binaharapan, Kota Bandung'
+  // namaCustomer: 'Fajar',
+  // sales: 'Panca',
+  // telephone: '87847635259',
+  // keterangan: 'abcd',
+  // kurir: 'Akmal',
+  // alamat: 'Jl. Golf Cipanjalu no.42 RT.01 RW.11, Kec. Arcamanik, Kel.Cisaranten Binaharapan, Kota Bandung'
 }
+
+const pembayaran = [
+  { id: 1, description: 'Pembayaran Tunai/COD' },
+  { id: 2, description: 'Transfer' }
+]
 
 class SalesScreen extends Component {
   resetModal = undefined
@@ -64,7 +75,8 @@ class SalesScreen extends Component {
     this.state = {
       barcodeOpen: false,
       dataBarcode: 'No data barcode',
-      kodeBarcode: ''
+      kodeBarcode: '',
+      jenisPembayaran: ''
     }
   }
 
@@ -280,6 +292,58 @@ class SalesScreen extends Component {
                   setFieldValue={props.setFieldValue}
                   value={props.values.kurir}
                   error={props.errors.kurir}
+                  styleTitle={styles.formLabelText}
+                  styleInputText={styles.formPlacholderText}
+                />
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.labelStyle}>Ongkos</Text>
+                <Text style={styles.labelStyle2}>:</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <CustomInput
+                  name="ongkir"
+                  title={'ongkir'}
+                  returnKeyType="go"
+                  maxLength={15}
+                  placeholder={'Ongkos kirim'}
+                  setFieldValue={props.setFieldValue}
+                  value={props.values.ongkir}
+                  error={props.errors.ongkir}
+                  styleTitle={styles.formLabelText}
+                  styleInputText={styles.formPlacholderText}
+                />
+              </View>
+            </View>
+            <CustomSelectOption
+              label='Pembayaran'
+              title='Pembayaran'
+              data={pembayaran}
+              defaultValue={this.state.jenisPembayaran}
+              // error={errorPembayaran}
+              error={false}
+              selectTitle={'Pilih pembayaran'}
+              errorMessage={'Pembayaran harus diisi'}
+              onSelect={(value) => this.setState({ jenisPembayaran: value })}
+              setFieldValue={(value) => props.setFieldValue('jenisPembayaran', value)}
+            />
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.labelStyle}>Nama Toko</Text>
+                <Text style={styles.labelStyle2}>:</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <CustomInput
+                  name="ongkir"
+                  title={'ongkir'}
+                  returnKeyType="go"
+                  maxLength={15}
+                  placeholder={'Nama Cabang/Toko'}
+                  setFieldValue={props.setFieldValue}
+                  value={props.values.ongkir}
+                  error={props.errors.ongkir}
                   styleTitle={styles.formLabelText}
                   styleInputText={styles.formPlacholderText}
                 />
