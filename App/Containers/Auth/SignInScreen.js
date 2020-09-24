@@ -27,8 +27,8 @@ const schema = Yup.object().shape({
 
 const initialValue = {
   phoneCode: '+62',
-  // phoneNumber: '242424',
-  // password: 'dasda'
+  phoneNumber: '242424',
+  password: 'dasda'
 }
 
 class SignInScreen extends Component {

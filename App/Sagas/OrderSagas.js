@@ -82,3 +82,21 @@ export function* editBarang(api, action) {
   yield put(OrderActions.editBarangSuccess(newData))
   NavigationService.goBack()
 }
+
+export function* getOrderList(api, action) {
+  try {
+    const { data } = action
+    const response = yield call(api.getListOrder, data)
+    if (response.ok) {
+      console.tron.error({dataaa:response.data})
+      yield put(OrderActions.getOrderSuccess(response.data.data))
+    } else {
+      DropDownHolder.alert('error', 'GAGAL', `Gagal mengambil data order.`)
+      yield put(OrderActions.getOrderFailure())
+
+    }
+  } catch (err) {
+    DropDownHolder.alert('error', 'Gagal', err.message)
+    yield put(OrderActions.getOrderFailure())
+  }
+}

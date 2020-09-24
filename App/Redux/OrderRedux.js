@@ -8,6 +8,9 @@ const { Types, Creators } = createActions({
   getBarangRequest: ['data'],
   getBarangSuccess: ['payload'],
   getBarangFailure: null,
+  getOrderRequest: ['data'],
+  getOrderSuccess: ['payload'],
+  getOrderFailure: null,
   addBarangRequest: ['data'],
   addBarangSuccess: ['payload'],
   deleteBarangRequest: ['data'],
@@ -24,10 +27,12 @@ export default Creators
 
 export const INITIAL_STATE = Immutable({
   getBarang: DEFAULT_STATE,
+  getOrder: DEFAULT_STATE,
   addBarang: DEFAULT_STATE,
   deleteBarang: DEFAULT_STATE,
   editBarang: DEFAULT_STATE,
   listBarang: [],
+  listOrder: []
 })
 
 /* ------------- Selectors ------------- */
@@ -86,12 +91,30 @@ export const editBarangSuccess = (state, { payload }) => {
 export const resetBarang = state =>
   state.merge({ ...INITIAL_STATE })
 
+export const getOrderRequest = (state, { data }) => {
+  console.tron.error({ data })
+  return state.merge({ ...state, getOrder: { fetching: true, data, payload: null } })
+}
+
+export const getOrderSuccess = (state, { payload }) => {
+  let newList = [...state.listOrder]
+  // const { payload } = action
+  newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+  return state.merge({ ...state, getOrder: { fetching: false, error: null, payload }, listOrder: newList })
+}
+
+export const getOrderFailure = state =>
+  state.merge({ ...state, getOrder: { fetching: false, error: true, payload: null } })
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.GET_BARANG_REQUEST]: getBarangRequest,
   [Types.GET_BARANG_SUCCESS]: getBarangSuccess,
   [Types.GET_BARANG_FAILURE]: getBarangFailure,
+  [Types.GET_ORDER_REQUEST]: getOrderRequest,
+  [Types.GET_ORDER_SUCCESS]: getOrderSuccess,
+  [Types.GET_ORDER_FAILURE]: getOrderFailure,
   [Types.ADD_BARANG_REQUEST]: addBarangRequest,
   [Types.ADD_BARANG_SUCCESS]: addBarangSuccess,
   [Types.DELETE_BARANG_REQUEST]: deleteBarangRequest,

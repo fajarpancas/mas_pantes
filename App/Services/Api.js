@@ -2,7 +2,7 @@
 import apisauce from 'apisauce'
 
 // our "constructor"
-const create = (baseURL = 'https://tokoemaspantes.000webhostapp.com/') => {
+const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
   // ------
   // STEP 1
   // ------
@@ -39,6 +39,7 @@ const create = (baseURL = 'https://tokoemaspantes.000webhostapp.com/') => {
   const getUser = (username) => api.get('search/users', { q: username })
 
   const getBarang = (param) => api.post('/api/getbarang', param)
+  const getListOrder = (param) => api.get('/api/get-list-order', param)
 
   // ------
   // STEP 3
@@ -58,7 +59,8 @@ const create = (baseURL = 'https://tokoemaspantes.000webhostapp.com/') => {
     getRate,
     getUser,
     api, 
-    getBarang
+    getBarang,
+    getListOrder
   }
 }
 

@@ -25,10 +25,12 @@ export default StyleSheet.create({
     height: Scale(27),
   },
   containerTimeslot: {
-    flexDirection: 'row',
+    flexDirection: 'column',
+    flex: 1,
     height: 44,
     borderBottomColor: '#EEEEEE',
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    marginHorizontal: 5
   },
   submitText: {
     fontFamily: Fonts.type.acuminProMedium,
@@ -54,6 +56,18 @@ export default StyleSheet.create({
   text: {
     fontFamily: Fonts.type.azoSansRegular,
     fontSize: 13,
+    color: Colors.textBlack
+  },
+  tglJam: {
+    fontFamily: Fonts.type.acuminProMedium,
+    fontSize: 13,
+    paddingRight: 10,
+    color: Colors.textBlack
+  },
+  textEstimasi: {
+    fontFamily: Fonts.type.acuminProBold,
+    fontSize: 13,
+    paddingRight: 10,
     color: Colors.textBlack
   },
   time: {

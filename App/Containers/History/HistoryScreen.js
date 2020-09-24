@@ -8,6 +8,8 @@ import { connect } from 'react-redux'
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import styles from '../Styles/HistoryScreenStyle'
 import { Fonts, Colors } from '../../Themes'
+import Geolocation from '@react-native-community/geolocation';
+import Geocoder from 'react-native-geocoding';
 
 const dummyData = [
   {
@@ -71,9 +73,54 @@ class HistoryScreen extends Component {
     }
   })
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      latitude: 0,
+      longitude: 0,
+      error: null,
+      Address: null
+    }
+  }
+
+  async componentDidMount() {
+    Geocoder.init("AIzaSyDfywR6CfPrnwXAj9K_Jwm5ttdOebLxj_Q")
+    Geolocation.getCurrentPosition(
+      (position) => {
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+        console.log(position)
+        Geocoder.from(position.coords.latitude, position.coords.longitude)
+          .then(json => {
+            console.log(json);
+            var addressComponent = json.results[0].address_components;
+            this.setState({
+              Address: addressComponent
+            })
+            console.log(addressComponent);
+          })
+          .catch(error => console.warn(error));
+      },
+      (error) => {
+        // See error code charts below.
+        this.setState({
+          error: error.message
+        }),
+          console.log(error.code, error.message);
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: 10000,
+        maximumAge: 100000
+      }
+    );
+  }
+
   renderList = ({ item, index }) => {
     return (
-      <TouchableOpacity style={styles.listWrapper} onPress={()=> this.props.navigation.navigate('HistoryDetailScreen')}>
+      <TouchableOpacity style={styles.listWrapper} onPress={() => this.props.navigation.navigate('HistoryDetailScreen')}>
         <View style={{ paddingHorizontal: 15, paddingBottom: 15 }}>
           <View style={{ flexDirection: 'row' }}>
             <View style={{ flex: 1 }}>

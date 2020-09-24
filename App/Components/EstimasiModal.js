@@ -5,6 +5,7 @@ import styles from './Styles/ModalDeleteStyle'
 import NavigationServices from '../Services/NavigationServices'
 import { Images } from '../Themes'
 import { connect } from 'react-redux'
+import moment from 'moment'
 
 class EstimasiModal extends PureComponent {
     constructor(props) {
@@ -53,7 +54,7 @@ class EstimasiModal extends PureComponent {
                 isVisible={isVisible}>
                 <View style={styles.modalDeleteWrapper}>
                     <Text style={styles.titleEstimasi}>
-                        Anda akan mengirim barang dengan estimasi barang sampai pada jam {this.props.title}</Text>
+                        Anda akan mengirim barang dengan estimasi barang sampai pada tanggal {moment(this.props.tanggal, 'DD/MM/YYYY').format('DD MMMM YYYY')} jam {this.props.time}</Text>
                     <TouchableOpacity
                         onPress={this.confirm}
                         style={styles.submitButton}>
