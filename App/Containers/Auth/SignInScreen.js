@@ -17,6 +17,7 @@ import images from '../../Themes/Images'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import Modal from 'react-native-modal'
+import AuthActions from '../../Redux/AuthRedux'
 
 const schema = Yup.object().shape({
   phoneNumber: Yup.string()
@@ -46,6 +47,15 @@ class SignInScreen extends Component {
   }
 
   handleSubmit(values, actions) {
+    const { loginRequest } = this.props
+
+    const params = {
+      phone_number: values.phoneCode + values.phoneNumber,
+      password: values.password
+    }
+
+    // loginRequest(params)
+
     switch (this.state.user) {
       case 'customer':
         this.props.navigation.navigate('App')
@@ -206,6 +216,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    loginRequest: (params) => dispatch(AuthActions.loginRequest([params]))
   }
 }
 

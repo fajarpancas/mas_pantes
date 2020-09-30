@@ -8,12 +8,21 @@ import DebugConfig from '../Config/DebugConfig'
 import { StartupTypes } from '../Redux/StartupRedux'
 import { GithubTypes } from '../Redux/GithubRedux'
 import { OrderTypes } from '../Redux/OrderRedux'
+import { AuthTypes } from '../Redux/AuthRedux'
 
 /* ------------- Sagas ------------- */
 
 import { startup } from './StartupSagas'
 import { getUserAvatar } from './GithubSagas'
-import { addBarang, createOrder, deleteBarang, editBarang, getBarang, getOrderList } from './OrderSagas'
+import {
+  addBarang,
+  createOrder,
+  deleteBarang,
+  editBarang,
+  getBarang,
+  getOrderList
+} from './OrderSagas'
+import { login } from './AuthSagas'
 
 /* ------------- API ------------- */
 
@@ -23,9 +32,11 @@ const api = DebugConfig.useFixtures ? FixtureAPI : API.create()
 
 /* ------------- Connect Types To Sagas ------------- */
 
-export default function * root () {
+export default function* root() {
   yield all([
     // some sagas only receive an action
+    takeLatest(AuthTypes.LOGIN_REQUEST, login, api),
+
     takeLatest(StartupTypes.STARTUP, startup),
     takeLatest(OrderTypes.GET_ORDER_REQUEST, getOrderList, api),
     takeLatest(OrderTypes.GET_BARANG_REQUEST, getBarang, api),

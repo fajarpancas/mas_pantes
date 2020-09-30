@@ -38,6 +38,7 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
   const getRate = () => api.get('rate_limit')
   const getUser = (username) => api.get('search/users', { q: username })
 
+  const login = (param) => api.post('/api/login', param)
   const getBarang = (param) => api.post('/api/getbarang', param)
   const getListOrder = (param) => api.get('/api/get-list-order', param)
 
@@ -59,6 +60,7 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
     getRate,
     getUser,
     api, 
+    login,
     getBarang,
     getListOrder
   }
