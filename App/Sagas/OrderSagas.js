@@ -88,7 +88,7 @@ export function* getOrderList(api, action) {
     const { data } = action
     const response = yield call(api.getListOrder, data)
     if (response.ok) {
-      console.tron.error({dataaa:response.data})
+      console.tron.error({ dataaa: response.data })
       yield put(OrderActions.getOrderSuccess(response.data.data))
     } else {
       DropDownHolder.alert('error', 'GAGAL', `Gagal mengambil data order.`)
@@ -98,5 +98,14 @@ export function* getOrderList(api, action) {
   } catch (err) {
     DropDownHolder.alert('error', 'Gagal', err.message)
     yield put(OrderActions.getOrderFailure())
+  }
+}
+
+export function* createOrder(api, action) {
+  try {
+    const { data } = action
+    console.tron.error({ data })
+  } catch {
+
   }
 }

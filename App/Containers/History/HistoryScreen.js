@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
 import { View, Text, FlatList, StatusBar, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
-
-// Styles
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import styles from '../Styles/HistoryScreenStyle'
 import { Fonts, Colors } from '../../Themes'
 import Geolocation from '@react-native-community/geolocation';
 import Geocoder from 'react-native-geocoding';
+import {API_KEY} from '../../Data/Const'
 
 const dummyData = [
   {
@@ -84,7 +81,7 @@ class HistoryScreen extends Component {
   }
 
   async componentDidMount() {
-    Geocoder.init("AIzaSyDfywR6CfPrnwXAj9K_Jwm5ttdOebLxj_Q")
+    Geocoder.init(API_KEY)
     Geolocation.getCurrentPosition(
       (position) => {
         this.setState({

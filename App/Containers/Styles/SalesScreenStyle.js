@@ -15,6 +15,12 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  textError: {
+    textAlign: 'left',
+    fontSize: 10,
+    color: 'red',
+    fontFamily: Fonts.type.azoSansRegular,
+  },
   textBarcode: {
     flex: 1,
     textAlign: 'center'
@@ -42,22 +48,21 @@ export default StyleSheet.create({
   formPlacholderText: {
     height: Scale(35),
     fontFamily: Fonts.type.acuminProRegular,
-    paddingHorizontal: 5,
+    // paddingHorizontal: 5,
     fontSize: 13,
     padding: 0
   },
   formAlamat: {
     fontFamily: Fonts.type.acuminProRegular,
     fontSize: 13,
-    paddingHorizontal: 5,
+    // paddingHorizontal: 5,
     padding: 0,
     height: Scale(45),
     lineHeight: 18,
     borderBottomColor: '#DDDDDD',
     borderBottomWidth: 1,
     paddingVertical: 5,
-    textAlignVertical: 'top',
-    marginBottom: 10
+    textAlignVertical: 'top'
   },
   formLabelText: {
     fontFamily: Fonts.type.acuminProBold,
@@ -69,7 +74,8 @@ export default StyleSheet.create({
     fontFamily: Fonts.type.acuminProRegular,
     fontSize: 13,
     backgroundColor: '#f2f2f2',
-    paddingHorizontal: 5,
+    // paddingHorizontal: 5,
+    marginTop: 10,
     padding: 0
   },
   formLabelTextDisable: {
@@ -94,7 +100,7 @@ export default StyleSheet.create({
   },
   kemasButton: {
     height: Scale(30),
-    width: Scale(100),
+    width: Scale(110),
     backgroundColor: Colors.alertSuccess,
     borderRadius: 4,
     justifyContent: 'center'
@@ -108,7 +114,7 @@ export default StyleSheet.create({
   },
   addButton: {
     height: Scale(30),
-    width: Scale(100),
+    width: Scale(110),
     backgroundColor: Colors.alertInfo,
     borderRadius: 4,
     justifyContent: 'center'
@@ -122,7 +128,7 @@ export default StyleSheet.create({
   },
   scanButton: {
     height: Scale(30),
-    width: Scale(100),
+    width: Scale(110),
     backgroundColor: Colors.alertError,
     borderRadius: 4,
     justifyContent: 'center',

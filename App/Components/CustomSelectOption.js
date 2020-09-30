@@ -174,13 +174,13 @@ const styles = {
         flex: 1,
         fontFamily: Fonts.type.azoSansRegular,
         fontSize: 13,
-        paddingLeft: 5,
+        // paddingLeft: 5,
         color: '#999999'
     },
     value: {
         flex: 1,
         fontFamily: Fonts.type.azoSansRegular,
-        paddingLeft: 5,
+        // paddingLeft: 5,
         fontSize: 13,
         color: Colors.textBlack
     },

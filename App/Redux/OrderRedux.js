@@ -8,6 +8,9 @@ const { Types, Creators } = createActions({
   getBarangRequest: ['data'],
   getBarangSuccess: ['payload'],
   getBarangFailure: null,
+  createOrderRequest: ['data'],
+  createOrderSuccess: ['payload'],
+  createOrderFailure: null,
   getOrderRequest: ['data'],
   getOrderSuccess: ['payload'],
   getOrderFailure: null,
@@ -26,6 +29,7 @@ export default Creators
 /* ------------- Initial State ------------- */
 
 export const INITIAL_STATE = Immutable({
+  createOrder: DEFAULT_STATE,
   getBarang: DEFAULT_STATE,
   getOrder: DEFAULT_STATE,
   addBarang: DEFAULT_STATE,
@@ -106,12 +110,26 @@ export const getOrderSuccess = (state, { payload }) => {
 export const getOrderFailure = state =>
   state.merge({ ...state, getOrder: { fetching: false, error: true, payload: null } })
 
+export const createOrderRequest = (state, { data }) =>
+  state.merge({ ...state, createOrder: { fetching: true, data, payload: null } })
+
+// successful api lookup
+export const createOrderSuccess = (state, { payload }) =>
+  state.merge({ ...state, createOrder: { fetching: false, error: null, payload } })
+
+// Something went wrong somewhere.
+export const createOrderFailure = state =>
+  state.merge({ ...state, createOrder: { fetching: false, error: true, payload: null } })
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.GET_BARANG_REQUEST]: getBarangRequest,
   [Types.GET_BARANG_SUCCESS]: getBarangSuccess,
   [Types.GET_BARANG_FAILURE]: getBarangFailure,
+  [Types.CREATE_ORDER_REQUEST]: createOrderRequest,
+  [Types.CREATE_ORDER_SUCCESS]: createOrderSuccess,
+  [Types.CREATE_ORDER_FAILURE]: createOrderFailure,
   [Types.GET_ORDER_REQUEST]: getOrderRequest,
   [Types.GET_ORDER_SUCCESS]: getOrderSuccess,
   [Types.GET_ORDER_FAILURE]: getOrderFailure,
