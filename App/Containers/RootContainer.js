@@ -5,9 +5,16 @@ import { connect } from 'react-redux'
 import StartupActions from '../Redux/StartupRedux'
 import ReduxPersist from '../Config/ReduxPersist'
 import InAppPopUp from '../Components/InAppPopUp'
+import {
+  ConnectionHandler,
+  CustomAlert,
+  LoadingModal,
+  Method,
+} from 'react-native-awesome-component';
 
 // Styles
 import styles from './Styles/RootContainerStyles'
+import { Colors } from '../Themes'
 
 class RootContainer extends Component {
   componentDidMount() {
@@ -23,6 +30,11 @@ class RootContainer extends Component {
         <StatusBar barStyle='light-content' />
         <ReduxNavigation />
         <InAppPopUp />
+        <LoadingModal
+          size={'large'}
+          color={Colors.goldBasic}
+          ref={(r) => Method.LoadingHelper.setLoadingInstance(r)}
+        />
       </View>
     )
   }

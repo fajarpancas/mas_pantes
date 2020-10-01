@@ -8,6 +8,7 @@ import QRCode from 'react-native-qrcode-svg'
 import Scale from '../../Transforms/Scale'
 import Modal from 'react-native-modal'
 import CustomModalDelete from '../../Components/CustomModalDelete'
+import AuthActions from '../../Redux/AuthRedux'
 
 const privacyInform = [
   {
@@ -81,8 +82,9 @@ class ProfileScreen extends Component {
     )
   }
 
-  logout =() => {
-    this.props.navigation.navigate('Auth')
+  logout = () => {
+    const { logoutRequest } = this.props
+    logoutRequest()
   }
 
   showOffModal = () => {
@@ -197,6 +199,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    logoutRequest: () => dispatch(AuthActions.logoutRequest())
   }
 }
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {
   StatusBar,
   TouchableOpacity,
+  ActivityIndicator,
   View,
   Text,
   Image
@@ -27,16 +28,14 @@ const schema = Yup.object().shape({
 })
 
 const initialValue = {
-  phoneCode: '+62',
-  phoneNumber: '242424',
-  password: 'dasda'
+  phoneNumber: '081',
+  password: '123456'
 }
 
 class SignInScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      phoneCode: '+62',
       phoneNumber: '',
       password: '',
       errorPhoneNumber: false,
@@ -50,23 +49,23 @@ class SignInScreen extends Component {
     const { loginRequest } = this.props
 
     const params = {
-      phone_number: values.phoneCode + values.phoneNumber,
+      email: values.phoneNumber,
       password: values.password
     }
 
-    // loginRequest(params)
+    loginRequest(params)
 
-    switch (this.state.user) {
-      case 'customer':
-        this.props.navigation.navigate('App')
-        break;
-      case 'sales':
-        this.props.navigation.navigate('AppSales')
-        break;
-      case 'kurir':
-        this.props.navigation.navigate('AppKurir')
-        break;
-    }
+    // switch (this.state.user) {
+    //   case 'customer':
+    //     this.props.navigation.navigate('App')
+    //     break;
+    //   case 'sales':
+    //     this.props.navigation.navigate('AppSales')
+    //     break;
+    //   case 'kurir':
+    //     this.props.navigation.navigate('AppKurir')
+    //     break;
+    // }
   }
 
   showOffModal = () => {
@@ -116,18 +115,20 @@ class SignInScreen extends Component {
   }
 
   renderForm = (props) => {
+    const { login } = this.props
+    const { fetching } = login
     return (
       <KeyboardAwareScrollView extraScrollHeight={40} style={{ marginHorizontal: 25 }}>
         <Styled.Container padded style={{ borderRadius: 10 }}>
           <View style={{ padding: 15 }}>
             <Text style={styles.titleSignIn}>Masuk ke Aplikasi</Text>
-            <View style={{ flexDirection: 'column', marginBottom: 15 }}>
+            {/* <View style={{ flexDirection: 'column', marginBottom: 15 }}>
               <Text style={styles.formLabelText}>Masuk sebagai</Text>
               <TouchableOpacity style={styles.chooseButton} onPress={this.showOffModal}>
                 <Text style={styles.textUser}>{this.state.user} (mode develop only while waiting API)</Text>
               </TouchableOpacity>
-            </View>
-            <CustomInput
+            </View> */}
+            {/* <CustomInput
               label
               name="phoneNumber"
               title={'No. Telepon'}
@@ -152,6 +153,21 @@ class SignInScreen extends Component {
                   />
                 )
               }}
+            /> */}
+            <CustomInput
+              label
+              name="phoneNumber"
+              title={'Nomor Telepon'}
+              autoCapitalize="none"
+              keyboardType='numeric'
+              returnKeyType="go"
+              maxLength={15}
+              placeholder={'Masukkan nomor telepon'}
+              setFieldValue={props.setFieldValue}
+              value={props.values.phoneNumber}
+              error={props.errors.phoneNumber}
+              styleTitle={styles.formLabelText}
+              styleInputText={styles.formPlacholderText}
             />
 
             <CustomInput
@@ -171,7 +187,7 @@ class SignInScreen extends Component {
               styleInputText={styles.formPlacholderText}
             />
 
-            {false
+            {fetching
               ? <ActivityIndicator style={{ marginVertical: 10 }} />
               :
               <TouchableOpacity style={styles.signInBtn} onPress={props.handleSubmit}>
@@ -211,12 +227,13 @@ class SignInScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    login: state.auth.login
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loginRequest: (params) => dispatch(AuthActions.loginRequest([params]))
+    loginRequest: (params) => dispatch(AuthActions.loginRequest(params))
   }
 }
 

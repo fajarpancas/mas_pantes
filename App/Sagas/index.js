@@ -22,7 +22,7 @@ import {
   getBarang,
   getOrderList
 } from './OrderSagas'
-import { login } from './AuthSagas'
+import { login, logout } from './AuthSagas'
 
 /* ------------- API ------------- */
 
@@ -36,6 +36,7 @@ export default function* root() {
   yield all([
     // some sagas only receive an action
     takeLatest(AuthTypes.LOGIN_REQUEST, login, api),
+    takeLatest(AuthTypes.LOGOUT_REQUEST, logout, api),
 
     takeLatest(StartupTypes.STARTUP, startup),
     takeLatest(OrderTypes.GET_ORDER_REQUEST, getOrderList, api),

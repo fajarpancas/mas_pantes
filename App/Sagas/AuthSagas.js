@@ -1,27 +1,64 @@
-/* ***********************************************************
-* A short word on how to use this automagically generated file.
-* We're often asked in the ignite gitter channel how to connect
-* to a to a third party api, so we thought we'd demonstrate - but
-* you should know you can use sagas for other flow control too.
-*
-* Other points:
-*  - You'll need to add this saga to sagas/index.js
-*  - This template uses the api declared in sagas/index.js, so
-*    you'll need to define a constant in that file.
-*************************************************************/
-
-import { call, put } from 'redux-saga/effects'
+import { call, put, all } from 'redux-saga/effects'
 import AuthActions from '../Redux/AuthRedux'
-// import { AuthSelectors } from '../Redux/AuthRedux'
+import { DropDownHolder } from '../Components'
+import NavigationServices from '../Services/NavigationServices'
+import SessionActions from '../Redux/SessionRedux'
+import { delay } from '../Lib/Helper';
+import { Method } from 'react-native-awesome-component';
 
-export function * login (api, action) {
-  const { data } = action
-  const response = yield call(api.login, data)
+export function* login(api, action) {
+  try {
+    const { data } = action
 
-  console.tron.error({data})
-  if (response.ok) {
-    yield put(AuthActions.loginSuccess(response.data))
-  } else {
-    yield put(AuthActions.loginFailure())
+    const response = yield call(api.login, data)
+
+    if (response.ok) {
+      const { data } = response.data
+      const { token_user, Id_Role } = data
+
+      api.api.setHeaders({ Authorization: `bearer ${token_user}` });
+
+      if (Id_Role === 1) {
+        NavigationServices.navigate('AppSales')
+      } else if (Id_Role === 2) {
+        NavigationServices.navigate('AppKurir')
+      } else if (Id_Role === 3) {
+        NavigationServices.navigate('App')
+      }
+
+      yield all([
+        put(SessionActions.saveUserSession(data)),
+        put(SessionActions.saveTokenAuth(token_user)),
+        put(AuthActions.loginSuccess(data))
+      ])
+      DropDownHolder.alert('success', 'Login Berhasil', `hai ${data.Nama_User}, selamat datang di aplikasi pantes gold`)
+
+    } else {
+      DropDownHolder.alert('error', 'Login Gagal', `maaf, nomor telepon dan kata sandi yang anda masukkan salah`)
+      yield put(AuthActions.loginFailure())
+    }
+  } catch {
+    DropDownHolder.alert('error', 'Login Gagal', `maaf, nomor telepon dan kata sandi yang anda masukkan salah`)
+  }
+}
+
+export function* logout(api, action) {
+  try {
+    Method.LoadingHelper.showLoading()
+    const response = yield call(api.logout)
+    if (response.ok) {
+      yield all([
+        put(SessionActions.logout()),
+        put(AuthActions.logoutSuccess(response.data))
+      ])
+      NavigationServices.navigate('Auth')
+      Method.LoadingHelper.hideLoading()
+    } else {
+      yield put(AuthActions.logoutFailure())
+      Method.LoadingHelper.hideLoading()
+    }
+  } catch {
+    yield put(AuthActions.logoutFailure())
+    Method.LoadingHelper.hideLoading()
   }
 }
