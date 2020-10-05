@@ -145,6 +145,7 @@ class AvailOrderScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    user: state.session.userSession
   }
 }
 

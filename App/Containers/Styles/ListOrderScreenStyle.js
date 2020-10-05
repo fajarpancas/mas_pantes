@@ -6,7 +6,7 @@ export default StyleSheet.create({
   ...ApplicationStyles.screen,
   listOrderWrapper: {
     height: 'auto',
-    padding: 10,
+    padding: 15,
     width: Scale(350),
     alignSelf: 'center',
     backgroundColor: Colors.white,
@@ -14,11 +14,12 @@ export default StyleSheet.create({
     elevation: 1
   },
   detailButton: {
-    width: Scale(100),
-    backgroundColor: Colors.borderGrey,
-    height: 30,
-    borderRadius: 5,
-    justifyContent: 'center'
+    borderColor: '#00b9f2',
+    borderWidth: 1,
+    width: Scale(40),
+    height: Scale(40),
+    borderRadius: Scale(40),
+    justifyContent: 'center',
   },
   chevronRight: {
     width: Scale(23),
@@ -82,18 +83,21 @@ export default StyleSheet.create({
     fontFamily: Fonts.type.acuminProRegular
   },
   ambilButton: {
-    width: Scale(100),
-    backgroundColor: Colors.alertSuccess,
-    height: 30,
-    borderRadius: 5,
-    justifyContent: 'center'
+    borderColor: '#00b9f2',
+    borderWidth: 1,
+    width: Scale(40),
+    height: Scale(40),
+    borderRadius: Scale(40),
+    justifyContent: 'center',
   },
   cancelButton: {
-    width: Scale(100),
-    backgroundColor: Colors.alertError,
-    height: 30,
-    borderRadius: 5,
-    justifyContent: 'center'
+    borderColor: 'red',
+    borderWidth: 1,
+    width: Scale(40),
+    height: Scale(40),
+    borderRadius: Scale(40),
+    justifyContent: 'center',
+
   },
   ambilText: {
     textAlign: 'center',
@@ -116,11 +120,37 @@ export default StyleSheet.create({
   textInfo: {
     fontFamily: Fonts.type.acuminProRegular,
     color: Colors.textBlack,
+    lineHeight: 18
+  },
+  textInfoAlamat: {
+    fontFamily: Fonts.type.acuminProRegular,
+    color: Colors.textBlack,
+    lineHeight: 18,
+    flex: 1
+  },
+  textName: {
+    fontFamily: Fonts.type.acuminProBold,
+    color: Colors.textBlack,
+    lineHeight: 18
   },
   namaKurir: {
     fontFamily: Fonts.type.textBlack,
     padding: 12,
     color: Colors.textBlack
+  },
+  textKirim: {
+    fontFamily: Fonts.type.acuminProMedium,
+    marginTop: 2,
+    fontSize: 12,
+    lineHeight: 18,
+    color: '#00b9f2'
+  },
+  textBatal: {
+    fontFamily: Fonts.type.acuminProMedium,
+    marginTop: 2,
+    fontSize: 12,
+    lineHeight: 18,
+    color: 'red'
   },
   labelStyle: {
     width: Scale(80),

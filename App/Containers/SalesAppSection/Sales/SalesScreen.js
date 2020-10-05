@@ -13,19 +13,21 @@ import { Styled, CustomDatepicker } from 'react-native-awesome-component'
 import PhoneRegion from '../../Auth/PhoneRegion'
 import Scale from '../../../Transforms/Scale'
 import OrderActions from '../../../Redux/OrderRedux'
+import MasterDataActions from '../../../Redux/MasterDataRedux'
 import HeaderMasPantes from '../../../Components/HeaderMasPantes'
 import CustomTableRow from '../../../Components/CustomTableRow'
 import CustomModalDelete from '../../../Components/CustomModalDelete'
 import CustomSelectOption from '../../../Components/CustomSelectOption'
 import moment from 'moment'
+import { Method } from 'react-native-awesome-component';
 
 const schema = Yup.object().shape({
-  noFaktur: Yup.string(),
+  // noFaktur: Yup.string(),
   tanggal: Yup.string(),
-  namaCustomer: Yup.string()
-    .required("Nama Customer harus diisi."),
-  sales: Yup.string()
-    .required("Sales harus diisi."),
+  // namaCustomer: Yup.string()
+  //   .required("Nama Customer harus diisi."),
+  // sales: Yup.string()
+  //   .required("Sales harus diisi."),
   tanggal: Yup.string()
     .required("Tanggal harus diisi."),
   alamat: Yup.string()
@@ -34,29 +36,18 @@ const schema = Yup.object().shape({
     .required("Telepon harus diisi."),
   keterangan: Yup.string()
     .required("Keterangan harus diisi."),
-  kurir: Yup.string()
-    .required("Nama kurir harus diisi."),
+  // kurir: Yup.string()
+  //   .nullable(),
+  // .required("Nama kurir harus diisi."),
   ongkir: Yup.string()
     .required("Ongkos kirim harus diisi."),
-  jenisPembayaran: Yup.string(),
+  // jenisPembayaran: Yup.string(),
   namaToko: Yup.string()
     .required("Nama Toko harus diisi."),
 })
 
-const randomA = Math.floor(Math.random() * 100000) + 1
-const randomB = Math.floor(Math.random() * 100000) + 1
-
-const initialValue = {
-  noFaktur: randomA.toString() + randomB.toString(),
-  phoneCode: '+62',
-  tanggal: moment(new Date()).format('DD-MM-YYYY'),
-  // namaCustomer: 'Fajar',
-  // sales: 'Panca',
-  // telephone: '87847635259',
-  // keterangan: 'abcd',
-  // kurir: 'Akmal',
-  // alamat: 'Jl. Golf Cipanjalu no.42 RT.01 RW.11, Kec. Arcamanik, Kel.Cisaranten Binaharapan, Kota Bandung'
-}
+// const randomA = Math.floor(Math.random() * 100000) + 1
+// const randomB = Math.floor(Math.random() * 100000) + 1
 
 const pembayaran = [
   { id: 1, description: 'Pembayaran Tunai/COD' },
@@ -78,7 +69,20 @@ class SalesScreen extends Component {
       kodeBarcode: '',
       jenisPembayaran: '',
       errorAlamat: false,
-      errorPembayaran: false
+      errorPembayaran: false,
+      customerName: '',
+      errorCustomer: false,
+      kurir: '',
+      errorKurir: false
+    }
+
+    this.initialValue = {
+      tanggal: moment(new Date()).format('DD MMMM YYYY'),
+      telephone: '87847635259',
+      keterangan: 'abcd',
+      ongkir: '90000',
+      namaToko: 'abc',
+      alamat: 'Jl. Golf Cipanjalu no.42 RT.01 RW.11, Kec. Arcamanik, Kel.Cisaranten Binaharapan, Kota Bandung'
     }
   }
 
@@ -91,7 +95,6 @@ class SalesScreen extends Component {
     const param = {
       Kode_Barcode: value
     }
-
     getBarangRequest(param)
   }
 
@@ -104,44 +107,50 @@ class SalesScreen extends Component {
   }
 
   handleSubmit(values, actions) {
-    const { barang } = this.props
+    const { barang, user, noPenjualan, createOrderRequest } = this.props
+    const { errorCustomer, errorPembayaran, errorKurir } = this.state
+    if (!errorCustomer && !errorPembayaran && !errorKurir) {
+      let parseBarang = []
+      let totalHarga = 0
 
-    let parseBarang = []
-    let totalHarga = 0
-
-    if (barang.length > 0) {
-      parseBarang = barang.map((obj) => {
-        return {
-          No_Penjualan: values.noFaktur,
-          No_Nota: values.noFaktur,
-          Kd_Barang: obj.id,
-          Nama_Barang: obj.Nama_Barang,
-          Harga: obj.harga,
-          Harga_Jual: obj.harga,
-          Status: 1
+      if (barang.length > 0) {
+        parseBarang = barang.map((obj) => {
+          return {
+            No_Penjualan: noPenjualan,
+            No_Nota: noPenjualan,
+            Kd_Barang: obj.id,
+            Nama_Barang: obj.Nama_Barang,
+            Harga: obj.harga,
+            Harga_Jual: obj.harga,
+          }
+        })
+        for (let i = 0; i < barang.length; i++) {
+          totalHarga = totalHarga + parseInt(barang[i].harga)
         }
-      })
-    }
 
-    for(let i = 0; i < barang.length; i++ ){
-      totalHarga = totalHarga + barang[i].harga
-    }
+        const params = {
+          No_Penjualan: noPenjualan,
+          Id_Sales: user.Id_Sales,
+          Id_Member: null,
+          Nama_Customer: values.namaCustomer,
+          Alamat: values.alamat,
+          Kurir_Id: null,
+          Nilai_Bayar: totalHarga,
+          Ongkos_Kirim: values.ongkir,
+          Id_Jenis_Pembayaran: values.jenisPembayaran,
+          Data_Barang: JSON.stringify(parseBarang)
+        }
+        Method.LoadingHelper.showLoading()
 
-    const params = {
-      No_Penjualan: values.noFaktur,
-      Id_Sales: 2,
-      Id_Member: 2,
-      Nama_Customer: values.namaCustomer,
-      Alamat: values.alamat,
-      Jam_Kemas: values.tanggal,
-      Kurir_Id: 1,
-      Nilai_Bayar: totalHarga,
-      Ongkos_Kirim: values.ongkir,
-      Id_Jenis_Pembayaran: values.jenisPembayaran,
-      Data_Barang: parseBarang,
+        createOrderRequest(params)
+      }
     }
+  }
 
-    console.tron.error({params})
+  componentDidMount() {
+    const { getListUserRequest, getListKurirRequest } = this.props
+    getListUserRequest()
+    getListKurirRequest()
   }
 
   cariBarang = () => {
@@ -171,17 +180,29 @@ class SalesScreen extends Component {
       this.setState({ errorAlamat: true })
     }
 
+    if (props.values.namaCustomer) {
+      this.setState({ errorCustomer: false })
+    } else {
+      this.setState({ errorCustomer: true })
+    }
+
     if (props.values.jenisPembayaran) {
       this.setState({ errorPembayaran: false })
     } else {
       this.setState({ errorPembayaran: true })
     }
 
+    if (props.values.kurir) {
+      this.setState({ errorKurir: false })
+    } else {
+      this.setState({ errorKurir: true })
+    }
+
     props.handleSubmit()
   }
 
   renderForm = (props) => {
-    const { barang } = this.props
+    const { barang, user, noPenjualan, userData, kurirData } = this.props
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
@@ -202,8 +223,8 @@ class SalesScreen extends Component {
                       maxLength={15}
                       placeholder={'Nomor Nota'}
                       setFieldValue={props.setFieldValue}
-                      value={props.values.noFaktur}
-                      error={props.errors.noFaktur}
+                      value={noPenjualan}
+                      error={false}
                       styleTitle={styles.formLabelTextDisable}
                       styleInputText={styles.formPlacholderTextDisable}
                     />
@@ -214,7 +235,7 @@ class SalesScreen extends Component {
                     <Text style={styles.labelStyle}>Customer </Text>
                     <Text style={styles.labelStyle2}>:</Text>
                   </View>
-                  <View style={{ flex: 1 }}>
+                  {/* <View style={{ flex: 1 }}>
                     <CustomInput
                       name="namaCustomer"
                       returnKeyType="go"
@@ -226,7 +247,18 @@ class SalesScreen extends Component {
                       styleTitle={styles.formLabelText}
                       styleInputText={styles.formPlacholderText}
                     />
-                  </View>
+                  </View> */}
+                  <CustomSelectOption
+                    label='Nama Customer'
+                    title='Nama Customer'
+                    data={userData}
+                    defaultValue={this.state.customerName}
+                    error={this.state.errorCustomer}
+                    selectTitle={'Pilih Customer'}
+                    errorMessage={'Nama Customer diisi'}
+                    onSelect={(value) => this.setState({ customerName: value })}
+                    setFieldValue={(value) => props.setFieldValue('namaCustomer', value)}
+                  />
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <View style={{ flexDirection: 'row' }}>
@@ -241,10 +273,11 @@ class SalesScreen extends Component {
                       maxLength={15}
                       placeholder={'Nama Sales'}
                       setFieldValue={props.setFieldValue}
-                      value={props.values.sales}
-                      error={props.errors.sales}
-                      styleTitle={styles.formLabelText}
-                      styleInputText={styles.formPlacholderText}
+                      value={user && user.Nama_User ? user.Nama_User : ''}
+                      error={false}
+                      editable={false}
+                      styleTitle={styles.formLabelTextDisable}
+                      styleInputText={styles.formPlacholderTextDisable}
                     />
                   </View>
                 </View>
@@ -302,28 +335,15 @@ class SalesScreen extends Component {
                   <View style={{ flex: 1 }}>
                     <CustomInput
                       name="telephone"
-                      title={'No. Telepon'}
+                      title={'telephone'}
                       returnKeyType="go"
-                      keyboardType="numeric"
                       maxLength={15}
+                      placeholder={'Nomor Telepon'}
                       setFieldValue={props.setFieldValue}
-                      placeholder={'Nomor telepon'}
                       value={props.values.telephone}
                       error={props.errors.telephone}
                       styleTitle={styles.formLabelText}
                       styleInputText={styles.formPlacholderText}
-                      renderLeft={() => {
-                        return (
-                          <PhoneRegion
-                            editable={false}
-                            value={props.values.phoneCode}
-                            onSubmit={({ label, value }) => {
-                              console.tron.log('onSubmit ', label, value)
-                              props.setFieldValue('phoneCode', value)
-                            }}
-                          />
-                        )
-                      }}
                     />
                   </View>
                 </View>
@@ -351,7 +371,7 @@ class SalesScreen extends Component {
                     <Text style={styles.labelStyle}>Kurir</Text>
                     <Text style={styles.labelStyle2}>:</Text>
                   </View>
-                  <View style={{ flex: 1 }}>
+                  {/* <View style={{ flex: 1 }}>
                     <CustomInput
                       name="kurir"
                       title={'kurir'}
@@ -364,7 +384,18 @@ class SalesScreen extends Component {
                       styleTitle={styles.formLabelText}
                       styleInputText={styles.formPlacholderText}
                     />
-                  </View>
+                  </View> */}
+                  <CustomSelectOption
+                    label='Nama Kurir'
+                    title='Nama Kurir'
+                    data={kurirData}
+                    defaultValue={this.state.kurir}
+                    error={this.state.errorKurir}
+                    selectTitle={'Pilih Kurir'}
+                    errorMessage={'Nama Kurir diisi'}
+                    onSelect={(value) => this.setState({ kurir: value })}
+                    setFieldValue={(value) => props.setFieldValue('kurir', value)}
+                  />
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <View style={{ flexDirection: 'row' }}>
@@ -520,7 +551,7 @@ class SalesScreen extends Component {
                   validationSchema={schema}
                   render={this.renderForm.bind(this)}
                   validateOnChange={false}
-                  initialValues={initialValue}
+                  initialValues={this.initialValue}
                 />
               </View>
             </View>
@@ -553,13 +584,29 @@ const mapStateToProps = (state) => {
     })
   }
 
+  const userLists = state.masterData.listUser;
+  let userData = userLists.map((obj) => {
+    return { id: obj.User_Id, description: obj.Nama_User };
+  });
+
+  const kurirLists = state.masterData.listKurir;
+  let kurirData = kurirLists.map((obj) => {
+    return { id: obj.Kurir_Id, description: obj.Nama_User };
+  });
+
   return {
-    barang
+    userData,
+    kurirData,
+    barang,
+    user: state.session.userSession,
+    noPenjualan: state.session.noPenjualan
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getListUserRequest: () => dispatch(MasterDataActions.getListUserRequest()),
+    getListKurirRequest: () => dispatch(MasterDataActions.getListKurirRequest()),
     createOrderRequest: (param) => dispatch(OrderActions.createOrderRequest(param)),
     getBarangRequest: (param) => dispatch(OrderActions.getBarangRequest(param)),
     deleteBarangRequest: (param) => dispatch(OrderActions.deleteBarangRequest(param)),

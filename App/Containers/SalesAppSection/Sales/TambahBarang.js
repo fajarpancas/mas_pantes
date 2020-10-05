@@ -48,7 +48,6 @@ class TambahBarang extends Component {
             Nama_Barang: values.namaBarang,
             harga: values.harga
         }
-        console.tron.error({ params })
 
         this.props.addBarangRequest(params)
     }

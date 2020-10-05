@@ -11,6 +11,7 @@ export const reducers = combineReducers({
   search: require('./SearchRedux').reducer,
   auth: require('./AuthRedux').reducer,
   session: require('./SessionRedux').reducer,
+  masterData: require('./MasterDataRedux').reducer,
   order: require('./OrderRedux').reducer
 })
 

@@ -13,6 +13,7 @@ import moment from 'moment-timezone';
 import Modal from 'react-native-modal'
 import OrdeActions from '../../Redux/OrderRedux'
 import { CustomFlatList } from '../../Components'
+import Icons from 'react-native-vector-icons/MaterialIcons'
 
 class ListOrder extends Component {
   constructor(props) {
@@ -149,17 +150,27 @@ class ListOrder extends Component {
                 <Text style={[{ flex: 1 }, styles.textInfo]}>{item.No_Penjualan}</Text>
                 <Text style={styles.textInfo}>{item.Tgl_Penjualan}</Text>
               </View>
-              <Text style={styles.textInfo}>{item.Nama_Customer}</Text>
-              <Text style={styles.textInfo}>{item.Alamat}</Text>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={[{ flex: 1 }, styles.textInfo]}>Telepon</Text>
-                <TouchableOpacity
-                  style={item.Row_Id == this.state.rowIdOpen ? styles.cancelButton : styles.ambilButton}
-                  onPress={() => item.Row_Id == this.state.rowIdOpen ? this.batalAction() : this.ambilAction(item.Row_Id)}>
-                  <Text style={styles.ambilText}>
-                    {item.Row_Id == this.state.rowIdOpen ? 'Batal' : 'Ambil'}
-                  </Text>
-                </TouchableOpacity>
+              <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
+                <View style={{ flexDirection: 'column', flex: 1 }}>
+                  <Text style={styles.textName}>{item.Nama_Customer}</Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
+                    <Icons name="place" size={25} color={'red'} style={{ marginRight: 10 }} />
+                    <Text style={styles.textInfoAlamat}>{item.Alamat}</Text>
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                  <TouchableOpacity
+                    style={item.Row_Id === this.state.rowIdOpen ? styles.cancelButton : styles.ambilButton}
+                    onPress={() => item.Row_Id === this.state.rowIdOpen ? this.batalAction() : this.ambilAction(item.Row_Id)}>
+                    <Icons
+                      name={item.Row_Id === this.state.rowIdOpen ? 'close' : 'near-me'}
+                      color={item.Row_Id === this.state.rowIdOpen ? 'red' : '#00b9f2'}
+                      size={30}
+                      style={{ alignSelf: 'center' }} />
+                  </TouchableOpacity>
+                  <Text style={item.Row_Id === this.state.rowIdOpen ? styles.textBatal : styles.textKirim}>
+                    {item.Row_Id === this.state.rowIdOpen ? 'Batal' : 'Kirim'}</Text>
+                </View>
               </View>
               {
                 item.Row_Id == this.state.rowIdOpen &&
@@ -183,9 +194,10 @@ class ListOrder extends Component {
   }
 
   render() {
+    const { user } = this.props
     return (
       <View style={{ flex: 1 }}>
-        <Text style={styles.namaKurir}>Nama Kurir: Akmal</Text>
+        <Text style={styles.namaKurir}>Nama Kurir: {user && user.Nama_User ? user.Nama_User : ''}</Text>
         <CustomFlatList
           data={this.props.listOrder}
           renderItem={this.renderList}
@@ -222,7 +234,8 @@ const mapStateToProps = (state) => {
   console.tron.error({ listOrder })
   return {
     listOrder,
-    getOrder
+    getOrder,
+    user: state.session.userSession
   }
 }
 

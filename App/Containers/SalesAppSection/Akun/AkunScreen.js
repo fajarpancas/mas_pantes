@@ -6,6 +6,7 @@ import Scale from '../../../Transforms/Scale'
 import styles from '../../Styles/AkunScreenStyle'
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import CustomModalDelete from '../../../Components/CustomModalDelete'
+import AuthActions from '../../../Redux/AuthRedux'
 
 const privacyInform = [
     {
@@ -56,7 +57,8 @@ class AkunScreen extends Component {
     }
 
     logout = () => {
-        this.props.navigation.navigate('Auth')
+        const { logoutRequest } = this.props
+        logoutRequest()
     }
 
     renderList = ({ title, navigation }) => {
@@ -124,6 +126,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        logoutRequest: () => dispatch(AuthActions.logoutRequest())
     }
 }
 

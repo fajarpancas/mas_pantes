@@ -11,11 +11,11 @@
 *************************************************************/
 
 import { Method } from 'react-native-awesome-component';
-import { call, put, select } from 'redux-saga/effects'
+import { call, put, select, all } from 'redux-saga/effects'
 import OrderActions, { OrderSelectors } from '../Redux/OrderRedux'
 import { DropDownHolder } from '../Components'
 import NavigationService from '../Services/NavigationServices'
-// import { OrderSelectors } from '../Redux/OrderRedux'
+import SessionActions from '../Redux/SessionRedux'
 
 export function* getOrder(api, action) {
   const { data } = action
@@ -88,7 +88,7 @@ export function* getOrderList(api, action) {
     const { data } = action
     const response = yield call(api.getListOrder, data)
     if (response.ok) {
-      console.tron.error({ dataaa: response.data })
+      console.tron.error({ dataaa: response.data.data })
       yield put(OrderActions.getOrderSuccess(response.data.data))
     } else {
       DropDownHolder.alert('error', 'GAGAL', `Gagal mengambil data order.`)
@@ -101,10 +101,44 @@ export function* getOrderList(api, action) {
   }
 }
 
+export function* getOrderListProcess(api, action) {
+  try {
+    const { data } = action
+    const response = yield call(api.getListOrderProcess, data)
+    if (response.ok) {
+      yield put(OrderActions.getOrderProcessSuccess(response.data.data))
+    } else {
+      DropDownHolder.alert('error', 'GAGAL', `Gagal mengambil data order.`)
+      yield put(OrderActions.getOrderProcessFailure())
+
+    }
+  } catch (err) {
+    DropDownHolder.alert('error', 'Gagal', err.message)
+    yield put(OrderActions.getOrderProcessFailure())
+  }
+}
+
 export function* createOrder(api, action) {
   try {
     const { data } = action
-    console.tron.error({ data })
+    const randomA = Math.floor(Math.random() * 100000) + 1
+    const randomB = Math.floor(Math.random() * 100000) + 1
+    const noPenjualan = randomA.toString() + randomB.toString()
+
+    const response = yield call(api.createOrder, data)
+
+    if (response.ok) {
+      yield all([
+        put(SessionActions.saveNoPenjualan(noPenjualan)),
+        put(OrderActions.createOrderSuccess(response.data.data)),
+        put(OrderActions.resetBarang())
+      ])
+      Method.LoadingHelper.hideLoading()
+    } else {
+      DropDownHolder.alert('error', 'Gagal', `Kemas penjualan gagal`)
+      Method.LoadingHelper.hideLoading()
+      yield put(OrderActions.createOrderFailure())
+    }
   } catch {
 
   }

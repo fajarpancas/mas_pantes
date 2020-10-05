@@ -6,7 +6,8 @@ import Immutable from 'seamless-immutable'
 const { Types, Creators } = createActions({
   saveUserSession: ['data'],
   saveTokenAuth: ['data'],
-  logout: null
+  logout: null,
+  saveNoPenjualan: ['data']
 })
 
 export const SessionTypes = Types
@@ -17,13 +18,16 @@ export default Creators
 export const INITIAL_STATE = Immutable({
   isLoggedIn: false,
   userSession: null,
-  token: null
+  token: null,
+  noPenjualan: null
 })
 
 /* ------------- Selectors ------------- */
 
 export const SessionSelectors = {
-  getData: state => state.data
+  getLoggedInStatus: state => state.session.isLoggedIn,
+  getUser: state => state.session.userSession,
+  getToken: state => state.session.token
 }
 
 /* ------------- Reducers ------------- */
@@ -38,9 +42,15 @@ export const saveTokenAuth = (state, { data }) =>
 
 export const logout = (state) =>
   state.merge({ ...INITIAL_STATE })
+
+export const saveNoPenjualan = (state, { data }) =>
+  state.merge({ ...state, noPenjualan: data })
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.SAVE_USER_SESSION]: saveUserSession,
-  [Types.SAVE_TOKEN_AUTH]: saveTokenAuth
+  [Types.SAVE_TOKEN_AUTH]: saveTokenAuth,
+  [Types.LOGOUT]: logout,
+  [Types.SAVE_NO_PENJUALAN]: saveNoPenjualan
 })

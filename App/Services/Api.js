@@ -38,10 +38,14 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
   const getRate = () => api.get('rate_limit')
   const getUser = (username) => api.get('search/users', { q: username })
 
+  const getListUser = () => api.get('/api/list-user')
+  const getListKurir = () => api.get('/api/list-kurir')
   const login = (param) => api.post('/api/login', param)
   const logout = () => api.post('/api/logout')
+  const createOrder = (param) => api.post('/api/penjualan', param)
   const getBarang = (param) => api.post('/api/getbarang', param)
   const getListOrder = (param) => api.get('/api/get-list-order', param)
+  const getListOrderProcess = (param) => api.post('/api/get-list-order-by-kurir', param)
 
   // ------
   // STEP 3
@@ -63,8 +67,12 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
     api,
     login,
     logout,
+    createOrder,
+    getListOrderProcess,
     getBarang,
-    getListOrder
+    getListOrder,
+    getListUser,
+    getListKurir
   }
 }
 

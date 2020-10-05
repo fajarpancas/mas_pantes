@@ -9,6 +9,9 @@ import { Method } from 'react-native-awesome-component';
 export function* login(api, action) {
   try {
     const { data } = action
+    const randomA = Math.floor(Math.random() * 100000) + 1
+    const randomB = Math.floor(Math.random() * 100000) + 1
+    const noPenjualan =  randomA.toString() + randomB.toString()
 
     const response = yield call(api.login, data)
 
@@ -29,6 +32,7 @@ export function* login(api, action) {
       yield all([
         put(SessionActions.saveUserSession(data)),
         put(SessionActions.saveTokenAuth(token_user)),
+        put(SessionActions.saveNoPenjualan(noPenjualan)),
         put(AuthActions.loginSuccess(data))
       ])
       DropDownHolder.alert('success', 'Login Berhasil', `hai ${data.Nama_User}, selamat datang di aplikasi pantes gold`)
@@ -37,8 +41,9 @@ export function* login(api, action) {
       DropDownHolder.alert('error', 'Login Gagal', `maaf, nomor telepon dan kata sandi yang anda masukkan salah`)
       yield put(AuthActions.loginFailure())
     }
-  } catch {
-    DropDownHolder.alert('error', 'Login Gagal', `maaf, nomor telepon dan kata sandi yang anda masukkan salah`)
+  } catch (err) {
+    yield put(AuthActions.loginFailure())
+    DropDownHolder.alert('error', 'Login Gagal', err.message)
   }
 }
 

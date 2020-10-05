@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:769127795647:android:fc88d95ba62fca6e986f0a",
+        "mobilesdk_app_id": "1:769127795647:android:22cb1e20d1f9bb70986f0a",
         "android_client_info": {
-          "package_name": "com.com.tokomas.app"
+          "package_name": "com.tokomas.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "769127795647-lphi3fg1cda6r5q8c1l0ksfkecka9tkk.apps.googleusercontent.com",
+          "client_id": "769127795647-9u1fc73i1o6ueog44bb55u31kbqj4k3n.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.com.tokomas.app",
+            "package_name": "com.tokomas.app",
             "certificate_hash": "0bf9fe3889d28a9c58f0c10ab70e4328d823f320"
           }
         },

@@ -14,6 +14,9 @@ const { Types, Creators } = createActions({
   getOrderRequest: ['data'],
   getOrderSuccess: ['payload'],
   getOrderFailure: null,
+  getOrderProcessRequest: ['data'],
+  getOrderProcessSuccess: ['payload'],
+  getOrderProcessFailure: null,
   addBarangRequest: ['data'],
   addBarangSuccess: ['payload'],
   deleteBarangRequest: ['data'],
@@ -32,11 +35,13 @@ export const INITIAL_STATE = Immutable({
   createOrder: DEFAULT_STATE,
   getBarang: DEFAULT_STATE,
   getOrder: DEFAULT_STATE,
+  getOrderProcess: DEFAULT_STATE,
   addBarang: DEFAULT_STATE,
   deleteBarang: DEFAULT_STATE,
   editBarang: DEFAULT_STATE,
   listBarang: [],
-  listOrder: []
+  listOrder: [],
+  listOrderProcess: []
 })
 
 /* ------------- Selectors ------------- */
@@ -101,6 +106,7 @@ export const getOrderRequest = (state, { data }) => {
 }
 
 export const getOrderSuccess = (state, { payload }) => {
+  console.tron.error({ payload })
   let newList = [...state.listOrder]
   // const { payload } = action
   newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
@@ -109,6 +115,22 @@ export const getOrderSuccess = (state, { payload }) => {
 
 export const getOrderFailure = state =>
   state.merge({ ...state, getOrder: { fetching: false, error: true, payload: null } })
+
+export const getOrderProcessRequest = (state, { data }) => {
+  console.tron.error({ data })
+  return state.merge({ ...state, getOrderProcess: { fetching: true, data, payload: null } })
+}
+
+export const getOrderProcessSuccess = (state, { payload }) => {
+  let newList = [...state.listOrderProcess]
+  // const { payload } = action
+  newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+  return state.merge({ ...state, getOrderProcess: { fetching: false, error: null, payload }, listOrderProcess: newList })
+}
+
+export const getOrderProcessFailure = state =>
+  state.merge({ ...state, getOrderProcess: { fetching: false, error: true, payload: null } })
+
 
 export const createOrderRequest = (state, { data }) =>
   state.merge({ ...state, createOrder: { fetching: true, data, payload: null } })
@@ -133,6 +155,9 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.GET_ORDER_REQUEST]: getOrderRequest,
   [Types.GET_ORDER_SUCCESS]: getOrderSuccess,
   [Types.GET_ORDER_FAILURE]: getOrderFailure,
+  [Types.GET_ORDER_PROCESS_REQUEST]: getOrderProcessRequest,
+  [Types.GET_ORDER_PROCESS_SUCCESS]: getOrderProcessSuccess,
+  [Types.GET_ORDER_PROCESS_FAILURE]: getOrderProcessFailure,
   [Types.ADD_BARANG_REQUEST]: addBarangRequest,
   [Types.ADD_BARANG_SUCCESS]: addBarangSuccess,
   [Types.DELETE_BARANG_REQUEST]: deleteBarangRequest,
