@@ -1,58 +1,86 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity } from 'react-native'
+import { Text, View, StatusBar, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
-import HeaderMasPantes from '../../Components/HeaderMasPantes'
+import ListOrder from './ListOrder'
+import { CustomFlatList } from '../../Components'
+import OrderActions from '../../Redux/OrderRedux'
+import Icons from 'react-native-vector-icons/MaterialIcons'
 import styles from '../Styles/ListOrderScreenStyle'
-import { Colors } from '../../Themes'
 
 class FinishOrderScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     header: null
   })
 
+  componentDidMount() {
+    this.onRefresh()
+  }
+
+  onRefresh = () => {
+    const { getOrderFinishRequest, user } = this.props
+    setTimeout(() => {
+      const params = {
+        page: 1,
+        Kurir_Id: user.Id_Kurir
+      }
+
+      getOrderFinishRequest(params)
+    }, 1000)
+  }
+
+  renderList = ({ item, index }) => {
+    return (
+      <View style={{ flex: 1, marginBottom: 10 }}>
+        <View style={styles.listOrderWrapper}>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={[{ flex: 1 }, styles.textInfo]}>{item.No_Penjualan}</Text>
+            <Text style={styles.textInfo}>{item.Tgl_Penjualan}</Text>
+          </View>
+          <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
+            <View style={{ flexDirection: 'column', flex: 1 }}>
+              <Text style={styles.textName}>{item.Nama_Customer}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
+                <Icons name="place" size={25} color={'red'} style={{ marginRight: 10 }} />
+                <Text style={styles.textInfoAlamat}>{item.Alamat}</Text>
+              </View>
+            </View>
+            <View style={{ alignItems: 'center' }}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailScreen')}>
+                <Icons name="info" color={'#00b9f2'} size={40} style={{ alignSelf: 'center' }} />
+              </TouchableOpacity>
+              <Text style={styles.textKirim}>Detail</Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    )
+  }
+
   render() {
+    const { user, listOrder, getOrder } = this.props
+    let name;
+
+    if (user && user.Nama_User) {
+      name = user.Nama_User
+    }
+
     return (
       <View style={{ flex: 1 }}>
+        <StatusBar translucent={false} hidden={false} barStyle="light-content" backgroundColor={'#ccb102'} />
         <View style={{ flex: 1 }}>
           {/* <HeaderMasPantes /> */}
 
-          <Text style={styles.namaKurir}>Nama Kurir: Akmal</Text>
+          <Text style={styles.namaKurir}>Nama Kurir: {name}</Text>
+          <CustomFlatList
+            data={listOrder}
+            renderItem={this.renderList.bind(this)}
+            refreshing={getOrder.fetching}
+            onRefresh={this.onRefresh}
+            error={false}
+            errorMessage={'Tidak ada data order'}
+            onEndReached={() => { }}
+          />
 
-          <View style={{ flex: 1 }}>
-            <View style={styles.listOrderWrapper}>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={[{ flex: 1 }, styles.textInfo]}>No order</Text>
-                <Text style={styles.textInfo}>Tgl order</Text>
-              </View>
-              <Text style={styles.textInfo}>Nama</Text>
-              <Text style={styles.textInfo}>Alamat</Text>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={[{ flex: 1 }, styles.textInfo]}>Telepon</Text>
-                <TouchableOpacity style={styles.detailButton} onPress={() => this.props.navigation.navigate('DetailScreen')}>
-                  <Text style={styles.detailText}>
-                    Detail
-                 </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-
-          <View style={{
-            paddingVertical: 15,
-            paddingHorizontal: 15,
-            backgroundColor: Colors.white
-          }}>
-            <Text style={styles.textInfo}>Total Order :</Text>
-            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-              <Text style={[{ flex: 1 }, styles.textInfo]}>Jumlah Order</Text>
-              <Text style={styles.textInfo}>Nilai Order</Text>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={[{ flex: 1 }, styles.textInfo]}>Jumlah Terima</Text>
-              <Text style={styles.textInfo}>Nilai Terima</Text>
-            </View>
-
-          </View>
         </View>
       </View>
     )
@@ -61,11 +89,15 @@ class FinishOrderScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    user: state.session.userSession,
+    getOrder: state.order.getOrderFinish,
+    listOrder: state.order.listOrderFinish
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getOrderFinishRequest: (params) => dispatch(OrderActions.getOrderFinishRequest(params))
   }
 }
 

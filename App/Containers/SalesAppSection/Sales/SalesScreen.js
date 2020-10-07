@@ -137,6 +137,7 @@ class SalesScreen extends Component {
           Kurir_Id: null,
           Nilai_Bayar: totalHarga,
           Ongkos_Kirim: values.ongkir,
+          No_Telepon: values.telephone,
           Id_Jenis_Pembayaran: values.jenisPembayaran,
           Data_Barang: JSON.stringify(parseBarang)
         }
@@ -317,7 +318,7 @@ class SalesScreen extends Component {
                       onChangeText={(value) => props.setFieldValue('alamat', value)}
                     />
                     <View style={{ marginBottom: 7 }}>
-                      {this.state.errorPembayaran ? (
+                      {this.state.errorAlamat ? (
                         <Text style={styles.textError}>
                           Alamat harus diisi
                         </Text>

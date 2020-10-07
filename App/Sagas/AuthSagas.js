@@ -3,6 +3,7 @@ import AuthActions from '../Redux/AuthRedux'
 import { DropDownHolder } from '../Components'
 import NavigationServices from '../Services/NavigationServices'
 import SessionActions from '../Redux/SessionRedux'
+import OrderActions from '../Redux/OrderRedux'
 import { delay } from '../Lib/Helper';
 import { Method } from 'react-native-awesome-component';
 
@@ -11,7 +12,7 @@ export function* login(api, action) {
     const { data } = action
     const randomA = Math.floor(Math.random() * 100000) + 1
     const randomB = Math.floor(Math.random() * 100000) + 1
-    const noPenjualan =  randomA.toString() + randomB.toString()
+    const noPenjualan = randomA.toString() + randomB.toString()
 
     const response = yield call(api.login, data)
 
@@ -22,7 +23,12 @@ export function* login(api, action) {
       api.api.setHeaders({ Authorization: `bearer ${token_user}` });
 
       if (Id_Role === 1) {
+        const param = {
+          page: 1,
+          Id_Sales: data.Id_Sales
+        }
         NavigationServices.navigate('AppSales')
+        yield put(OrderActions.getSalesListOrderRequest(param))
       } else if (Id_Role === 2) {
         NavigationServices.navigate('AppKurir')
       } else if (Id_Role === 3) {
@@ -35,7 +41,7 @@ export function* login(api, action) {
         put(SessionActions.saveNoPenjualan(noPenjualan)),
         put(AuthActions.loginSuccess(data))
       ])
-      DropDownHolder.alert('success', 'Login Berhasil', `hai ${data.Nama_User}, selamat datang di aplikasi pantes gold`)
+      // DropDownHolder.alert('success', 'Login Berhasil', `hai ${data.Nama_User}, selamat datang di aplikasi pantes gold`)
 
     } else {
       DropDownHolder.alert('error', 'Login Gagal', `maaf, nomor telepon dan kata sandi yang anda masukkan salah`)

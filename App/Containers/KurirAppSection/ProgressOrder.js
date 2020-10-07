@@ -14,13 +14,18 @@ class ProgressOrderScreen extends Component {
   })
 
   componentDidMount() {
-    const { getOrderProcessRequest, user } = this.props
+    this.onRefresh()
+  }
+
+  onRefresh = () => {
+    const { getOrderNextProcessRequest, user } = this.props
     setTimeout(() => {
       const params = {
+        page: 1,
         Kurir_Id: user.Id_Kurir
       }
 
-      getOrderProcessRequest(params)
+      getOrderNextProcessRequest(params)
     }, 1000)
   }
 
@@ -40,9 +45,14 @@ class ProgressOrderScreen extends Component {
                 <Text style={styles.textInfoAlamat}>{item.Alamat}</Text>
               </View>
             </View>
-            <TouchableOpacity style={styles.detailButton} onPress={() => this.props.navigation.navigate('DetailScreen')}>
-              <Icons name="arrow-forward" color={'#00b9f2'} size={30} style={{ alignSelf: 'center' }} />
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+              <TouchableOpacity
+                style={styles.detailButton}
+                onPress={() => this.props.navigation.navigate('DetailScreen', { data: item })}>
+                <Icons name="arrow-forward" color={'#00b9f2'} size={30} style={{ alignSelf: 'center' }} />
+              </TouchableOpacity>
+              <Text style={styles.textKirim}>Selesai</Text>
+            </View>
           </View>
         </View>
       </View>
@@ -67,7 +77,7 @@ class ProgressOrderScreen extends Component {
             data={listOrderProcess}
             renderItem={this.renderList.bind(this)}
             refreshing={getOrderProcess.fetching}
-            onRefresh={() => this.props.getOrderProcessRequest()}
+            onRefresh={this.onRefresh}
             error={false}
             errorMessage={'Tidak ada data order'}
             onEndReached={() => { }}
@@ -82,14 +92,14 @@ class ProgressOrderScreen extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.session.userSession,
-    getOrderProcess: state.order.getOrderProcess,
-    listOrderProcess: state.order.listOrderProcess
+    getOrderProcess: state.order.getOrderNextProcess,
+    listOrderProcess: state.order.listOrderNextProcess
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getOrderProcessRequest: (params) => dispatch(OrderActions.getOrderProcessRequest(params))
+    getOrderNextProcessRequest: (params) => dispatch(OrderActions.getOrderNextProcessRequest(params))
   }
 }
 

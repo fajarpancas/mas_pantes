@@ -4,14 +4,14 @@ import { View, FlatList, Text, ActivityIndicator } from 'react-native'
 import { EmptyContent } from './EmptyContent'
 import { ErrorContent } from './ErrorContent'
 
-export default class CustomFlatList extends Component{
+export default class CustomFlatList extends Component {
 
-  render(){
+  render() {
     const dataIsArray = Array.isArray(this.props.data)
     const msgError = dataIsArray ? this.props.errorMessage : 'Invalid Data'
 
-    try{
-      if(this.props.error || !dataIsArray){
+    try {
+      if (this.props.error || !dataIsArray) {
         return (
           <ErrorContent
             title={this.props.errorTitle}
@@ -22,7 +22,7 @@ export default class CustomFlatList extends Component{
         )
       }
 
-      return(
+      return (
         <View style={styles.container}>
           <FlatList
             data={this.props.data}
@@ -32,18 +32,24 @@ export default class CustomFlatList extends Component{
             keyExtractor={(item, index) => index.toString()}
             ListHeaderComponent={this.props.ListHeaderComponent}
             ListFooterComponent={this.props.ListFooterComponent}
-            ListEmptyComponent={ () => {
-              if(this.props.renderEmpty){
-                return this.props.renderEmpty()
+            ListEmptyComponent={() => {
+              if (!this.props.refreshing && this.props.renderEmpty) {
+                // return this.props.renderEmpty()
+                return <EmptyContent title={this.props.emptyTitle} message={this.props.emptyMessage} />
               }
-              return <EmptyContent title={this.props.emptyTitle} message={this.props.emptyMessage}/>
+              return (
+                <View style={{ justifyContent: 'center', flex: 1, flexDirection: 'row' }}>
+                  <ActivityIndicator size={20}/>
+                  <Text style={{ alignSelf: 'center', marginLeft: 10 }}>Mengambil data...</Text>
+                </View>
+              )
             }}
             contentContainerStyle={{ flexGrow: 1 }}
             onEndReached={this.props.onEndReached}
           />
         </View>
       )
-    }catch(err){
+    } catch (err) {
       __DEV__ && console.tron.error('CustomFlatList.err ')
       __DEV__ && console.tron.log('CustomFlatList.message ', err.message)
       return <ErrorContent
@@ -58,11 +64,11 @@ export default class CustomFlatList extends Component{
 
 CustomFlatList.defaultProps = {
   data: [],
-  renderItem: ({item, index}) => { return null },
+  renderItem: ({ item, index }) => { return null },
   renderEmpty: null,
-  onRefresh: () => {},
+  onRefresh: () => { },
   refreshing: false,
-  onEndReached: distance => {},
+  onEndReached: distance => { },
   emptyTitle: "No Item Found",
   emptyMessage: "We don't have any item that you request",
   error: false,

@@ -9,7 +9,6 @@ import CustomTableRow from '../../Components/CustomTableRow'
 import Camera from '../../Components/Camera'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import PhoneRegion from '../../Containers/Auth/PhoneRegion'
 import moment from 'moment'
 import { CustomInput, DropDownHolder } from '../../Components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -20,31 +19,17 @@ const schema = Yup.object().shape({
     tanggal: Yup.string(),
     namaCustomer: Yup.string()
         .required("Nama Customer harus diisi."),
-    sales: Yup.string()
-        .required("Sales harus diisi."),
-    tanggal: Yup.string()
-        .required("Tanggal harus diisi."),
     alamat: Yup.string()
         .required("Alamat harus diisi."),
     telephone: Yup.string()
         .required("Telepon harus diisi."),
-    keterangan: Yup.string()
-        .required("Keterangan harus diisi."),
+    // keterangan: Yup.string()
+    //     .required("Keterangan harus diisi."),
     penerima: Yup.string()
         .required("Penerima harus diisi."),
 })
 
-const initialValue = {
-    noFaktur: 'abcd2372736236276',
-    phoneCode: '+62',
-    tanggal: moment(new Date()).format('DD-MM-YYYY'),
-    namaCustomer: 'Fajar',
-    sales: 'Panca',
-    telephone: '87847635259',
-    keterangan: 'abcd',
-    kurir: 'Akmal',
-    alamat: 'Jl. Golf Cipanjalu no.42 RT.01 RW.11, Kec. Arcamanik, Kel.Cisaranten Binaharapan, Kota Bandung'
-}
+
 
 class DetailOrderScreen extends Component {
     camera = undefined
@@ -52,7 +37,19 @@ class DetailOrderScreen extends Component {
         super(props)
         this.state = {
             dataCamera: '',
-            uri: ''
+            uri: '',
+            errorFoto: false
+        }
+
+        const { dataOrder } = props
+
+        this.initialValue = {
+            noFaktur: dataOrder && dataOrder.No_Penjualan ? dataOrder.No_Penjualan : '-',
+            telephone: dataOrder && dataOrder.No_Telepon ? dataOrder.No_Telepon : '-',
+            tanggal: moment(new Date()).format('DD-MM-YYYY'),
+            namaCustomer: dataOrder && dataOrder.Nama_Customer ? dataOrder.Nama_Customer : '-',
+            // keterangan: 'abcd',
+            alamat: dataOrder && dataOrder.Alamat ? dataOrder.Alamat : '-',
         }
     }
 
@@ -68,15 +65,32 @@ class DetailOrderScreen extends Component {
     })
 
     handleSubmit(values, actions) {
-        // this.props.navigation.navigate('AppSales')
+        const { dataCamera } = this.state
+        const { user } = this.props
+        if (dataCamera !== '') {
+            const param = {
+                No_Penjualan: values.noFaktur,
+                Jam_Terima: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
+                Url_Foto_Penerima: 'aaa',
+                Nama_Penerima: values.penerima,
+                Kurir_Id: user.Id_Kurir
+            }
+            console.tron.error({ param })
+            console.tron.error({ dataCamera })
+        }
     }
 
     setDataCamera = (data) => {
         this.setState({ dataCamera: data, uri: data.uri })
     }
 
-    confirm = () => {
-        DropDownHolder.alert('error', 'Function belum tersedia', 'Mohon maaf, fungsi ini masih dalam tahap pengembangan, API belum tersedia')
+    confirm = (props) => {
+        if (this.state.dataCamera === '') {
+            this.setState({ errorFoto: true })
+        } else {
+            this.setState({ errorFoto: false })
+        }
+        props.handleSubmit()
     }
 
     reject = () => {
@@ -85,10 +99,7 @@ class DetailOrderScreen extends Component {
 
     renderForm = (props) => {
         const { uri } = this.state
-        let barang = [
-            { no: 1, Nama_Barang: 'Tes barang', harga: '2000000' },
-            { no: 2, Nama_Barang: 'Tes barang 2', harga: '1500000' }
-        ]
+        const { barang } = this.props
         return (
             <KeyboardAwareScrollView extraScrollHeight={40}>
                 <Styled.Container style={{ borderRadius: 10, marginHorizontal: 5, marginTop: 5 }}>
@@ -159,33 +170,19 @@ class DetailOrderScreen extends Component {
                             <View style={{ flex: 1 }}>
                                 <CustomInput
                                     name="telephone"
-                                    title={'No. Telepon'}
-                                    editable={false}
                                     returnKeyType="go"
-                                    keyboardType="numeric"
+                                    editable={false}
                                     maxLength={15}
+                                    placeholder={'Telepon'}
                                     setFieldValue={props.setFieldValue}
-                                    placeholder={'Nomor telepon'}
                                     value={props.values.telephone}
                                     error={props.errors.telephone}
                                     styleTitle={styles.formLabelText}
                                     styleInputText={styles.formPlacholderText}
-                                    renderLeft={() => {
-                                        return (
-                                            <PhoneRegion
-                                                editable={false}
-                                                value={props.values.phoneCode}
-                                                onSubmit={({ label, value }) => {
-                                                    console.tron.log('onSubmit ', label, value)
-                                                    props.setFieldValue('phoneCode', value)
-                                                }}
-                                            />
-                                        )
-                                    }}
                                 />
                             </View>
                         </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={styles.labelStyle}>Ket.</Text>
                                 <Text style={styles.labelStyle2}>:</Text>
@@ -204,7 +201,7 @@ class DetailOrderScreen extends Component {
                                     styleInputText={styles.formPlacholderText}
                                 />
                             </View>
-                        </View>
+                        </View> */}
                     </View>
                     {/* {this.renderSearchBar()} */}
                     <CustomTableRow
@@ -253,9 +250,18 @@ class DetailOrderScreen extends Component {
                             }
                         </View>
                     </TouchableOpacity>
+                    <View style={{ marginBottom: 7 }}>
+                        {this.state.errorFoto ? (
+                            <Text style={styles.textError}>
+                                Foto harus diisi
+                            </Text>
+                        ) : (
+                                <Text style={styles.textError} />
+                            )}
+                    </View>
                     <View style={{ marginVertical: 20 }}>
                         <TouchableOpacity
-                            onPress={this.confirm}
+                            onPress={() => this.confirm(props)}
                             style={styles.terimaButton}>
                             <Text style={styles.terimaText}>Terima</Text>
                         </TouchableOpacity>
@@ -271,6 +277,23 @@ class DetailOrderScreen extends Component {
     }
 
     render() {
+        const { dataOrder } = this.props
+        let jamKemas = '-'
+        let jamKirim = '-'
+        let jamTerima = '-'
+
+        if (dataOrder && dataOrder.Jam_Kemas) {
+            jamKemas = dataOrder.Jam_Kemas
+        }
+
+        if (dataOrder && dataOrder.Jam_Kirim) {
+            jamKirim = dataOrder.Jam_Kirim
+        }
+
+        if (dataOrder && dataOrder.Jam_Terima) {
+            jamTerima = dataOrder.Jam_Terima
+        }
+
         return (
             <View style={{ flex: 1, backgroundColor: Colors.white }}>
                 <StatusBar translucent={false} hidden={false} barStyle="light-content" backgroundColor={'#ccb102'} />
@@ -281,15 +304,14 @@ class DetailOrderScreen extends Component {
                         validationSchema={schema}
                         render={this.renderForm.bind(this)}
                         validateOnChange={false}
-                        initialValues={initialValue}
+                        initialValues={this.initialValue}
                     />
                 </View>
                 <View style={styles.bottomInfo}>
-                    <Text style={styles.textKemas}>Kemas: 08.00 wib</Text>
-                    <Text style={styles.textKemas}>Kirim: 09.00 wib</Text>
-                    <Text style={styles.textKemas}>Terima: - wib</Text>
+                    <Text style={styles.textKemas}>Kemas: {jamKemas}</Text>
+                    <Text style={styles.textKemas}>Kirim: {jamKirim}</Text>
+                    <Text style={styles.textKemas}>Terima: {jamTerima}</Text>
                 </View>
-
 
                 <Camera
                     setRef={r => this.camera = r}
@@ -299,8 +321,26 @@ class DetailOrderScreen extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
+    const dataOrder = props.navigation.getParam('data')
+    console.tron.error({ dataOrder })
+
+    let barang = []
+    if (dataOrder && dataOrder.Order_Detail && dataOrder.Order_Detail.length > 0) {
+        const { Order_Detail } = dataOrder
+        for (let i = 0; i < Order_Detail.length; i++) {
+            barang.push({
+                no: i + 1,
+                Nama_Barang: Order_Detail[i].Nama_Barang,
+                harga: Order_Detail[i].Harga,
+            })
+        }
+    }
+
     return {
+        user: state.session.userSession,
+        dataOrder,
+        barang
     }
 }
 

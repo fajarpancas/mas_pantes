@@ -1,17 +1,12 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, StatusBar, Image } from 'react-native'
+import { Text, View, StatusBar, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
-import HeaderMasPantes from '../../Components/HeaderMasPantes'
-import EstimasiModal from '../../Components/EstimasiModal'
-import { DropDownHolder } from '../../Components'
-import styles from '../Styles/ListOrderScreenStyle'
-import DatePicker from 'react-native-date-picker';
-import Scale from '../../Transforms/Scale';
-import TimePicker from "react-native-24h-timepicker"
-import { Colors, Images } from '../../Themes'
-import moment from 'moment-timezone';
-import Modal from 'react-native-modal'
 import ListOrder from './ListOrder'
+import { CustomFlatList } from '../../Components'
+import OrderActions from '../../Redux/OrderRedux'
+import Icons from 'react-native-vector-icons/MaterialIcons'
+import styles from '../Styles/ListOrderScreenStyle'
+import { Method } from 'react-native-awesome-component'
 
 class AvailOrderScreen extends Component {
   estimasiModal = undefined
@@ -22,122 +17,85 @@ class AvailOrderScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      estimasi: moment(new Date()).format('HH:mm'),
-      ambil: false,
-      date: moment(new Date()).format('DD/MM/YYYY'),
-      initialDate: undefined,
-      dateFormat: 'DD/MM/YYYY',
-      locale: 'en-GB',
-      mode: 'date',
-      modalDate: false
     }
   }
 
-  onCancel() {
-    this.TimePicker.close();
+  componentDidMount() {
+    this.onRefresh()
   }
 
-  confirmSubmit = () => {
-    this.ambilAction()
-    DropDownHolder.alert('success', 'Order berhasil diambil', 'Cek orderan yang telah diambil pada proses')
+  onRefresh = () => {
+    const { getOrderRequest } = this.props
+    const param = {
+      page: 1
+    }
+    getOrderRequest(param)
   }
 
-  onConfirm(hour, minute) {
-    this.TimePicker.close()
-    this.setState({ estimasi: `${hour}:${minute}` })
+  ambilBarang = (noPenjualan) => {
+    const { user, pickBarangRequest } = this.props
+    const param = {
+      No_Penjualan: noPenjualan,
+      Kurir_Id: user.Id_Kurir
+    }
+    Method.LoadingHelper.showLoading()
+    pickBarangRequest(param)
   }
 
-  setValueDate = (value) => {
-    this.setState({ date: value })
-  }
-
-  hideShowDatePicker = () => {
-    this.setState({ modalDate: !this.state.modalDate })
-  }
-
-  renderDatePicker = () => {
+  renderList = ({ item, index }) => {
     return (
-      <Modal
-        isVisible={this.state.modalDate}
-        backdropTransitionOutTiming={0}
-        onBackButtonPress={() => {
-          this.hideShowDatePicker()
-        }}
-        onBackdropPress={() => {
-          this.hideShowDatePicker()
-        }}
-        style={{
-          justifyContent: 'flex-end',
-          alignContent: 'center',
-          alignItems: 'center',
-          margin: 0,
-          width: '100%',
-          padding: 0
-        }}>
-
-        <DatePicker
-          style={{
-            backgroundColor: '#fff',
-            justifyContent: 'center',
-            alignSelf: 'center',
-            width: Scale(375),
-          }}
-          // initialDate={moment.tz(this.state.initialDate, 'UTC').toDate()}
-          onDateChange={(date) => { this.setValueDate(date) }}
-          maximumDate={undefined}
-          date={
-            this.state.date
-              ? moment.tz(this.state.date, this.state.dateFormat, 'UTC').toDate()
-              : moment.tz(undefined, 'UTC').toDate()
-          }
-          minimumDate={undefined}
-          mode={this.state.mode}
-          locale={this.state.locale}
-          timeZoneOffsetInMinutes={0}
-        />
-      </Modal>
-    )
-  }
-
-  ambilAction = () => {
-    this.setState({ ambil: !this.state.ambil })
-  }
-
-  renderTimeslot = (value) => {
-    const { date } = this.state
-    return (
-      <View style={{ flexDirection: 'row', marginTop: 15 }}>
-        <TouchableOpacity style={[styles.containerTimeslot, { marginRight: 10 }]} onPress={this.hideShowDatePicker}>
-          <Text style={styles.tglJam}>Tanggal</Text>
-          <View style={{ flexDirection: 'row', flex: 1 }}>
-            <View style={{ justifyContent: 'center', flex: 1 }}>
-              <Text style={styles.time}>{moment(date, 'DD/MM/YYYY').format('DD MMM YYYY')}</Text>
+      <View style={{ flex: 1, marginBottom: 10 }}>
+        <View style={styles.listOrderWrapper}>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={[{ flex: 1 }, styles.textInfo]}>{item.No_Penjualan}</Text>
+            <Text style={styles.textInfo}>{item.Tgl_Penjualan}</Text>
+          </View>
+          <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
+            <View style={{ flexDirection: 'column', flex: 1 }}>
+              <Text style={styles.textName}>{item.Nama_Customer}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
+                <Icons name="place" size={25} color={'red'} style={{ marginRight: 10 }} />
+                <Text style={styles.textInfoAlamat}>{item.Alamat}</Text>
+              </View>
             </View>
-            <View style={{ justifyContent: 'center' }}>
-              <Image source={Images.iconDropdown} style={styles.chevronRight} />
+            <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+              <TouchableOpacity style={styles.detailButton} onPress={() => this.ambilBarang(item.No_Penjualan)}>
+                <Icons name="add" color={'#00b9f2'} size={30} style={{ alignSelf: 'center' }} />
+              </TouchableOpacity>
+              <Text style={styles.textKirim}>Ambil</Text>
             </View>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.containerTimeslot, { marginLeft: 10 }]} onPress={() => this.TimePicker.open()}>
-          <Text style={styles.tglJam}>Jam</Text>
-          <View style={{ flexDirection: 'row', flex: 1 }}>
-            <View style={{ justifyContent: 'center', flex: 1 }}>
-              <Text style={styles.time}>{value}</Text>
-            </View>
-            <View style={{ justifyContent: 'center' }}>
-              <Image source={Images.iconDropdown} style={styles.chevronRight} />
-            </View>
-          </View>
-        </TouchableOpacity>
+        </View>
       </View>
     )
   }
 
   render() {
+    const { user, listOrder, getOrder } = this.props
+    let name;
+
+    if (user && user.Nama_User) {
+      name = user.Nama_User
+    }
+
     return (
       <View style={{ flex: 1 }}>
         <StatusBar translucent={false} hidden={false} barStyle="light-content" backgroundColor={'#ccb102'} />
-        <ListOrder />
+        <View style={{ flex: 1 }}>
+          {/* <HeaderMasPantes /> */}
+
+          <Text style={styles.namaKurir}>Nama Kurir: {name}</Text>
+          <CustomFlatList
+            data={listOrder}
+            renderItem={this.renderList.bind(this)}
+            refreshing={getOrder.fetching}
+            onRefresh={this.onRefresh}
+            error={false}
+            errorMessage={'Tidak ada data order'}
+            onEndReached={() => { }}
+          />
+
+        </View>
       </View >
     )
   }
@@ -145,12 +103,16 @@ class AvailOrderScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.session.userSession
+    user: state.session.userSession,
+    getOrder: state.order.getOrder,
+    listOrder: state.order.listOrder
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getOrderRequest: (param) => dispatch(OrderActions.getOrderRequest(param)),
+    pickBarangRequest: (param) => dispatch(OrderActions.pickBarangRequest(param))
   }
 }
 

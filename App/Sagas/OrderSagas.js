@@ -86,10 +86,12 @@ export function* editBarang(api, action) {
 export function* getOrderList(api, action) {
   try {
     const { data } = action
+    const { page } = data
+    console.tron.error({ data })
     const response = yield call(api.getListOrder, data)
     if (response.ok) {
       console.tron.error({ dataaa: response.data.data })
-      yield put(OrderActions.getOrderSuccess(response.data.data))
+      yield put(OrderActions.getOrderSuccess(response.data.data, page))
     } else {
       DropDownHolder.alert('error', 'GAGAL', `Gagal mengambil data order.`)
       yield put(OrderActions.getOrderFailure())
@@ -104,9 +106,10 @@ export function* getOrderList(api, action) {
 export function* getOrderListProcess(api, action) {
   try {
     const { data } = action
+    const { page } = data
     const response = yield call(api.getListOrderProcess, data)
     if (response.ok) {
-      yield put(OrderActions.getOrderProcessSuccess(response.data.data))
+      yield put(OrderActions.getOrderProcessSuccess(response.data.data, page))
     } else {
       DropDownHolder.alert('error', 'GAGAL', `Gagal mengambil data order.`)
       yield put(OrderActions.getOrderProcessFailure())
@@ -115,6 +118,60 @@ export function* getOrderListProcess(api, action) {
   } catch (err) {
     DropDownHolder.alert('error', 'Gagal', err.message)
     yield put(OrderActions.getOrderProcessFailure())
+  }
+}
+
+export function* getOrderListFinish(api, action) {
+  try {
+    const { data } = action
+    const { page } = data
+    const response = yield call(api.getListOrderFinish, data)
+    if (response.ok) {
+      yield put(OrderActions.getOrderFinishSuccess(response.data.data, page))
+    } else {
+      DropDownHolder.alert('error', 'GAGAL', `Gagal mengambil data order.`)
+      yield put(OrderActions.getOrderFinishFailure())
+
+    }
+  } catch (err) {
+    DropDownHolder.alert('error', 'Gagal', err.message)
+    yield put(OrderActions.getOrderFinishFailure())
+  }
+}
+
+export function* getSalesListOrder(api, action) {
+  try {
+    const { data } = action
+    const { page } = data
+    const response = yield call(api.getSalesListOrder, data)
+    if (response.ok) {
+      yield put(OrderActions.getSalesListOrderSuccess(response.data.data, page))
+    } else {
+      DropDownHolder.alert('error', 'GAGAL', `Gagal mengambil data order.`)
+      yield put(OrderActions.getSalesListOrderFailure())
+
+    }
+  } catch (err) {
+    DropDownHolder.alert('error', 'Gagal', err.message)
+    yield put(OrderActions.getSalesListOrderFailure())
+  }
+}
+
+export function* getOrderListDiambil(api, action) {
+  try {
+    const { data } = action
+    const { page } = data
+    const response = yield call(api.getListOrderNextProcess, data)
+    if (response.ok) {
+      yield put(OrderActions.getOrderNextProcessSuccess(response.data.data, page))
+    } else {
+      DropDownHolder.alert('error', 'GAGAL', `Gagal mengambil data order.`)
+      yield put(OrderActions.getOrderNextProcessFailure())
+
+    }
+  } catch (err) {
+    DropDownHolder.alert('error', 'Gagal', err.message)
+    yield put(OrderActions.getOrderNextProcessFailure())
   }
 }
 
@@ -134,6 +191,7 @@ export function* createOrder(api, action) {
         put(OrderActions.resetBarang())
       ])
       Method.LoadingHelper.hideLoading()
+      DropDownHolder.alert('success', 'KEMAS BARANG BERHASIL', `list orderan yg telah di kemas pada screen LIST ORDER.`)
     } else {
       DropDownHolder.alert('error', 'Gagal', `Kemas penjualan gagal`)
       Method.LoadingHelper.hideLoading()
@@ -141,5 +199,113 @@ export function* createOrder(api, action) {
     }
   } catch {
 
+  }
+}
+
+export function* pickBarang(api, action) {
+  try {
+    const { data } = action
+    const { Kurir_Id } = data
+    const param = {
+      page: 1,
+      Kurir_Id
+    }
+    const response = yield call(api.pickBarang, data)
+    if (response.ok) {
+      yield all([
+        put(OrderActions.pickBarangSuccess(response.data.data)),
+        put(OrderActions.getOrderRequest(param)),
+        put(OrderActions.getOrderProcessRequest(param))
+      ])
+      Method.LoadingHelper.hideLoading()
+      DropDownHolder.alert(
+        'success',
+        'BERHASIL MENGAMBIL ORDERAN',
+        `Cek orderan yang sudah diambil pada tab menu DIAMBIL.`)
+    } else {
+      DropDownHolder.alert('error', 'GAGAL', `Gagal mengambil orderan.`)
+      yield all([
+        put(OrderActions.pickBarangFailure()),
+        put(OrderActions.getOrderRequest(param)),
+        put(OrderActions.getOrderProcessRequest(param))
+      ])
+      Method.LoadingHelper.hideLoading()
+    }
+  } catch (err) {
+    DropDownHolder.alert('error', 'Gagal', err.message)
+    yield put(OrderActions.pickBarangFailure())
+    Method.LoadingHelper.hideLoading()
+  }
+}
+
+export function* kirimBarang(api, action) {
+  try {
+    const { data } = action
+    const { Kurir_Id } = data
+    const param = {
+      page: 1,
+      Kurir_Id
+    }
+    const response = yield call(api.kirimBarang, data)
+    if (response.ok) {
+      yield all([
+        put(OrderActions.kirimBarangSuccess(response.data.data)),
+        put(OrderActions.getOrderProcessRequest(param)),
+        put(OrderActions.getOrderNextProcessRequest(param))
+      ])
+      DropDownHolder.alert(
+        'success',
+        'BERHASIL MENGESTIMASI WAKTU ORDERAN',
+        `Cek orderan yang sudah diisi estimasi waktu sampai pada tab menu PROSES.`)
+      Method.LoadingHelper.hideLoading()
+    } else {
+      DropDownHolder.alert('error', 'GAGAL', `Gagal mengirim orderan.`)
+      yield all([
+        put(OrderActions.kirimBarangFailure()),
+        put(OrderActions.getOrderProcessRequest(param)),
+        put(OrderActions.getOrderNextProcessRequest(param))
+      ])
+      Method.LoadingHelper.hideLoading()
+    }
+  } catch (err) {
+    DropDownHolder.alert('error', 'Gagal', err.message)
+    yield put(OrderActions.kirimBarangFailure())
+    Method.LoadingHelper.hideLoading()
+  }
+}
+
+export function* barangSampai(api, action) {
+  try {
+    const { data } = action
+    const { Kurir_Id } = data
+    const param = {
+      page: 1,
+      Kurir_Id
+    }
+    const response = yield call(api.barangSampai, data)
+    if (response.ok) {
+      yield all([
+        put(OrderActions.barangSampaiSuccess(response.data.data)),
+        put(OrderActions.getOrderFinishRequest(param)),
+        put(OrderActions.getOrderNextProcessRequest(param))
+      ])
+      DropDownHolder.alert(
+        'success',
+        'BERHASIL MENGISI DATA PENERIMA',
+        `Cek orderan yang sudah selesai pada tab menu HISTORY.`)
+      Method.LoadingHelper.hideLoading()
+    } else {
+      DropDownHolder.alert('error', 'GAGAL', `Gagal mengisi data penerima.`)
+      yield all([
+        put(OrderActions.barangSampaiFailure()),
+        put(OrderActions.getOrderFinishRequest(param)),
+        put(OrderActions.getOrderNextProcessRequest(param))
+      ])
+      Method.LoadingHelper.hideLoading()
+    }
+  } catch (err) {
+    DropDownHolder.alert('error', 'Gagal', err.message)
+    yield put(OrderActions.barangSampaiFailure())
+    Method.LoadingHelper.hideLoading()
   }
 }

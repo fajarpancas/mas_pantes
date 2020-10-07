@@ -14,6 +14,7 @@ import Modal from 'react-native-modal'
 import OrdeActions from '../../Redux/OrderRedux'
 import { CustomFlatList } from '../../Components'
 import Icons from 'react-native-vector-icons/MaterialIcons'
+import { Method } from 'react-native-awesome-component'
 
 class ListOrder extends Component {
   constructor(props) {
@@ -27,13 +28,25 @@ class ListOrder extends Component {
       locale: 'en-GB',
       mode: 'date',
       modalDate: false,
-      rowIdOpen: ''
+      rowIdOpen: '',
+      noPenjualan: ''
     }
   }
 
   componentDidMount() {
-    const { getOrderRequest } = this.props
-    getOrderRequest()
+    this.onRefresh()
+  }
+
+  onRefresh = () => {
+    const { getOrderProcessRequest, user } = this.props
+    setTimeout(() => {
+      const params = {
+        page: 1,
+        Kurir_Id: user.Id_Kurir
+      }
+
+      getOrderProcessRequest(params)
+    }, 1000)
   }
 
   onCancel() {
@@ -41,8 +54,15 @@ class ListOrder extends Component {
   }
 
   confirmSubmit = () => {
-    this.ambilAction()
-    DropDownHolder.alert('success', 'Order berhasil diambil', 'Cek orderan yang telah diambil pada proses')
+    const { noPenjualan, estimasi, date } = this.state
+    const { user, kirimBarangRequest } = this.props
+    const param = {
+      No_Penjualan: noPenjualan,
+      Jam_Kirim: `${moment(date, 'DD/MM/YYYY').format('YYYY-MM-DD')} ${estimasi}:00`,
+      Kurir_Id: user.Id_Kurir
+    }
+    Method.LoadingHelper.showLoading()
+    kirimBarangRequest(param)
   }
 
   onConfirm(hour, minute) {
@@ -64,6 +84,12 @@ class ListOrder extends Component {
 
   batalAction = () => {
     this.setState({ rowIdOpen: '' })
+  }
+
+  showModal = (noPenjualan) => {
+    this.setState({ noPenjualan }, () => {
+      this.estimasiModal.show()
+    })
   }
 
   renderDatePicker = () => {
@@ -181,7 +207,7 @@ class ListOrder extends Component {
                   {this.renderTimeslot(this.state.estimasi)}
                   <TouchableOpacity
                     style={styles.submitButton}
-                    onPress={() => this.estimasiModal.show()}>
+                    onPress={() => this.showModal(item.No_Penjualan)}>
                     <Text style={styles.submitText}>Submit</Text>
                   </TouchableOpacity>
                 </View>
@@ -202,7 +228,7 @@ class ListOrder extends Component {
           data={this.props.listOrder}
           renderItem={this.renderList}
           refreshing={this.props.fetching}
-          onRefresh={() => this.props.getOrderRequest()}
+          onRefresh={this.onRefresh}
           error={false}
           errorMessage={'Tidak ada data order'}
           onEndReached={() => { }}
@@ -229,8 +255,8 @@ class ListOrder extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const listOrder = state.order.listOrder
-  const getOrder = state.order.getOrder
+  const listOrder = state.order.listOrderProcess
+  const getOrder = state.order.getOrderProcess
   console.tron.error({ listOrder })
   return {
     listOrder,
@@ -241,7 +267,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getOrderRequest: () => dispatch(OrdeActions.getOrderRequest())
+    getOrderProcessRequest: (params) => dispatch(OrdeActions.getOrderProcessRequest(params)),
+    kirimBarangRequest: (params) => dispatch(OrdeActions.kirimBarangRequest(params))
   }
 }
 

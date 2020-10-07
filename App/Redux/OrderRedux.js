@@ -12,18 +12,41 @@ const { Types, Creators } = createActions({
   createOrderSuccess: ['payload'],
   createOrderFailure: null,
   getOrderRequest: ['data'],
-  getOrderSuccess: ['payload'],
+  getOrderSuccess: ['payload', 'page'],
   getOrderFailure: null,
   getOrderProcessRequest: ['data'],
-  getOrderProcessSuccess: ['payload'],
+  getOrderProcessSuccess: ['payload', 'page'],
   getOrderProcessFailure: null,
+  getOrderNextProcessRequest: ['data'],
+  getOrderNextProcessSuccess: ['payload', 'page'],
+  getOrderNextProcessFailure: null,
+  getOrderFinishRequest: ['data'],
+  getOrderFinishSuccess: ['payload', 'page'],
+  getOrderFinishFailure: null,
   addBarangRequest: ['data'],
   addBarangSuccess: ['payload'],
   deleteBarangRequest: ['data'],
   deleteBarangSuccess: ['payload'],
   editBarangRequest: ['data'],
   editBarangSuccess: ['payload'],
-  resetBarang: null
+  resetBarang: null,
+
+  pickBarangRequest: ['data'],
+  pickBarangSuccess: ['payload'],
+  pickBarangFailure: null,
+
+  kirimBarangRequest: ['data'],
+  kirimBarangSuccess: ['payload'],
+  kirimBarangFailure: null,
+
+  barangSampaiRequest: ['data'],
+  barangSampaiSuccess: ['payload'],
+  barangSampaiFailure: null,
+
+  getSalesListOrderRequest: ['data'],
+  getSalesListOrderSuccess: ['payload', 'page'],
+  getSalesListOrderFailure: null,
+
 })
 
 export const OrderTypes = Types
@@ -36,12 +59,21 @@ export const INITIAL_STATE = Immutable({
   getBarang: DEFAULT_STATE,
   getOrder: DEFAULT_STATE,
   getOrderProcess: DEFAULT_STATE,
+  getOrderFinish: DEFAULT_STATE,
+  getOrderNextProcess: DEFAULT_STATE,
   addBarang: DEFAULT_STATE,
   deleteBarang: DEFAULT_STATE,
   editBarang: DEFAULT_STATE,
   listBarang: [],
   listOrder: [],
-  listOrderProcess: []
+  listOrderProcess: [],
+  listOrderNextProcess: [],
+  listOrderFinish: [],
+  salesListOrder: [],
+  pickBarang: DEFAULT_STATE,
+  kirimBarang: DEFAULT_STATE,
+  barangSampai: DEFAULT_STATE,
+  getSalesListOrder: DEFAULT_STATE
 })
 
 /* ------------- Selectors ------------- */
@@ -105,11 +137,14 @@ export const getOrderRequest = (state, { data }) => {
   return state.merge({ ...state, getOrder: { fetching: true, data, payload: null } })
 }
 
-export const getOrderSuccess = (state, { payload }) => {
+export const getOrderSuccess = (state, { payload, page }) => {
   console.tron.error({ payload })
   let newList = [...state.listOrder]
-  // const { payload } = action
-  newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+  if (page === 1) {
+    newList = payload
+  } else {
+    newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+  }
   return state.merge({ ...state, getOrder: { fetching: false, error: null, payload }, listOrder: newList })
 }
 
@@ -121,15 +156,55 @@ export const getOrderProcessRequest = (state, { data }) => {
   return state.merge({ ...state, getOrderProcess: { fetching: true, data, payload: null } })
 }
 
-export const getOrderProcessSuccess = (state, { payload }) => {
+export const getOrderProcessSuccess = (state, { payload, page }) => {
   let newList = [...state.listOrderProcess]
-  // const { payload } = action
-  newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+  if (page === 1) {
+    newList = payload
+  } else {
+    newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+  }
   return state.merge({ ...state, getOrderProcess: { fetching: false, error: null, payload }, listOrderProcess: newList })
 }
 
 export const getOrderProcessFailure = state =>
   state.merge({ ...state, getOrderProcess: { fetching: false, error: true, payload: null } })
+
+export const getOrderNextProcessRequest = (state, { data }) => {
+  console.tron.error({ data })
+  return state.merge({ ...state, getOrderNextProcess: { fetching: true, data, payload: null } })
+}
+
+export const getOrderNextProcessSuccess = (state, { payload, page }) => {
+  let newList = [...state.listOrderNextProcess]
+  if (page === 1) {
+    newList = payload
+  } else {
+    newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+  }
+  return state.merge({ ...state, getOrderNextProcess: { fetching: false, error: null, payload }, listOrderNextProcess: newList })
+}
+
+export const getOrderNextProcessFailure = state =>
+  state.merge({ ...state, getOrderNextProcess: { fetching: false, error: true, payload: null } })
+
+
+export const getOrderFinishRequest = (state, { data }) => {
+  console.tron.error({ data })
+  return state.merge({ ...state, getOrderFinish: { fetching: true, data, payload: null } })
+}
+
+export const getOrderFinishSuccess = (state, { payload, page }) => {
+  let newList = [...state.listOrderFinish]
+  if (page === 1) {
+    newList = payload
+  } else {
+    newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+  }
+  return state.merge({ ...state, getOrderFinish: { fetching: false, error: null, payload }, listOrderFinish: newList })
+}
+
+export const getOrderFinishFailure = state =>
+  state.merge({ ...state, getOrderFinish: { fetching: false, error: true, payload: null } })
 
 
 export const createOrderRequest = (state, { data }) =>
@@ -142,6 +217,59 @@ export const createOrderSuccess = (state, { payload }) =>
 // Something went wrong somewhere.
 export const createOrderFailure = state =>
   state.merge({ ...state, createOrder: { fetching: false, error: true, payload: null } })
+
+export const kirimBarangRequest = (state, { data }) =>
+  state.merge({ ...state, kirimBarang: { fetching: true, data, payload: null } })
+
+// successful api lookup
+export const kirimBarangSuccess = (state, { payload }) =>
+  state.merge({ ...state, kirimBarang: { fetching: false, error: null, payload } })
+
+// Something went wrong somewhere.
+export const kirimBarangFailure = state =>
+  state.merge({ ...state, kirimBarang: { fetching: false, error: true, payload: null } })
+
+export const pickBarangRequest = (state, { data }) =>
+  state.merge({ ...state, pickBarang: { fetching: true, data, payload: null } })
+
+// successful api lookup
+export const pickBarangSuccess = (state, { payload }) =>
+  state.merge({ ...state, pickBarang: { fetching: false, error: null, payload } })
+
+// Something went wrong somewhere.
+export const pickBarangFailure = state =>
+  state.merge({ ...state, pickBarang: { fetching: false, error: true, payload: null } })
+
+export const barangSampaiRequest = (state, { data }) =>
+  state.merge({ ...state, barangSampai: { fetching: true, data, payload: null } })
+
+// successful api lookup
+export const barangSampaiSuccess = (state, { payload }) =>
+  state.merge({ ...state, barangSampai: { fetching: false, error: null, payload } })
+
+// Something went wrong somewhere.
+export const barangSampaiFailure = state =>
+  state.merge({ ...state, barangSampai: { fetching: false, error: true, payload: null } })
+
+export const getSalesListOrderRequest = (state, { data }) => {
+  console.tron.error({ data })
+  return state.merge({ ...state, getSalesListOrder: { fetching: true, data, payload: null } })
+}
+
+export const getSalesListOrderSuccess = (state, { payload, page }) => {
+  console.tron.error({ payload })
+  let newList = [...state.salesListOrder]
+  if (page === 1) {
+    newList = payload
+  } else {
+    newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+  }
+  return state.merge({ ...state, getSalesListOrder: { fetching: false, error: null, payload }, salesListOrder: newList })
+}
+
+export const getSalesListOrderFailure = state =>
+  state.merge({ ...state, getSalesListOrder: { fetching: false, error: true, payload: null } })
+
 
 /* ------------- Hookup Reducers To Types ------------- */
 
@@ -158,11 +286,30 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.GET_ORDER_PROCESS_REQUEST]: getOrderProcessRequest,
   [Types.GET_ORDER_PROCESS_SUCCESS]: getOrderProcessSuccess,
   [Types.GET_ORDER_PROCESS_FAILURE]: getOrderProcessFailure,
+  [Types.GET_ORDER_NEXT_PROCESS_REQUEST]: getOrderNextProcessRequest,
+  [Types.GET_ORDER_NEXT_PROCESS_SUCCESS]: getOrderNextProcessSuccess,
+  [Types.GET_ORDER_NEXT_PROCESS_FAILURE]: getOrderNextProcessFailure,
+  [Types.GET_ORDER_FINISH_REQUEST]: getOrderFinishRequest,
+  [Types.GET_ORDER_FINISH_SUCCESS]: getOrderFinishSuccess,
+  [Types.GET_ORDER_FINISH_FAILURE]: getOrderFinishFailure,
   [Types.ADD_BARANG_REQUEST]: addBarangRequest,
   [Types.ADD_BARANG_SUCCESS]: addBarangSuccess,
   [Types.DELETE_BARANG_REQUEST]: deleteBarangRequest,
   [Types.DELETE_BARANG_SUCCESS]: deleteBarangSuccess,
   [Types.EDIT_BARANG_REQUEST]: editBarangRequest,
   [Types.EDIT_BARANG_SUCCESS]: editBarangSuccess,
-  [Types.RESET_BARANG]: resetBarang
+  [Types.RESET_BARANG]: resetBarang,
+  [Types.PICK_BARANG_REQUEST]: pickBarangRequest,
+  [Types.PICK_BARANG_SUCCESS]: pickBarangSuccess,
+  [Types.PICK_BARANG_FAILURE]: pickBarangFailure,
+  [Types.KIRIM_BARANG_REQUEST]: kirimBarangRequest,
+  [Types.KIRIM_BARANG_SUCCESS]: kirimBarangSuccess,
+  [Types.KIRIM_BARANG_FAILURE]: kirimBarangFailure,
+  [Types.BARANG_SAMPAI_REQUEST]: barangSampaiRequest,
+  [Types.BARANG_SAMPAI_SUCCESS]: barangSampaiSuccess,
+  [Types.BARANG_SAMPAI_FAILURE]: barangSampaiFailure,
+
+  [Types.GET_SALES_LIST_ORDER_REQUEST]: getSalesListOrderRequest,
+  [Types.GET_SALES_LIST_ORDER_SUCCESS]: getSalesListOrderSuccess,
+  [Types.GET_SALES_LIST_ORDER_FAILURE]: getSalesListOrderFailure,
 })

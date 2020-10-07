@@ -145,6 +145,15 @@ export default StyleSheet.create({
     lineHeight: 18,
     color: '#00b9f2'
   },
+  textSetor: {
+    fontFamily: Fonts.type.acuminProMedium,
+    marginTop: 2,
+    flexWrap: 'wrap',
+    width: Scale(70),
+    fontSize: 12,
+    textAlign: 'center',
+    color: Colors.warm_grey
+  },
   textBatal: {
     fontFamily: Fonts.type.acuminProMedium,
     marginTop: 2,
@@ -232,7 +241,8 @@ export default StyleSheet.create({
   },
   photoContainerNoBorder: {
     flexDirection: 'row',
-    marginLeft: 18
+    marginLeft: 18,
+    marginTop: 7
   },
   photoContainer: {
     height: 64,
@@ -241,6 +251,7 @@ export default StyleSheet.create({
     alignSelf: 'center',
     borderColor: '#CCCCCC',
     borderWidth: 1,
+    marginTop: 7,
     borderRadius: 4
   },
   icPhoto: {
@@ -305,5 +316,47 @@ export default StyleSheet.create({
     fontSize: 14,
     color: Colors.alertError,
     textAlign: 'center'
-  }
+  },
+  textError: {
+    textAlign: 'left',
+    fontSize: 10,
+    color: 'red',
+    fontFamily: Fonts.type.azoSansRegular,
+    marginLeft: 20
+  },
+  menungguOrder: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 14,
+    color: Colors.alertError,
+    textAlign: 'left'
+  },
+  finishOrder: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 14,
+    color: Colors.alertSuccess,
+    textAlign: 'left'
+  },
+  statusText: {
+    fontFamily: Fonts.type.acuminProBold,
+    fontSize: 14,
+    marginTop: 13,
+    marginBottom: 1,
+    color: Colors.textBlack,
+    textAlign: 'left'
+  },
+  pembayaranTitle: {
+    fontFamily: Fonts.type.acuminProBold,
+    fontSize: 14,
+    marginBottom: 1,
+    color: Colors.textBlack,
+    textAlign: 'left'
+  },
+  pembayaran: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 14,
+    marginLeft: 5,
+    marginBottom: 1,
+    color: Colors.textBlack,
+    textAlign: 'left'
+  },
 })

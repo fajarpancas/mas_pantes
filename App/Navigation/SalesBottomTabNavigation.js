@@ -55,19 +55,19 @@ const stackNav = screen =>
 
 const SalesBottomTabNavigation = createBottomTabNavigator(
     {
-        // HomeSales: {
-        //     screen: stackNav(HomeSalesScreen),
-        //     navigationOptions: navigation => ({
-        //         title: I18n.t('home.home'),
-        //         tabBarIcon: ({ focused, tintColor }) => (
-        //             <Icon name="home" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
-        //         ),
-        //     }),
-        // },
+        HomeSales: {
+            screen: stackNav(HomeSalesScreen),
+            navigationOptions: navigation => ({
+                title: 'List Order',
+                tabBarIcon: ({ focused, tintColor }) => (
+                    <Icon name="list" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
+                ),
+            }),
+        },
         Sales: {
             screen: stackNav(SalesScreen),
             navigationOptions: () => ({
-                title: 'Order',
+                title: 'Buat Orderan',
                 tabBarIcon: ({ focused, tintColor }) => (
                     <Icon name="chrome-reader-mode" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
                 ),
@@ -84,7 +84,7 @@ const SalesBottomTabNavigation = createBottomTabNavigator(
         },
     },
     {
-        initialRouteName: 'Sales',
+        initialRouteName: 'HomeSales',
         tabBarOptions: {
             activeTintColor: '#ccb102',
             labelStyle: {

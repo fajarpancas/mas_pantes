@@ -17,12 +17,18 @@ import { startup } from './StartupSagas'
 import { getUserAvatar } from './GithubSagas'
 import {
   addBarang,
+  barangSampai,
   createOrder,
   deleteBarang,
   editBarang,
   getBarang,
   getOrderList,
-  getOrderListProcess
+  getOrderListDiambil,
+  getOrderListFinish,
+  getOrderListProcess,
+  getSalesListOrder,
+  kirimBarang,
+  pickBarang
 } from './OrderSagas'
 import { login, logout } from './AuthSagas'
 import { getListKurir, getListUser } from './MasterDataSagas'
@@ -44,11 +50,17 @@ export default function* root() {
     takeLatest(StartupTypes.STARTUP, startup, api),
     takeLatest(OrderTypes.GET_ORDER_REQUEST, getOrderList, api),
     takeLatest(OrderTypes.GET_ORDER_PROCESS_REQUEST, getOrderListProcess, api),
+    takeLatest(OrderTypes.GET_ORDER_NEXT_PROCESS_REQUEST, getOrderListDiambil, api),
+    takeLatest(OrderTypes.GET_ORDER_FINISH_REQUEST, getOrderListFinish, api),
+    takeLatest(OrderTypes.GET_SALES_LIST_ORDER_REQUEST, getSalesListOrder, api),
     takeLatest(OrderTypes.GET_BARANG_REQUEST, getBarang, api),
     takeLatest(OrderTypes.ADD_BARANG_REQUEST, addBarang, api),
     takeLatest(OrderTypes.DELETE_BARANG_REQUEST, deleteBarang, api),
     takeLatest(OrderTypes.EDIT_BARANG_REQUEST, editBarang, api),
     takeLatest(OrderTypes.CREATE_ORDER_REQUEST, createOrder, api),
+    takeLatest(OrderTypes.PICK_BARANG_REQUEST, pickBarang, api),
+    takeLatest(OrderTypes.KIRIM_BARANG_REQUEST, kirimBarang, api),
+    takeLatest(OrderTypes.BARANG_SAMPAI_REQUEST, barangSampai, api),
 
     takeLatest(MasterDataTypes.GET_LIST_USER_REQUEST, getListUser, api),
     takeLatest(MasterDataTypes.GET_LIST_KURIR_REQUEST, getListKurir, api),
