@@ -37,9 +37,15 @@ class ProfileScreen extends Component {
   modalLogout = undefined
 
   constructor(props) {
+    const { user } = props
+    let name = '-'
+
+    if (user && user.Nama_User) {
+      name = user.Nama_User
+    }
     super(props)
     this.state = {
-      qrValue: 'Pejuang Subuh',
+      qrValue: name,
       modalShow: false
     }
   }
@@ -141,7 +147,7 @@ class ProfileScreen extends Component {
               justifyContent: 'center',
               marginLeft: 15
             }}>
-              <Text style={styles.namaToko}>Fajar Panca Saputra</Text>
+              <Text style={styles.namaToko}>{this.state.qrValue}</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2 }}>
                 <Icons name='email' style={{ marginTop: Scale(1) }} size={13} color={Colors.textGrey} />
                 <Text style={styles.namaSales}>pejuangsubuh@vs.me</Text>
@@ -194,6 +200,7 @@ class ProfileScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    user: state.session.userSession
   }
 }
 

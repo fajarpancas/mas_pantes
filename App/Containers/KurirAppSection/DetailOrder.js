@@ -13,6 +13,8 @@ import moment from 'moment'
 import { CustomInput, DropDownHolder } from '../../Components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Styled, CustomDatepicker } from 'react-native-awesome-component'
+import OrderActions from '../../Redux/OrderRedux'
+import { Method } from 'react-native-awesome-component';
 
 const schema = Yup.object().shape({
     noFaktur: Yup.string(),
@@ -66,17 +68,17 @@ class DetailOrderScreen extends Component {
 
     handleSubmit(values, actions) {
         const { dataCamera } = this.state
-        const { user } = this.props
+        const { user, barangSampaiRequest } = this.props
         if (dataCamera !== '') {
             const param = {
                 No_Penjualan: values.noFaktur,
                 Jam_Terima: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
-                Url_Foto_Penerima: 'aaa',
+                Url_Foto_Penerima: `data:image/jpeg;base64,${dataCamera.base64}`,
                 Nama_Penerima: values.penerima,
                 Kurir_Id: user.Id_Kurir
             }
-            console.tron.error({ param })
-            console.tron.error({ dataCamera })
+            Method.LoadingHelper.showLoading()
+            barangSampaiRequest(param)
         }
     }
 
@@ -97,9 +99,39 @@ class DetailOrderScreen extends Component {
         DropDownHolder.alert('error', 'Function belum tersedia', 'Mohon maaf, fungsi ini masih dalam tahap pengembangan, API belum tersedia')
     }
 
+    renderDetailViewOnly = () => {
+        const { dataOrder } = this.props
+        let namaPenerima = '-'
+
+        if (dataOrder && dataOrder.Nama_Penerima) {
+            namaPenerima = dataOrder.Nama_Penerima
+        }
+
+        return (
+            <View style={{ marginHorizontal: 10 }}>
+                <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.labelStyle}>Penerima</Text>
+                    <Text style={styles.textInfo}>:  {namaPenerima} </Text>
+                </View>
+                <Text style={styles.labelStyle}>Foto Penerima</Text>
+                {dataOrder && dataOrder.Url_Foto_Penerima &&
+                    <Image
+                        style={[styles.photoView, { marginBottom: 15 }]}
+                        resizeMode="contain"
+                        source={{
+                            uri: dataOrder.Url_Foto_Penerima,
+                        }}
+                        resizeMethod={'resize'}
+                        resizeMode={'cover'}
+                    />
+                }
+            </View>
+        )
+    }
+
     renderForm = (props) => {
         const { uri } = this.state
-        const { barang } = this.props
+        const { barang, dataOrder } = this.props
         return (
             <KeyboardAwareScrollView extraScrollHeight={40}>
                 <Styled.Container style={{ borderRadius: 10, marginHorizontal: 5, marginTop: 5 }}>
@@ -209,47 +241,51 @@ class DetailOrderScreen extends Component {
                         onPressEdit={(data) => this.props.navigation.navigate('EditBarang', { data })}
                         onDeleteData={(id) => this.deleteDataBarang(id)}
                         data={barang} />
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20, marginHorizontal: 15 }}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={styles.labelStyle}>Penerima</Text>
-                            <Text style={styles.labelStyle2}>:</Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            <CustomInput
-                                name="penerima"
-                                returnKeyType="go"
-                                maxLength={15}
-                                placeholder={'Nama Penerima'}
-                                setFieldValue={props.setFieldValue}
-                                value={props.values.penerima}
-                                error={props.errors.penerima}
-                                styleTitle={styles.formLabelTextDisable}
-                                styleInputText={styles.formPlacholderTextDisable}
-                            />
-                        </View>
-                    </View>
-                    <TouchableOpacity onPress={() => this.camera.show()} style={uri === '' ? styles.photoContainer : styles.photoContainerNoBorder}>
-                        <View style={{ justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
-                            {uri !== '' ?
-                                <Image
-                                    source={{ uri: uri, isStatic: true }}
-                                    style={styles.photo}
+                    {!dataOrder.viewOnly &&
+                        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20, marginHorizontal: 15 }}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={styles.labelStyle}>Penerima</Text>
+                                <Text style={styles.labelStyle2}>:</Text>
+                            </View>
+                            <View style={{ flex: 1 }}>
+                                <CustomInput
+                                    name="penerima"
+                                    returnKeyType="go"
+                                    maxLength={15}
+                                    placeholder={'Nama Penerima'}
+                                    setFieldValue={props.setFieldValue}
+                                    value={props.values.penerima}
+                                    error={props.errors.penerima}
+                                    styleTitle={styles.formLabelTextDisable}
+                                    styleInputText={styles.formPlacholderTextDisable}
                                 />
-                                :
-                                <Image source={Images.camera} style={styles.uploadIcon} />
-                            }
-                            {uri === '' ?
-                                <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
-                                    <Text style={styles.icPhoto}>Foto penerima</Text>
-                                    <Text style={styles.uploadPhoto}>Tap untuk mangambil foto</Text>
-                                </View>
-                                :
-                                <TouchableOpacity onPress={() => this.camera.show()} style={{ justifyContent: 'center' }}>
-                                    <Text style={styles.changePhoto}>Ubah Foto Penerima</Text>
-                                </TouchableOpacity>
-                            }
-                        </View>
-                    </TouchableOpacity>
+                            </View>
+                        </View>}
+                    {!dataOrder.viewOnly &&
+                        <TouchableOpacity onPress={() => this.camera.show()} style={uri === '' ? styles.photoContainer : styles.photoContainerNoBorder}>
+                            <View style={{ justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
+                                {uri !== '' ?
+                                    <Image
+                                        source={{ uri: uri, isStatic: true }}
+                                        style={styles.photo}
+                                    />
+                                    :
+                                    <Image source={Images.camera} style={styles.uploadIcon} />
+                                }
+                                {uri === '' ?
+                                    <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
+                                        <Text style={styles.icPhoto}>Foto penerima</Text>
+                                        <Text style={styles.uploadPhoto}>Tap untuk mangambil foto</Text>
+                                    </View>
+                                    :
+                                    <TouchableOpacity onPress={() => this.camera.show()} style={{ justifyContent: 'center' }}>
+                                        <Text style={styles.changePhoto}>Ubah Foto Penerima</Text>
+                                    </TouchableOpacity>
+                                }
+                            </View>
+                        </TouchableOpacity>
+                    }
+
                     <View style={{ marginBottom: 7 }}>
                         {this.state.errorFoto ? (
                             <Text style={styles.textError}>
@@ -259,18 +295,22 @@ class DetailOrderScreen extends Component {
                                 <Text style={styles.textError} />
                             )}
                     </View>
-                    <View style={{ marginVertical: 20 }}>
-                        <TouchableOpacity
-                            onPress={() => this.confirm(props)}
-                            style={styles.terimaButton}>
-                            <Text style={styles.terimaText}>Terima</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={this.reject}
-                            style={styles.rejectButton}>
-                            <Text style={styles.rejectText}>Reject</Text>
-                        </TouchableOpacity>
-                    </View>
+                    {!dataOrder.viewOnly &&
+                        <View style={{ marginVertical: 20 }}>
+                            <TouchableOpacity
+                                onPress={() => this.confirm(props)}
+                                style={styles.terimaButton}>
+                                <Text style={styles.terimaText}>Terima</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={this.reject}
+                                style={styles.rejectButton}>
+                                <Text style={styles.rejectText}>Reject</Text>
+                            </TouchableOpacity>
+                        </View>
+                    }
+
+                    {dataOrder.viewOnly && this.renderDetailViewOnly()}
                 </Styled.Container>
             </KeyboardAwareScrollView>
         )
@@ -283,15 +323,15 @@ class DetailOrderScreen extends Component {
         let jamTerima = '-'
 
         if (dataOrder && dataOrder.Jam_Kemas) {
-            jamKemas = dataOrder.Jam_Kemas
+            jamKemas = moment(dataOrder.Jam_Kemas, 'YYYY-MM-DD hh:mm:ss').format('DD MMM YYYY, hh:mm')
         }
 
         if (dataOrder && dataOrder.Jam_Kirim) {
-            jamKirim = dataOrder.Jam_Kirim
+            jamKirim = moment(dataOrder.Jam_Kirim, 'YYYY-MM-DD hh:mm:ss').format('DD MMM YYYY, hh:mm')
         }
 
         if (dataOrder && dataOrder.Jam_Terima) {
-            jamTerima = dataOrder.Jam_Terima
+            jamTerima = moment(dataOrder.Jam_Terima, 'YYYY-MM-DD hh:mm:ss').format('DD MMM YYYY, hh:mm')
         }
 
         return (
@@ -308,9 +348,9 @@ class DetailOrderScreen extends Component {
                     />
                 </View>
                 <View style={styles.bottomInfo}>
-                    <Text style={styles.textKemas}>Kemas: {jamKemas}</Text>
-                    <Text style={styles.textKemas}>Kirim: {jamKirim}</Text>
-                    <Text style={styles.textKemas}>Terima: {jamTerima}</Text>
+                    <Text style={styles.textKemas}>Jam Kemas: {'\n'} {jamKemas}</Text>
+                    <Text style={styles.textKemas}>Jam Kirim: {'\n'} {jamKirim}</Text>
+                    <Text style={styles.textKemas}>Jam Terima: {'\n'} {jamTerima}</Text>
                 </View>
 
                 <Camera
@@ -346,6 +386,7 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        barangSampaiRequest: (param) => dispatch(OrderActions.barangSampaiRequest(param))
     }
 }
 

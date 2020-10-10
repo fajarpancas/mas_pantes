@@ -33,7 +33,7 @@ export default class CustomFlatList extends Component {
             ListHeaderComponent={this.props.ListHeaderComponent}
             ListFooterComponent={this.props.ListFooterComponent}
             ListEmptyComponent={() => {
-              if (!this.props.refreshing && this.props.renderEmpty) {
+              if (!this.props.refreshing) {
                 // return this.props.renderEmpty()
                 return <EmptyContent title={this.props.emptyTitle} message={this.props.emptyMessage} />
               }

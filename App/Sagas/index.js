@@ -28,7 +28,9 @@ import {
   getOrderListProcess,
   getSalesListOrder,
   kirimBarang,
-  pickBarang
+  kurirSetor,
+  pickBarang,
+  uploadFotoBarang
 } from './OrderSagas'
 import { login, logout } from './AuthSagas'
 import { getListKurir, getListUser } from './MasterDataSagas'
@@ -61,6 +63,8 @@ export default function* root() {
     takeLatest(OrderTypes.PICK_BARANG_REQUEST, pickBarang, api),
     takeLatest(OrderTypes.KIRIM_BARANG_REQUEST, kirimBarang, api),
     takeLatest(OrderTypes.BARANG_SAMPAI_REQUEST, barangSampai, api),
+    takeLatest(OrderTypes.UPLOAD_FOTO_BARANG_REQUEST, uploadFotoBarang, api),
+    takeLatest(OrderTypes.KURIR_SETOR_REQUEST, kurirSetor, api),
 
     takeLatest(MasterDataTypes.GET_LIST_USER_REQUEST, getListUser, api),
     takeLatest(MasterDataTypes.GET_LIST_KURIR_REQUEST, getListKurir, api),

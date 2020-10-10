@@ -7,6 +7,8 @@ import OrderActions from '../../Redux/OrderRedux'
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import styles from '../Styles/ListOrderScreenStyle'
 import { Method } from 'react-native-awesome-component'
+import moment from 'moment'
+import { Colors } from '../../Themes'
 
 class AvailOrderScreen extends Component {
   estimasiModal = undefined
@@ -48,7 +50,7 @@ class AvailOrderScreen extends Component {
         <View style={styles.listOrderWrapper}>
           <View style={{ flexDirection: 'row' }}>
             <Text style={[{ flex: 1 }, styles.textInfo]}>{item.No_Penjualan}</Text>
-            <Text style={styles.textInfo}>{item.Tgl_Penjualan}</Text>
+            <Text style={styles.textInfo}>{moment(item.Tgl_Penjualan, 'YYYY-MM-DD hh:mm:ss').format('DD MMM YYYY, hh:mm')}</Text>
           </View>
           <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
             <View style={{ flexDirection: 'column', flex: 1 }}>
@@ -84,7 +86,21 @@ class AvailOrderScreen extends Component {
         <View style={{ flex: 1 }}>
           {/* <HeaderMasPantes /> */}
 
-          <Text style={styles.namaKurir}>Nama Kurir: {name}</Text>
+          <View style={{
+            backgroundColor: 'white',
+            paddingHorizontal: 20,
+            paddingVertical: 15,
+            flexDirection: 'row',
+            elevation: 1,
+            marginBottom: 5
+          }}>
+            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+              <Icons name='person' size={20} color={Colors.textBlack} />
+              <Text style={[styles.textInfoTotal, { marginLeft: 10 }]}>{name}</Text>
+            </View>
+            <Text style={[styles.textInfoTotal, { textAlign: 'right', flex: 1 }]}>Total Order Tersedia: {listOrder.length}</Text>
+          </View>
+
           <CustomFlatList
             data={listOrder}
             renderItem={this.renderList.bind(this)}

@@ -7,6 +7,7 @@ import HeaderMasPantes from '../../../Components/HeaderMasPantes'
 import { CustomFlatList } from '../../../Components'
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Colors } from '../../../Themes'
+import moment from 'moment'
 
 class HomeSalesScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -29,6 +30,16 @@ class HomeSalesScreen extends Component {
     }
   }
 
+  kurirSetor = (item) => {
+    const { kurirSetorRequest, user } = this.props
+    const param = {
+      Id_Sales: user.Id_Sales,
+      No_Penjualan: item.No_Penjualan,
+      Jam_Setor: moment(new Date()).format('YYYY-MM-DD hh:mm:ss')
+    }
+    kurirSetorRequest(param)
+  }
+
   renderStatus = (status) => {
     switch (status) {
       case 0:
@@ -41,7 +52,7 @@ class HomeSalesScreen extends Component {
         );
       case 2:
         return (
-          <Text style={styles.menungguOrder}>Kurir sedang mengirim orderan kepada customer</Text>
+          <Text style={styles.menungguOrder}>Orderan dalam proses pengiriman</Text>
         );
       case 3:
         return (
@@ -70,7 +81,7 @@ class HomeSalesScreen extends Component {
         <View style={styles.listOrderWrapper}>
           <View style={{ flexDirection: 'row' }}>
             <Text style={[{ flex: 1 }, styles.textInfo]}>{item.No_Penjualan}</Text>
-            <Text style={styles.textInfo}>{item.Tgl_Penjualan}</Text>
+            <Text style={styles.textInfo}>{moment(item.Tgl_Penjualan, 'YYYY-MM-DD hh:mm:ss').format('DD MMM YYYY, hh:mm')}</Text>
           </View>
           <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
             <View style={{ flexDirection: 'column', flex: 1 }}>
@@ -80,9 +91,9 @@ class HomeSalesScreen extends Component {
                 <Text style={styles.textInfoAlamat}>{item.Alamat}</Text>
               </View>
             </View>
-            <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'column', alignItems: 'center', paddingHorizontal: 5 }}>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('DetailScreen', { data: item })}>
+                onPress={() => this.props.navigation.navigate('DetailScreen', { data: { ...item, viewOnly: true } })}>
                 <Icons name="info" color={'#00b9f2'} size={30} style={{ alignSelf: 'center' }} />
               </TouchableOpacity>
               <Text style={styles.textKirim}>Detail</Text>
@@ -95,20 +106,28 @@ class HomeSalesScreen extends Component {
             <View style={{ flexDirection: 'column', marginTop: 13, flex: 1 }}>
               <View style={{ flexDirection: 'row' }}>
                 <Text style={styles.pembayaranTitle}>Jenis Pembayaran:</Text>
-                <Text style={styles.pembayaran}>{item.Jenis_Bayar === '1' ? 'Tunai/COD' : 'Transfer'}</Text>
+                <Text style={styles.pembayaran}>{item.Id_Jenis_Pembayaran === 1 ? 'Tunai/COD' : 'Transfer'}</Text>
               </View>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.pembayaranTitle}>Status Pembayaran:</Text>
-                <Text style={styles.pembayaran}>Belum disetorkan</Text>
-              </View>
+              {item.Id_Jenis_Pembayaran === 1 &&
+                <View style={{ flexDirection: 'row' }}>
+                  <Text style={styles.pembayaranTitle}>Status Pembayaran:</Text>
+                  {item.Status === 0 ?
+                    <Text style={styles.pembayaran}>Belum disetorkan</Text> :
+                    <Text style={styles.pembayaran}>Sudah disetorkan</Text>}
+                </View>}
             </View>
-            <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('DetailScreen', { data: item })}>
-                <Icons name="check-box" color={Colors.warm_grey} size={30} style={{ alignSelf: 'center' }} />
-              </TouchableOpacity>
-              <Text style={styles.textSetor}>Tandai sudah menyetor</Text>
-            </View>
+            {item.Id_Jenis_Pembayaran === 1 && status === 3 &&
+              <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                <TouchableOpacity
+                  disabled={item.Status === 1}
+                  onPress={() => this.kurirSetor(item)}>
+                  <Icons name="check-box" color={item.Status === 0 ? Colors.warm_grey : Colors.alertSuccess} size={30} style={{ alignSelf: 'center' }} />
+                </TouchableOpacity>
+                {item.Status === 0 ?
+                  <Text style={styles.textSetor}>Tandai sudah menyetor</Text>
+                  : <Text style={styles.textSetorSuccess}>Sudah disetorkan</Text>
+                }
+              </View>}
           </View>
         </View>
       </View>
@@ -136,6 +155,8 @@ class HomeSalesScreen extends Component {
             onRefresh={this.onRefresh}
             error={false}
             errorMessage={'Tidak ada data order'}
+            emptyTitle={'Data Order Kosong'}
+            emptyMessage={'Belum ada order yang dibuat'}
             onEndReached={() => { }}
           />
 
@@ -155,6 +176,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    kurirSetorRequest: (param) => dispatch(OrderActions.kurirSetorRequest(param)),
     getSalesListOrderRequest: (param) => dispatch(OrderActions.getSalesListOrderRequest(param))
   }
 }

@@ -11,10 +11,7 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
-
-// Styles
+import HeaderName from './HeaderName'
 import styles from '../Styles/HomeScreenStyle'
 import { Colors, Images } from '../../Themes'
 import Scale from '../../Transforms/Scale'
@@ -22,11 +19,6 @@ import QRCode from 'react-native-qrcode-svg'
 
 const dummyData = [
   { title: 'Discount 50% PromoOpening Toko Emas Pantes di Grage Citi Mall Cirebon' },
-  { title: 'Discount 50% PromoOpening Toko Emas Pantes di Grage Citi Mall Cirebon' },
-  { title: 'Discount 50% PromoOpening Toko Emas Pantes di Grage Citi Mall Cirebon' },
-  { title: 'Discount 50% PromoOpening Toko Emas Pantes di Grage Citi Mall Cirebon' },
-  { title: 'Discount 50% PromoOpening Toko Emas Pantes di Grage Citi Mall Cirebon' },
-  { title: 'Discount 50% PromoOpening Toko Emas Pantes di Grage Citi Mall Cirebon' }
 ]
 
 class HomeScreen extends Component {
@@ -39,10 +31,7 @@ class HomeScreen extends Component {
 
   static navigationOptions = ({ navigation }) => ({
     headerLeft: () => (
-      <View style={styles.headerLeft}>
-        <Text style={styles.hiText}>Hai,</Text>
-        <Text style={styles.usernameText}>Fajar Panca Saputra</Text>
-      </View>
+      <HeaderName />
     ),
     headerRight: () => (
       <View style={{ marginRight: 20, marginTop: 10 }}>

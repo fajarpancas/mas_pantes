@@ -8,12 +8,16 @@ import BerikanPenilaianScreen from '../Containers/Profile/BerikanPenilaianScreen
 import HubungiKamiScreen from '../Containers/Profile/HubungiKamiScreen'
 import KebijakanPrivasiScreen from '../Containers/Profile/KebijakanPrivasiScreen'
 import PelajariFaqScreen from '../Containers/Profile/PelajariFaqScreen'
+import DetailOrderScreen from '../Containers/KurirAppSection/DetailOrder'
 
 const AppSalesStack = createStackNavigator(
     {
         MainScreen: {
             screen: SalesBottomTabNavigation,
             navigationOptions: { header: null }
+        },
+        DetailScreen: {
+            screen: DetailOrderScreen
         },
         TambahBarang: {
             screen: TambahBarang,

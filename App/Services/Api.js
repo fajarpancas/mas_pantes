@@ -53,6 +53,8 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
   const pickBarang = (param) => api.post('/api/pick-barang', param)
   const kirimBarang = (param) => api.post('/api/kirim-barang', param)
   const barangSampai = (param) => api.post('/api/barang-sampai', param)
+  const uploadFotoBarang = (param) => api.post('/api/upload-foto-barang', param)
+  const kurirSetor = (param) => api.post('/api/kurir-setor', param)
   // ------
   // STEP 3
   // ------
@@ -84,7 +86,9 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
     pickBarang,
     kirimBarang,
     barangSampai,
-    getSalesListOrder
+    getSalesListOrder,
+    uploadFotoBarang,
+    kurirSetor
   }
 }
 

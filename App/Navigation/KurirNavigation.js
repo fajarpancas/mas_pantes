@@ -7,12 +7,16 @@ import BerikanPenilaianScreen from '../Containers/Profile/BerikanPenilaianScreen
 import HubungiKamiScreen from '../Containers/Profile/HubungiKamiScreen'
 import KebijakanPrivasiScreen from '../Containers/Profile/KebijakanPrivasiScreen'
 import PelajariFaqScreen from '../Containers/Profile/PelajariFaqScreen'
+import EditBarang from '../Containers/SalesAppSection/Sales/EditBarang'
 
 const AppKurirStack = createStackNavigator(
     {
         MainScreen: {
             screen: KurirBottomTabNavigation,
             navigationOptions: { header: null }
+        },
+        EditBarang: {
+            screen: EditBarang,
         },
         DetailScreen: {
             screen: DetailOrderScreen

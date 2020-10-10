@@ -15,6 +15,16 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  cusSelect:{
+    fontFamily: Fonts.type.acuminProRegular,
+    color: Colors.textBlack,
+    fontSize: 12,
+    marginLeft: 5
+  },
+  radioIcon: {
+    width: Scale(15),
+    height: Scale(15)
+  },
   textError: {
     textAlign: 'left',
     fontSize: 10,
@@ -272,5 +282,68 @@ export default StyleSheet.create({
     marginBottom: 15,
     height: Scale(40),
     justifyContent: 'center'
+  },
+  photoContainerNoBorder: {
+    flexDirection: 'row',
+    marginTop: 7
+  },
+  photoContainer: {
+    height: 64,
+    flexDirection: 'row',
+    width: Scale(335),
+    alignSelf: 'center',
+    borderColor: '#CCCCCC',
+    borderWidth: 1,
+    marginTop: 7,
+    borderRadius: 4
+  },
+  icPhoto: {
+    fontFamily: Fonts.type.acuminProMedium,
+    fontSize: 14,
+    color: Colors.textBlack
+  },
+  uploadPhoto: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 12,
+    color: '#57A9DD',
+  },
+  changePhoto: {
+    fontFamily: Fonts.type.acuminProMedium,
+    fontSize: 12,
+    color: '#57A9DD',
+    marginLeft: 10
+  },
+  photo: {
+    height: Scale(100),
+    width: Scale(100),
+    borderRadius: 4,
+  },
+  photoView: {
+    height: Scale(500),
+    width: Scale(325),
+    borderRadius: 4,
+    alignSelf: 'center'
+  },
+  uploadIcon: {
+    height: Scale(30),
+    width: Scale(35),
+    marginHorizontal: 20
+  },
+  viewIcon: {
+    height: Scale(64),
+    width: Scale(64),
+    marginHorizontal: 12
+  },
+  unggah: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 10,
+    color: '#57A9DD',
+    marginTop: 5
+  },
+  unggahGagal: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 10,
+    color: 'red',
+    marginTop: 5
   }
 })

@@ -7,6 +7,7 @@ import { Colors } from '../../Themes'
 import OrderActions from '../../Redux/OrderRedux'
 import { CustomFlatList } from '../../Components'
 import Icons from 'react-native-vector-icons/MaterialIcons'
+import moment from 'moment'
 
 class ProgressOrderScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -35,7 +36,7 @@ class ProgressOrderScreen extends Component {
         <View style={styles.listOrderWrapper}>
           <View style={{ flexDirection: 'row' }}>
             <Text style={[{ flex: 1 }, styles.textInfo]}>{item.No_Penjualan}</Text>
-            <Text style={styles.textInfo}>{item.Tgl_Penjualan}</Text>
+            <Text style={styles.textInfo}>{moment(item.Tgl_Penjualan, 'YYYY-MM-DD hh:mm:ss').format('DD MMM YYYY, hh:mm')}</Text>
           </View>
           <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
             <View style={{ flexDirection: 'column', flex: 1 }}>
@@ -48,7 +49,7 @@ class ProgressOrderScreen extends Component {
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
               <TouchableOpacity
                 style={styles.detailButton}
-                onPress={() => this.props.navigation.navigate('DetailScreen', { data: item })}>
+                onPress={() => this.props.navigation.navigate('DetailScreen', { data: { ...item, viewOnly: false } })}>
                 <Icons name="arrow-forward" color={'#00b9f2'} size={30} style={{ alignSelf: 'center' }} />
               </TouchableOpacity>
               <Text style={styles.textKirim}>Selesai</Text>
@@ -72,7 +73,21 @@ class ProgressOrderScreen extends Component {
         <View style={{ flex: 1 }}>
           {/* <HeaderMasPantes /> */}
 
-          <Text style={styles.namaKurir}>Nama Kurir: {name}</Text>
+          <View style={{
+            backgroundColor: 'white',
+            paddingHorizontal: 20,
+            paddingVertical: 15,
+            flexDirection: 'row',
+            elevation: 1,
+            marginBottom: 5
+          }}>
+            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+              <Icons name='person' size={20} color={Colors.textBlack} />
+              <Text style={[styles.textInfoTotal, { marginLeft: 10 }]}>{name}</Text>
+            </View>
+            <Text style={[styles.textInfoTotal, { textAlign: 'right', flex: 1 }]}>Total Order Dikirim: {listOrderProcess.length}</Text>
+          </View>
+
           <CustomFlatList
             data={listOrderProcess}
             renderItem={this.renderList.bind(this)}

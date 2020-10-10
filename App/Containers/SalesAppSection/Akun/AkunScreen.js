@@ -73,6 +73,13 @@ class AkunScreen extends Component {
     }
 
     render() {
+        const {user} = this.props
+        let name = ''
+
+        if(user && user.Nama_User){
+            name = user.Nama_User
+        }
+
         return (
             <View style={{ flex: 1 }}>
                 <View style={{ flex: 1 }}>
@@ -85,10 +92,10 @@ class AkunScreen extends Component {
                             justifyContent: 'center',
                             marginLeft: 10
                         }}>
-                            <Text style={styles.namaSales}>Akmal M Kristatnto
+                            <Text style={styles.namaSales}>{name}
                                 <Text style={styles.sales}></Text>
                             </Text>
-                            <Text style={styles.namaToko}>Cabang Garage City Mall</Text>
+                            <Text style={styles.namaToko}>-</Text>
                         </View>
                     </View>
 
@@ -121,6 +128,7 @@ class AkunScreen extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        user: state.session.userSession
     }
 }
 

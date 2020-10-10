@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { View, Text, StatusBar, Alert, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, StatusBar, Image, TouchableOpacity, TextInput } from 'react-native'
 import { connect } from 'react-redux'
 // import BarcodeScannerScreen from './BarcodeScanner'
-import { Colors, Fonts } from '../../../Themes'
+import { Colors, Fonts, Images } from '../../../Themes'
 import styles from '../../Styles/SalesScreenStyle'
 import { CustomInput } from '../../../Components'
 import { Formik } from 'formik'
@@ -73,16 +73,18 @@ class SalesScreen extends Component {
       customerName: '',
       errorCustomer: false,
       kurir: '',
-      errorKurir: false
+      errorKurir: false,
+      haveAcc: true,
+      customerId: null
     }
 
     this.initialValue = {
       tanggal: moment(new Date()).format('DD MMMM YYYY'),
-      telephone: '87847635259',
-      keterangan: 'abcd',
-      ongkir: '90000',
-      namaToko: 'abc',
-      alamat: 'Jl. Golf Cipanjalu no.42 RT.01 RW.11, Kec. Arcamanik, Kel.Cisaranten Binaharapan, Kota Bandung'
+      // telephone: '87847635259',
+      // keterangan: 'abcd',
+      // ongkir: '90000',
+      // namaToko: 'abc',
+      // alamat: 'Jl. Golf Cipanjalu no.42 RT.01 RW.11, Kec. Arcamanik, Kel.Cisaranten Binaharapan, Kota Bandung'
     }
   }
 
@@ -109,7 +111,7 @@ class SalesScreen extends Component {
   handleSubmit(values, actions) {
     const { barang, user, noPenjualan, createOrderRequest } = this.props
     const { errorCustomer, errorPembayaran, errorKurir } = this.state
-    if (!errorCustomer && !errorPembayaran && !errorKurir) {
+    if (!errorCustomer && !errorPembayaran) {
       let parseBarang = []
       let totalHarga = 0
 
@@ -122,6 +124,7 @@ class SalesScreen extends Component {
             Nama_Barang: obj.Nama_Barang,
             Harga: obj.harga,
             Harga_Jual: obj.harga,
+            Url_Foto_Barang: obj.foto
           }
         })
         for (let i = 0; i < barang.length; i++) {
@@ -132,9 +135,10 @@ class SalesScreen extends Component {
           No_Penjualan: noPenjualan,
           Id_Sales: user.Id_Sales,
           Id_Member: null,
+          User_Id: this.state.customerId,
           Nama_Customer: values.namaCustomer,
           Alamat: values.alamat,
-          Kurir_Id: null,
+          Kurir_Id: values.kurir,
           Nilai_Bayar: totalHarga,
           Ongkos_Kirim: values.ongkir,
           No_Telepon: values.telephone,
@@ -146,6 +150,16 @@ class SalesScreen extends Component {
         createOrderRequest(params)
       }
     }
+  }
+
+  resetPropsValues = (props) => {
+    props.setFieldValue('namaCustomer', '')
+    props.setFieldValue('alamat', '')
+    props.setFieldValue('telephone', '')
+    props.setFieldValue('keterangan', '')
+    props.setFieldValue('ongkir', '')
+    props.setFieldValue('namaToko', '')
+    this.setState({ kurir: '', jenisPembayaran: '', customerName: '' })
   }
 
   componentDidMount() {
@@ -193,13 +207,17 @@ class SalesScreen extends Component {
       this.setState({ errorPembayaran: true })
     }
 
-    if (props.values.kurir) {
-      this.setState({ errorKurir: false })
-    } else {
-      this.setState({ errorKurir: true })
-    }
+    // if (props.values.kurir) {
+    //   this.setState({ errorKurir: false })
+    // } else {
+    //   this.setState({ errorKurir: true })
+    // }
 
     props.handleSubmit()
+  }
+
+  changeStateAcc = (state) => {
+    this.setState({ haveAcc: state })
   }
 
   renderForm = (props) => {
@@ -231,35 +249,57 @@ class SalesScreen extends Component {
                     />
                   </View>
                 </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ flexDirection: 'row' }}>
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={styles.labelStyle}>Customer </Text>
                     <Text style={styles.labelStyle2}>:</Text>
                   </View>
-                  {/* <View style={{ flex: 1 }}>
-                    <CustomInput
-                      name="namaCustomer"
-                      returnKeyType="go"
-                      maxLength={15}
-                      placeholder={'Nama Customer'}
-                      setFieldValue={props.setFieldValue}
-                      value={props.values.namaCustomer}
-                      error={props.errors.namaCustomer}
-                      styleTitle={styles.formLabelText}
-                      styleInputText={styles.formPlacholderText}
-                    />
-                  </View> */}
-                  <CustomSelectOption
-                    label='Nama Customer'
-                    title='Nama Customer'
-                    data={userData}
-                    defaultValue={this.state.customerName}
-                    error={this.state.errorCustomer}
-                    selectTitle={'Pilih Customer'}
-                    errorMessage={'Nama Customer diisi'}
-                    onSelect={(value) => this.setState({ customerName: value })}
-                    setFieldValue={(value) => props.setFieldValue('namaCustomer', value)}
-                  />
+                  <View style={{ flexDirection: 'column', flex: 1 }}>
+                    <View style={{ flexDirection: 'row' }}>
+                      <TouchableOpacity
+                        onPress={() => this.changeStateAcc(true)}
+                        style={{ flexDirection: 'row', alignItems: 'center', marginRight: Scale(10) }}>
+                        <Image source={this.state.haveAcc ? Images.radioActive : Images.radio} style={styles.radioIcon} />
+                        <Text style={styles.cusSelect}>Memiliki akun</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => this.changeStateAcc(false)}
+                        style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image source={!this.state.haveAcc ? Images.radioActive : Images.radio} style={styles.radioIcon} />
+                        <Text style={styles.cusSelect}>Tidak memiliki akun</Text>
+                      </TouchableOpacity>
+                    </View>
+                    {!this.state.haveAcc ?
+                      <View style={{ flex: 1 }}>
+                        <CustomInput
+                          name="namaCustomer"
+                          returnKeyType="go"
+                          maxLength={15}
+                          placeholder={'Nama Customer'}
+                          setFieldValue={props.setFieldValue}
+                          value={props.values.namaCustomer}
+                          error={props.errors.namaCustomer}
+                          styleTitle={styles.formLabelText}
+                          styleInputText={styles.formPlacholderText}
+                        />
+                      </View>
+                      :
+                      <CustomSelectOption
+                        label='Pilih Customer'
+                        title='Pilih Customer'
+                        data={userData}
+                        defaultValue={this.state.customerName}
+                        error={this.state.errorCustomer}
+                        selectTitle={'Pilih Customer'}
+                        errorMessage={'Nama Customer diisi'}
+                        onSelect={(value) => {
+                          this.setState({ customerName: value })
+                          props.setFieldValue('namaCustomer', value)
+                        }}
+                        setFieldValue={(value) => this.setState({ customerId: value })}
+                      />
+                    }
+                  </View>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <View style={{ flexDirection: 'row' }}>
@@ -388,7 +428,7 @@ class SalesScreen extends Component {
                   </View> */}
                   <CustomSelectOption
                     label='Nama Kurir'
-                    title='Nama Kurir'
+                    title='Pilih Kurir (Optional)'
                     data={kurirData}
                     defaultValue={this.state.kurir}
                     error={this.state.errorKurir}
@@ -425,7 +465,7 @@ class SalesScreen extends Component {
                   </View>
                   <CustomSelectOption
                     label='Jenis Pembayaran'
-                    title='Jenis Pembayaran'
+                    title='Pilih Jenis Pembayaran'
                     data={pembayaran}
                     defaultValue={this.state.jenisPembayaran}
                     // error={errorPembayaran}
@@ -486,8 +526,9 @@ class SalesScreen extends Component {
             onPress={() => {
               if (barang.length > 0) {
                 this.resetModal.show()
+                this.resetPropsValues(props)
               } else {
-                DropDownHolder.alert('warn', 'Reset Tidak Tersedia', 'Belum ada data barang yang ditambahkan')
+                this.resetPropsValues(props)
               }
             }
             }

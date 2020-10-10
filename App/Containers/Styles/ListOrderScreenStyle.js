@@ -21,6 +21,12 @@ export default StyleSheet.create({
     borderRadius: Scale(40),
     justifyContent: 'center',
   },
+  photoView: {
+    height: Scale(500),
+    width: Scale(325),
+    borderRadius: 4,
+    alignSelf: 'center'
+  },
   chevronRight: {
     width: Scale(23),
     height: Scale(27),
@@ -122,6 +128,11 @@ export default StyleSheet.create({
     color: Colors.textBlack,
     lineHeight: 18
   },
+  textInfoTotal: {
+    fontFamily: Fonts.type.acuminProMedium,
+    color: Colors.textBlack,
+    fontSize: 13
+  },
   textInfoAlamat: {
     fontFamily: Fonts.type.acuminProRegular,
     color: Colors.textBlack,
@@ -153,6 +164,15 @@ export default StyleSheet.create({
     fontSize: 12,
     textAlign: 'center',
     color: Colors.warm_grey
+  },
+  textSetorSuccess: {
+    fontFamily: Fonts.type.acuminProMedium,
+    marginTop: 2,
+    flexWrap: 'wrap',
+    width: Scale(70),
+    fontSize: 12,
+    textAlign: 'center',
+    color: Colors.alertSuccess
   },
   textBatal: {
     fontFamily: Fonts.type.acuminProMedium,
@@ -279,8 +299,9 @@ export default StyleSheet.create({
   textKemas: {
     color: Colors.white,
     fontFamily: Fonts.type.acuminProRegular,
-    fontSize: 13,
+    fontSize: 12,
     flex: 1,
+    lineHeight: 15,
     textAlign: 'center'
   },
   terimaButton: {

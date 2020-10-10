@@ -78,7 +78,7 @@ export default class CustomSelectOption extends Component {
                         </View>
                     }
                     <TouchableOpacity style={styles.submitButton} onPress={this.select} activeOpacity={0.8}>
-                        <Text style={styles.submitText}>{I18n.t('auth.select')}</Text>
+                        <Text style={styles.submitText}>Pilih</Text>
                     </TouchableOpacity>
                 </View>
             </Modal>

@@ -81,38 +81,38 @@ class HistoryScreen extends Component {
   }
 
   async componentDidMount() {
-    Geocoder.init(API_KEY)
-    Geolocation.getCurrentPosition(
-      (position) => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        });
-        console.log(position)
-        Geocoder.from(position.coords.latitude, position.coords.longitude)
-          .then(json => {
-            console.log(json);
-            var addressComponent = json.results[0].address_components;
-            this.setState({
-              Address: addressComponent
-            })
-            console.log(addressComponent);
-          })
-          .catch(error => console.warn(error));
-      },
-      (error) => {
-        // See error code charts below.
-        this.setState({
-          error: error.message
-        }),
-          console.log(error.code, error.message);
-      },
-      {
-        enableHighAccuracy: false,
-        timeout: 10000,
-        maximumAge: 100000
-      }
-    );
+    // Geocoder.init(API_KEY)
+    // Geolocation.getCurrentPosition(
+    //   (position) => {
+    //     this.setState({
+    //       latitude: position.coords.latitude,
+    //       longitude: position.coords.longitude,
+    //     });
+    //     console.log(position)
+    //     Geocoder.from(position.coords.latitude, position.coords.longitude)
+    //       .then(json => {
+    //         console.log(json);
+    //         var addressComponent = json.results[0].address_components;
+    //         this.setState({
+    //           Address: addressComponent
+    //         })
+    //         console.log(addressComponent);
+    //       })
+    //       .catch(error => console.warn(error));
+    //   },
+    //   (error) => {
+    //     // See error code charts below.
+    //     this.setState({
+    //       error: error.message
+    //     }),
+    //       console.log(error.code, error.message);
+    //   },
+    //   {
+    //     enableHighAccuracy: false,
+    //     timeout: 10000,
+    //     maximumAge: 100000
+    //   }
+    // );
   }
 
   renderList = ({ item, index }) => {

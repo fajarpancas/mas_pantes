@@ -178,20 +178,26 @@ export function* getOrderListDiambil(api, action) {
 export function* createOrder(api, action) {
   try {
     const { data } = action
+    const { Id_Sales } = data
     const randomA = Math.floor(Math.random() * 100000) + 1
     const randomB = Math.floor(Math.random() * 100000) + 1
     const noPenjualan = randomA.toString() + randomB.toString()
 
     const response = yield call(api.createOrder, data)
-
+    const param = {
+      page: 1,
+      Id_Sales
+    }
     if (response.ok) {
       yield all([
         put(SessionActions.saveNoPenjualan(noPenjualan)),
         put(OrderActions.createOrderSuccess(response.data.data)),
-        put(OrderActions.resetBarang())
+        put(OrderActions.getSalesListOrderRequest(param))
+        // put(OrderActions.resetBarang())
       ])
       Method.LoadingHelper.hideLoading()
       DropDownHolder.alert('success', 'KEMAS BARANG BERHASIL', `list orderan yg telah di kemas pada screen LIST ORDER.`)
+      NavigationService.navigate('HomeSales')
     } else {
       DropDownHolder.alert('error', 'Gagal', `Kemas penjualan gagal`)
       Method.LoadingHelper.hideLoading()
@@ -284,6 +290,7 @@ export function* barangSampai(api, action) {
     }
     const response = yield call(api.barangSampai, data)
     if (response.ok) {
+      NavigationService.goBack()
       yield all([
         put(OrderActions.barangSampaiSuccess(response.data.data)),
         put(OrderActions.getOrderFinishRequest(param)),
@@ -298,8 +305,6 @@ export function* barangSampai(api, action) {
       DropDownHolder.alert('error', 'GAGAL', `Gagal mengisi data penerima.`)
       yield all([
         put(OrderActions.barangSampaiFailure()),
-        put(OrderActions.getOrderFinishRequest(param)),
-        put(OrderActions.getOrderNextProcessRequest(param))
       ])
       Method.LoadingHelper.hideLoading()
     }
@@ -307,5 +312,41 @@ export function* barangSampai(api, action) {
     DropDownHolder.alert('error', 'Gagal', err.message)
     yield put(OrderActions.barangSampaiFailure())
     Method.LoadingHelper.hideLoading()
+  }
+}
+
+export function* uploadFotoBarang(api, action) {
+  try {
+    const { data } = action
+    const response = yield call(api.uploadFotoBarang, data)
+    if (response.ok) {
+      yield put(OrderActions.uploadFotoBarangSuccess(response.data))
+    } else {
+      yield put(OrderActions.uploadFotoBarangFailure())
+    }
+  } catch (err) {
+    DropDownHolder.alert('error', 'Gagal', err.message)
+    yield put(OrderActions.uploadFotoBarangFailure())
+  }
+}
+
+export function* kurirSetor(api, action) {
+  try {
+    const { data } = action
+    const { Id_Sales } = data
+    const param = {
+      page: 1,
+      Id_Sales
+    }
+    const response = yield call(api.kurirSetor, data)
+    if (response.ok) {
+      yield put(OrderActions.kurirSetorSuccess(response.data))
+      yield put(OrderActions.getSalesListOrderRequest(param))
+    } else {
+      yield put(OrderActions.kurirSetorFailure())
+    }
+  } catch (err) {
+    DropDownHolder.alert('error', 'Gagal', err.message)
+    yield put(OrderActions.kurirSetorFailure())
   }
 }

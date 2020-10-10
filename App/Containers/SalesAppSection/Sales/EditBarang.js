@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Image } from 'react-native'
 import { connect } from 'react-redux'
 import { Colors, Fonts } from '../../../Themes'
 import styles from '../../Styles/SalesScreenStyle'
@@ -21,7 +21,7 @@ const schema = Yup.object().shape({
 
 class EditBarang extends Component {
     static navigationOptions = ({ navigation }) => ({
-        headerTitle: 'Edit Barang',
+        headerTitle: 'Lihat Barang',
         headerTitleStyle: {
             color: Colors.white,
             fontSize: 16,
@@ -59,17 +59,19 @@ class EditBarang extends Component {
     }
 
     renderForm = (props) => {
-        console.tron.error({ props })
+        const dataEdit = this.props.navigation.getParam('data')
+        console.tron.error({ dataEdit })
         return (
             <View style={{ flex: 1 }}>
-                <View style={{ paddingHorizontal: 15, flex: 1, paddingTop: 15 }}>
+                <View style={{ flex: 1, paddingTop: 15 }}>
                     <KeyboardAwareScrollView extraScrollHeight={40}>
-                        <Styled.Container style={{ borderRadius: 10, marginHorizontal: 5, marginTop: 5 }}>
+                        <Styled.Container style={{ borderRadius: 10, marginHorizontal: 25, marginTop: 5 }}>
                             <CustomInput
                                 label
                                 name="namaBarang"
                                 title={'Nama Barang'}
                                 returnKeyType="go"
+                                editable={false}
                                 maxLength={15}
                                 placeholder={'Masukkan nama barang'}
                                 setFieldValue={props.setFieldValue}
@@ -84,6 +86,7 @@ class EditBarang extends Component {
                                 keyboardType={'numeric'}
                                 title={'Harga Barang'}
                                 returnKeyType="go"
+                                editable={false}
                                 maxLength={15}
                                 placeholder={'Masukkan harga barang'}
                                 setFieldValue={props.setFieldValue}
@@ -97,12 +100,23 @@ class EditBarang extends Component {
                                     )
                                 }}
                             />
+                            <Text style={[styles.formLabelTextTambah, {marginBottom:10}]}>Foto Barang</Text>
+                            <Image
+                                style={[styles.photoView, {marginBottom: 15}]}
+                                resizeMode="contain"
+                                source={{
+                                    uri: dataEdit.foto,
+                                }}
+                                resizeMethod={'resize'}
+                                resizeMode={'cover'}
+                            />
+
                         </Styled.Container>
                     </KeyboardAwareScrollView>
                 </View>
-                <TouchableOpacity onPress={props.handleSubmit} style={styles.tambahButton}>
+                {/* <TouchableOpacity onPress={props.handleSubmit} style={styles.tambahButton}>
                     <Text style={styles.cariText}>EDIT</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         )
     }

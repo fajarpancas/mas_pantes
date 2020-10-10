@@ -47,6 +47,13 @@ const { Types, Creators } = createActions({
   getSalesListOrderSuccess: ['payload', 'page'],
   getSalesListOrderFailure: null,
 
+  uploadFotoBarangRequest: ['data'],
+  uploadFotoBarangSuccess: ['payload'],
+  uploadFotoBarangFailure: null,
+
+  kurirSetorRequest: ['data'],
+  kurirSetorSuccess: ['payload'],
+  kurirSetorFailure: null,
 })
 
 export const OrderTypes = Types
@@ -73,7 +80,9 @@ export const INITIAL_STATE = Immutable({
   pickBarang: DEFAULT_STATE,
   kirimBarang: DEFAULT_STATE,
   barangSampai: DEFAULT_STATE,
-  getSalesListOrder: DEFAULT_STATE
+  getSalesListOrder: DEFAULT_STATE,
+  uploadFotoBarang: DEFAULT_STATE,
+  kurirSetor: DEFAULT_STATE
 })
 
 /* ------------- Selectors ------------- */
@@ -260,15 +269,38 @@ export const getSalesListOrderSuccess = (state, { payload, page }) => {
   console.tron.error({ payload })
   let newList = [...state.salesListOrder]
   if (page === 1) {
-    newList = payload
+    newList = mergeAndReplace([], payload, 'Row_Id', 'Tgl_Penjualan', 'asc', true)
   } else {
-    newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+    newList = mergeAndReplace(newList, payload, 'Row_Id', 'Tgl_Penjualan', 'asc', true)
   }
   return state.merge({ ...state, getSalesListOrder: { fetching: false, error: null, payload }, salesListOrder: newList })
 }
 
 export const getSalesListOrderFailure = state =>
   state.merge({ ...state, getSalesListOrder: { fetching: false, error: true, payload: null } })
+
+export const uploadFotoBarangRequest = (state, { data }) => {
+  return state.merge({ ...state, uploadFotoBarang: { fetching: true, data, payload: null } })
+}
+
+export const uploadFotoBarangSuccess = (state, { payload }) => {
+  return state.merge({ ...state, uploadFotoBarang: { fetching: false, error: null, payload } })
+}
+
+export const uploadFotoBarangFailure = state =>
+  state.merge({ ...state, uploadFotoBarang: { fetching: false, error: true, payload: null } })
+
+  
+export const kurirSetorRequest = (state, { data }) =>
+state.merge({ ...state, kurirSetor: { fetching: true, data, payload: null } })
+
+// successful api lookup
+export const kurirSetorSuccess = (state, { payload }) =>
+state.merge({ ...state, kurirSetor: { fetching: false, error: null, payload } })
+
+// Something went wrong somewhere.
+export const kurirSetorFailure = state =>
+state.merge({ ...state, kurirSetor: { fetching: false, error: true, payload: null } })
 
 
 /* ------------- Hookup Reducers To Types ------------- */
@@ -308,8 +340,15 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.BARANG_SAMPAI_REQUEST]: barangSampaiRequest,
   [Types.BARANG_SAMPAI_SUCCESS]: barangSampaiSuccess,
   [Types.BARANG_SAMPAI_FAILURE]: barangSampaiFailure,
+  [Types.UPLOAD_FOTO_BARANG_REQUEST]: uploadFotoBarangRequest,
+  [Types.UPLOAD_FOTO_BARANG_SUCCESS]: uploadFotoBarangSuccess,
+  [Types.UPLOAD_FOTO_BARANG_FAILURE]: uploadFotoBarangFailure,
 
   [Types.GET_SALES_LIST_ORDER_REQUEST]: getSalesListOrderRequest,
   [Types.GET_SALES_LIST_ORDER_SUCCESS]: getSalesListOrderSuccess,
   [Types.GET_SALES_LIST_ORDER_FAILURE]: getSalesListOrderFailure,
+  
+  [Types.KURIR_SETOR_REQUEST]: kurirSetorRequest,
+  [Types.KURIR_SETOR_SUCCESS]: kurirSetorSuccess,
+  [Types.KURIR_SETOR_FAILURE]: kurirSetorFailure,
 })
