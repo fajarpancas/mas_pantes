@@ -342,11 +342,16 @@ export function* kurirSetor(api, action) {
     if (response.ok) {
       yield put(OrderActions.kurirSetorSuccess(response.data))
       yield put(OrderActions.getSalesListOrderRequest(param))
+      Method.LoadingHelper.hideLoading()
+      DropDownHolder.alert('success', 'Update Status Pembayaran', 'Status pembayaran berhasil diupdate')
     } else {
       yield put(OrderActions.kurirSetorFailure())
+      Method.LoadingHelper.hideLoading()
+      DropDownHolder.alert('error', 'Gagal', err.message)
     }
   } catch (err) {
     DropDownHolder.alert('error', 'Gagal', err.message)
-    yield put(OrderActions.kurirSetorFailure())
+      Method.LoadingHelper.hideLoading()
+      yield put(OrderActions.kurirSetorFailure())
   }
 }

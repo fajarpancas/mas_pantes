@@ -8,6 +8,7 @@ import { CustomFlatList } from '../../../Components'
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Colors } from '../../../Themes'
 import moment from 'moment'
+import { Method } from 'react-native-awesome-component';
 
 class HomeSalesScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -38,6 +39,7 @@ class HomeSalesScreen extends Component {
       Jam_Setor: moment(new Date()).format('YYYY-MM-DD hh:mm:ss')
     }
     kurirSetorRequest(param)
+    Method.LoadingHelper.showLoading()
   }
 
   renderStatus = (status) => {
