@@ -54,6 +54,10 @@ const { Types, Creators } = createActions({
   kurirSetorRequest: ['data'],
   kurirSetorSuccess: ['payload'],
   kurirSetorFailure: null,
+
+  kurirSetorListRequest: ['data'],
+  kurirSetorListSuccess: ['payload', 'page'],
+  kurirSetorListFailure: null,
 })
 
 export const OrderTypes = Types
@@ -82,7 +86,9 @@ export const INITIAL_STATE = Immutable({
   barangSampai: DEFAULT_STATE,
   getSalesListOrder: DEFAULT_STATE,
   uploadFotoBarang: DEFAULT_STATE,
-  kurirSetor: DEFAULT_STATE
+  kurirSetor: DEFAULT_STATE,
+  kurirSetorList: DEFAULT_STATE,
+  kurirSetorListData: []
 })
 
 /* ------------- Selectors ------------- */
@@ -302,6 +308,24 @@ state.merge({ ...state, kurirSetor: { fetching: false, error: null, payload } })
 export const kurirSetorFailure = state =>
 state.merge({ ...state, kurirSetor: { fetching: false, error: true, payload: null } })
 
+export const kurirSetorListRequest = (state, { data }) =>
+state.merge({ ...state, kurirSetorList: { fetching: true, data, payload: null } })
+
+// successful api lookup
+export const kurirSetorListSuccess = (state, { payload ,page}) =>{
+  let newList = [...state.kurirSetorListData]
+  if (page === 1) {
+    newList = mergeAndReplace([], payload, 'Row_Id', 'Row_Id', 'asc', false)
+  } else {
+    newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+  }
+  return state.merge({ ...state, kurirSetorList: { fetching: false, error: null, payload }, kurirSetorListData: newList })
+}
+
+// Something went wrong somewhere.
+export const kurirSetorListFailure = state =>
+state.merge({ ...state, kurirSetorList: { fetching: false, error: true, payload: null } })
+
 
 /* ------------- Hookup Reducers To Types ------------- */
 
@@ -351,4 +375,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.KURIR_SETOR_REQUEST]: kurirSetorRequest,
   [Types.KURIR_SETOR_SUCCESS]: kurirSetorSuccess,
   [Types.KURIR_SETOR_FAILURE]: kurirSetorFailure,
+  
+  [Types.KURIR_SETOR_LIST_REQUEST]: kurirSetorListRequest,
+  [Types.KURIR_SETOR_LIST_SUCCESS]: kurirSetorListSuccess,
+  [Types.KURIR_SETOR_LIST_FAILURE]: kurirSetorListFailure,
 })

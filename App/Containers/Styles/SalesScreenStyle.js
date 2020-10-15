@@ -152,7 +152,7 @@ export default StyleSheet.create({
     textTransform: 'uppercase'
   },
   headerTable: {
-    marginHorizontal: 10,
+    // marginHorizontal: 5
     flexDirection: 'row',
     alignSelf: 'center'
   },
@@ -171,7 +171,7 @@ export default StyleSheet.create({
     backgroundColor: Colors.goldBasic,
     paddingVertical: 10,
     borderWidth: 1,
-    width: Scale(150),
+    width: Scale(120),
     justifyContent: 'center',
   },
   borderTableFoto: {
@@ -219,7 +219,7 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     borderLeftWidth: 1,
     borderRightWidth: 1,
-    width: Scale(150),
+    width: Scale(120),
     justifyContent: 'center',
   },
   borderTableFotoValue: {
@@ -262,8 +262,27 @@ export default StyleSheet.create({
     borderLeftWidth: 1,
     borderRightWidth: 1,
     backgroundColor: Colors.goldBasic,
-    flex: 1,
-    justifyContent: 'center',
+    width:Scale(240),
+  },
+  borderTableTotalValue: {
+    marginHorizontal: Scale(-0.5),
+    borderBottomColor: 'white',
+    borderLeftColor: 'white',
+    borderRightColor: 'white',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    backgroundColor: Colors.goldBasic,
+    width:Scale(80),
+  },
+  borderNoValue: {
+    marginHorizontal: Scale(-0.5),
+    borderBottomColor: 'white',
+    borderBottomWidth: 1,
+    paddingVertical: 10,
+    backgroundColor: Colors.goldBasic,
+    width:Scale(79),
   },
   formPlacholderTextTambah: {
     height: 36,
@@ -345,5 +364,17 @@ export default StyleSheet.create({
     fontSize: 10,
     color: 'red',
     marginTop: 5
-  }
+  },
+  wrapperListKurir:{
+    backgroundColor: 'white',
+    width: Scale(355),
+    padding: 10,
+    elevation: 1,
+    alignSelf: 'center',
+    borderRadius: 5
+  },
+  namaKurirText: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 13,
+  },
 })

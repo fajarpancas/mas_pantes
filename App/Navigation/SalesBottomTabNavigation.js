@@ -7,6 +7,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import HomeSalesScreen from '../Containers/SalesAppSection/Home/HomeSalesScreen';
 import SalesScreen from '../Containers/SalesAppSection/Sales/SalesScreen';
 import AkunScreen from '../Containers/SalesAppSection/Akun/AkunScreen';
+import ListKurirScreen from '../Containers/SalesAppSection/Sales/ListKurirScreen';
 
 import I18n from '../I18n';
 import { Images, Colors, Fonts, ApplicationStyles } from '../Themes';
@@ -59,6 +60,15 @@ const SalesBottomTabNavigation = createBottomTabNavigator(
             screen: stackNav(HomeSalesScreen),
             navigationOptions: navigation => ({
                 title: 'List Order',
+                tabBarIcon: ({ focused, tintColor }) => (
+                    <Icon name="list" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
+                ),
+            }),
+        },
+        ListKurir: {
+            screen: stackNav(ListKurirScreen),
+            navigationOptions: navigation => ({
+                title: 'List Kurir',
                 tabBarIcon: ({ focused, tintColor }) => (
                     <Icon name="list" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
                 ),

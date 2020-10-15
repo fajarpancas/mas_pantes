@@ -52,6 +52,9 @@ class DetailOrderScreen extends Component {
             namaCustomer: dataOrder && dataOrder.Nama_Customer ? dataOrder.Nama_Customer : '-',
             // keterangan: 'abcd',
             alamat: dataOrder && dataOrder.Alamat ? dataOrder.Alamat : '-',
+            pembayaran: dataOrder && dataOrder.Id_Jenis_Pembayaran
+                ? dataOrder.Id_Jenis_Pembayaran === 1 ? 'Tunai/COD' : 'Transfer' : '-',
+            ongkir: dataOrder && dataOrder.Ongkos_Kirim ? dataOrder.Ongkos_Kirim : '-'
         }
     }
 
@@ -132,6 +135,11 @@ class DetailOrderScreen extends Component {
     renderForm = (props) => {
         const { uri } = this.state
         const { barang, dataOrder } = this.props
+        let namaPenerima = '-'
+
+        if (dataOrder && dataOrder.Nama_Kurir) {
+            namaPenerima = dataOrder.Nama_Kurir
+        }
         return (
             <KeyboardAwareScrollView extraScrollHeight={40}>
                 <Styled.Container style={{ borderRadius: 10, marginHorizontal: 5, marginTop: 5 }}>
@@ -214,6 +222,66 @@ class DetailOrderScreen extends Component {
                                 />
                             </View>
                         </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={styles.labelStyle}>Pembayaran</Text>
+                                <Text style={styles.labelStyle2}>:</Text>
+                            </View>
+                            <View style={{ flex: 1 }}>
+                                <CustomInput
+                                    name="telephone"
+                                    returnKeyType="go"
+                                    editable={false}
+                                    maxLength={15}
+                                    placeholder={'Telepon'}
+                                    setFieldValue={props.setFieldValue}
+                                    value={props.values.pembayaran}
+                                    error={props.errors.pembayaran}
+                                    styleTitle={styles.formLabelText}
+                                    styleInputText={styles.formPlacholderText}
+                                />
+                            </View>
+                        </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={styles.labelStyle}>Ongkos Kirim</Text>
+                                <Text style={styles.labelStyle2}>:</Text>
+                            </View>
+                            <View style={{ flex: 1 }}>
+                                <CustomInput
+                                    name="telephone"
+                                    returnKeyType="go"
+                                    editable={false}
+                                    maxLength={15}
+                                    placeholder={'Telepon'}
+                                    setFieldValue={props.setFieldValue}
+                                    value={props.values.ongkir}
+                                    error={props.errors.ongkir}
+                                    styleTitle={styles.formLabelText}
+                                    styleInputText={styles.formPlacholderText}
+                                />
+                            </View>
+                        </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={styles.labelStyle}>Estimasi Sampai</Text>
+                                <Text style={styles.labelStyle2}>:</Text>
+                            </View>
+                            <View style={{ flex: 1 }}>
+                                <CustomInput
+                                    name="telephone"
+                                    returnKeyType="go"
+                                    editable={false}
+                                    maxLength={15}
+                                    placeholder={'Telepon'}
+                                    setFieldValue={props.setFieldValue}
+                                    value={'-'}
+                                    error={props.errors.ongkir}
+                                    styleTitle={styles.formLabelText}
+                                    styleInputText={styles.formPlacholderText}
+                                />
+                            </View>
+                        </View>
                         {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={styles.labelStyle}>Ket.</Text>
@@ -241,11 +309,15 @@ class DetailOrderScreen extends Component {
                         onPressEdit={(data) => this.props.navigation.navigate('EditBarang', { data })}
                         onDeleteData={(id) => this.deleteDataBarang(id)}
                         data={barang} />
+                    <View style={{ flexDirection: 'row', marginHorizontal: 10, marginTop: 20 }}>
+                        <Text style={styles.labelStyle}>Kurir</Text>
+                        <Text style={styles.textInfo}>:  {namaPenerima} </Text>
+                    </View>
                     {!dataOrder.viewOnly &&
-                        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20, marginHorizontal: 15 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10 }}>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={styles.labelStyle}>Penerima</Text>
-                                <Text style={styles.labelStyle2}>:</Text>
+                                <Text style={styles.textInfo}>:</Text>
                             </View>
                             <View style={{ flex: 1 }}>
                                 <CustomInput
@@ -286,6 +358,7 @@ class DetailOrderScreen extends Component {
                         </TouchableOpacity>
                     }
 
+                    {!dataOrder.viewOnly &&
                     <View style={{ marginBottom: 7 }}>
                         {this.state.errorFoto ? (
                             <Text style={styles.textError}>
@@ -294,7 +367,7 @@ class DetailOrderScreen extends Component {
                         ) : (
                                 <Text style={styles.textError} />
                             )}
-                    </View>
+                    </View>}
                     {!dataOrder.viewOnly &&
                         <View style={{ marginVertical: 20 }}>
                             <TouchableOpacity

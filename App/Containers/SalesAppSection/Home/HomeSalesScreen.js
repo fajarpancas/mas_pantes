@@ -110,6 +110,14 @@ class HomeSalesScreen extends Component {
                 <Text style={styles.pembayaranTitle}>Jenis Pembayaran:</Text>
                 <Text style={styles.pembayaran}>{item.Id_Jenis_Pembayaran === 1 ? 'Tunai/COD' : 'Transfer'}</Text>
               </View>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.pembayaranTitle}>Jumlah Bayar:</Text>
+                <Text style={styles.pembayaran}>{`Rp. ${item.Nilai_Bayar}`}</Text>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.pembayaranTitle}>Ongkos Kirim:</Text>
+                <Text style={styles.pembayaran}>{`Rp. ${item.Ongkos_Kirim}`}</Text>
+              </View>
               {item.Id_Jenis_Pembayaran === 1 &&
                 <View style={{ flexDirection: 'row' }}>
                   <Text style={styles.pembayaranTitle}>Status Pembayaran:</Text>

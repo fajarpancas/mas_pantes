@@ -55,6 +55,7 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
   const barangSampai = (param) => api.post('/api/barang-sampai', param)
   const uploadFotoBarang = (param) => api.post('/api/upload-foto-barang', param)
   const kurirSetor = (param) => api.post('/api/kurir-setor', param)
+  const kurirSetorList = (param) => api.post('api/detail-setor-by-sales', param)
   // ------
   // STEP 3
   // ------
@@ -88,7 +89,8 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
     barangSampai,
     getSalesListOrder,
     uploadFotoBarang,
-    kurirSetor
+    kurirSetor,
+    kurirSetorList
   }
 }
 
