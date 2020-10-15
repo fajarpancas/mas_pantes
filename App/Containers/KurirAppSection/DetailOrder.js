@@ -373,6 +373,7 @@ const mapStateToProps = (state, props) => {
                 no: i + 1,
                 Nama_Barang: Order_Detail[i].Nama_Barang,
                 harga: Order_Detail[i].Harga,
+                foto: Order_Detail[i].Url_Foto_Barang,
             })
         }
     }

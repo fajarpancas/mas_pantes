@@ -62,6 +62,17 @@ class TambahBarang extends Component {
     handleSubmit(values, actions) {
         const { uploadFotoBarang } = this.props
         const { payload } = uploadFotoBarang
+        let url = ''
+        let foto = ''
+
+        if (payload && payload.Url) {
+            url = payload.Url
+        }
+
+        if (payload && payload.Nama_Foto) {
+            foto = payload.Nama_Foto
+        }
+
         if (payload) {
             const randomA = Math.floor(Math.random() * 100000) + 1
             const randomB = Math.floor(Math.random() * 100000) + 1
@@ -70,7 +81,8 @@ class TambahBarang extends Component {
                 id: 'B' + randomA.toString() + randomB.toString(),
                 Nama_Barang: values.namaBarang,
                 harga: values.harga,
-                foto: payload
+                foto: url,
+                nameFoto: foto
             }
 
             this.props.addBarangRequest(params)

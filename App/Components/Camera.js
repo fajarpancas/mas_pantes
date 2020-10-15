@@ -47,7 +47,7 @@ class CustomTableRow extends Component {
 
 
     async takePicture() {
-        const options = { quality: 0.1, base64: true }
+        const options = { quality: 0.2, base64: true }
         const data = await this.camera.takePictureAsync(options)
         this.props.onCapture(data)
         this.hide()

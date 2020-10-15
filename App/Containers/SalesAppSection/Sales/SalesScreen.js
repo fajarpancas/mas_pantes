@@ -124,7 +124,7 @@ class SalesScreen extends Component {
             Nama_Barang: obj.Nama_Barang,
             Harga: obj.harga,
             Harga_Jual: obj.harga,
-            Url_Foto_Barang: obj.foto
+            Url_Foto_Barang: obj.nameFoto
           }
         })
         for (let i = 0; i < barang.length; i++) {
@@ -377,6 +377,7 @@ class SalesScreen extends Component {
                     <CustomInput
                       name="telephone"
                       title={'telephone'}
+                      keyboardType='numeric'
                       returnKeyType="go"
                       maxLength={15}
                       placeholder={'Nomor Telepon'}
@@ -447,6 +448,7 @@ class SalesScreen extends Component {
                     <CustomInput
                       name="ongkir"
                       title={'ongkir'}
+                      keyboardType='numeric'
                       returnKeyType="go"
                       maxLength={15}
                       placeholder={'Ongkos kirim'}

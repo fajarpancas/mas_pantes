@@ -201,10 +201,18 @@ export function* createOrder(api, action) {
     } else {
       DropDownHolder.alert('error', 'Gagal', `Kemas penjualan gagal`)
       Method.LoadingHelper.hideLoading()
-      yield put(OrderActions.createOrderFailure())
+      yield all([
+        put(SessionActions.saveNoPenjualan(noPenjualan)),
+        put(OrderActions.createOrderFailure())
+      ])
     }
   } catch {
-
+    DropDownHolder.alert('error', 'Gagal', `Kemas penjualan gagal`)
+    Method.LoadingHelper.hideLoading()
+    yield all([
+      put(SessionActions.saveNoPenjualan(noPenjualan)),
+      put(OrderActions.createOrderFailure())
+    ])
   }
 }
 
@@ -351,7 +359,7 @@ export function* kurirSetor(api, action) {
     }
   } catch (err) {
     DropDownHolder.alert('error', 'Gagal', err.message)
-      Method.LoadingHelper.hideLoading()
-      yield put(OrderActions.kurirSetorFailure())
+    Method.LoadingHelper.hideLoading()
+    yield put(OrderActions.kurirSetorFailure())
   }
 }
