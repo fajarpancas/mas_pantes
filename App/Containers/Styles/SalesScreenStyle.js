@@ -15,7 +15,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  cusSelect:{
+  cusSelect: {
     fontFamily: Fonts.type.acuminProRegular,
     color: Colors.textBlack,
     fontSize: 12,
@@ -171,7 +171,7 @@ export default StyleSheet.create({
     backgroundColor: Colors.goldBasic,
     paddingVertical: 10,
     borderWidth: 1,
-    width: Scale(120),
+    width: Scale(100),
     justifyContent: 'center',
   },
   borderTableFoto: {
@@ -190,6 +190,15 @@ export default StyleSheet.create({
     paddingVertical: 10,
     borderWidth: 1,
     width: Scale(80),
+    justifyContent: 'center',
+  },
+  borderTableHargaNama: {
+    marginHorizontal: Scale(-0.5),
+    borderColor: Colors.goldBasic,
+    backgroundColor: Colors.goldBasic,
+    paddingVertical: 10,
+    borderWidth: 1,
+    width: Scale(100),
     justifyContent: 'center',
   },
   valueTable: {
@@ -219,7 +228,7 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     borderLeftWidth: 1,
     borderRightWidth: 1,
-    width: Scale(120),
+    width: Scale(100),
     justifyContent: 'center',
   },
   borderTableFotoValue: {
@@ -246,6 +255,19 @@ export default StyleSheet.create({
     width: Scale(80),
     justifyContent: 'center',
   },
+  borderTableHargaValueNama: {
+    marginHorizontal: Scale(-0.5),
+    borderBottomColor: 'lightgrey',
+    borderLeftColor: 'lightgrey',
+    borderRightColor: 'lightgrey',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    width: Scale(100),
+    justifyContent: 'center',
+    padding: 4
+  },
   valueTableFill: {
     fontSize: 12,
     color: Colors.textGrey,
@@ -262,7 +284,7 @@ export default StyleSheet.create({
     borderLeftWidth: 1,
     borderRightWidth: 1,
     backgroundColor: Colors.goldBasic,
-    width:Scale(240),
+    width: Scale(240),
   },
   borderTableTotalValue: {
     marginHorizontal: Scale(-0.5),
@@ -274,7 +296,7 @@ export default StyleSheet.create({
     borderLeftWidth: 1,
     borderRightWidth: 1,
     backgroundColor: Colors.goldBasic,
-    width:Scale(80),
+    width: Scale(80),
   },
   borderNoValue: {
     marginHorizontal: Scale(-0.5),
@@ -282,7 +304,7 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     paddingVertical: 10,
     backgroundColor: Colors.goldBasic,
-    width:Scale(79),
+    width: Scale(79),
   },
   formPlacholderTextTambah: {
     height: 36,
@@ -365,7 +387,7 @@ export default StyleSheet.create({
     color: 'red',
     marginTop: 5
   },
-  wrapperListKurir:{
+  wrapperListKurir: {
     backgroundColor: 'white',
     width: Scale(355),
     padding: 10,
@@ -373,8 +395,17 @@ export default StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 5
   },
+  namaKurirText2: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 13,
+    width: Scale(100)
+  },
   namaKurirText: {
     fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 13,
+  },
+  titleTextTotal: {
+    fontFamily: Fonts.type.acuminProMedium,
     fontSize: 13,
   },
 })
