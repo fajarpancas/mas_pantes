@@ -11,7 +11,7 @@ import moment from 'moment'
 
 class ProgressOrderScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    header: null
+    headerShown: false
   })
 
   componentDidMount() {

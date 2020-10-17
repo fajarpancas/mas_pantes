@@ -11,7 +11,7 @@ import { Colors } from '../../Themes'
 
 class FinishOrderScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    header: null
+    headerShown: false
   })
 
   componentDidMount() {

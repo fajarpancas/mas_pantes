@@ -14,7 +14,9 @@ const AppSalesStack = createStackNavigator(
     {
         MainScreen: {
             screen: SalesBottomTabNavigation,
-            navigationOptions: { header: null }
+            navigationOptions: {
+                headerShown: false
+            }
         },
         DetailScreen: {
             screen: DetailOrderScreen

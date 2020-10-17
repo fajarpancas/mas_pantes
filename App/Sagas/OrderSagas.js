@@ -381,3 +381,28 @@ export function* getKurirSetorList(api, action) {
     yield put(OrderActions.kurirSetorListFailure())
   }
 }
+
+export function* cekUSer(api, action) {
+  try {
+    const { data } = action
+    const response = yield call(api.cekUser, data)
+    if (response.ok) {
+      const { status } = response.data
+      if (status) {
+        yield put(OrderActions.cekUserSuccess(response.data.data))
+      } else {
+        const param = {
+          User_Id: '',
+          Nama_User: '',
+          No_Telepon: ''
+        }
+        yield put(OrderActions.cekUserSuccess(param))
+      }
+    } else {
+      yield put(OrderActions.cekUserFailure())
+    }
+  } catch (err) {
+    DropDownHolder.alert('error', 'Gagal', err.message)
+    yield put(OrderActions.cekUserFailure())
+  }
+}

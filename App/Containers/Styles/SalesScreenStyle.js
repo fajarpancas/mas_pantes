@@ -62,6 +62,13 @@ export default StyleSheet.create({
     fontSize: 13,
     padding: 0
   },
+  formPlacholderTextTelepon: {
+    // height: Scale(35),
+    fontFamily: Fonts.type.acuminProRegular,
+    // paddingHorizontal: 5,
+    fontSize: 13,
+    padding: 0
+  },
   formAlamat: {
     fontFamily: Fonts.type.acuminProRegular,
     fontSize: 13,

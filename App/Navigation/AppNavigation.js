@@ -11,7 +11,7 @@ const AuthStack = createStackNavigator(
   {
     SignInScreen: {
       screen: SignInScreen, navigationOptions: {
-        header: null
+        headerShown: false
       }
     },
   },

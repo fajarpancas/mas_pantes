@@ -39,6 +39,7 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
   const getUser = (username) => api.get('search/users', { q: username })
 
   const getListUser = () => api.get('/api/list-user')
+  const cekUser = (param) => api.post('/api/get-list-user', param)
   const getListKurir = () => api.get('/api/list-kurir')
   const login = (param) => api.post('/api/login', param)
   const logout = () => api.post('/api/logout')
@@ -90,7 +91,8 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
     getSalesListOrder,
     uploadFotoBarang,
     kurirSetor,
-    kurirSetorList
+    kurirSetorList,
+    cekUser
   }
 }
 

@@ -13,7 +13,9 @@ const AppKurirStack = createStackNavigator(
     {
         MainScreen: {
             screen: KurirBottomTabNavigation,
-            navigationOptions: { header: null }
+            navigationOptions: {
+                headerShown: false
+            }
         },
         EditBarang: {
             screen: EditBarang,

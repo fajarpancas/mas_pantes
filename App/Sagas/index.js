@@ -18,6 +18,7 @@ import { getUserAvatar } from './GithubSagas'
 import {
   addBarang,
   barangSampai,
+  cekUSer,
   createOrder,
   deleteBarang,
   editBarang,
@@ -67,6 +68,7 @@ export default function* root() {
     takeLatest(OrderTypes.UPLOAD_FOTO_BARANG_REQUEST, uploadFotoBarang, api),
     takeLatest(OrderTypes.KURIR_SETOR_REQUEST, kurirSetor, api),
     takeLatest(OrderTypes.KURIR_SETOR_LIST_REQUEST, getKurirSetorList, api),
+    takeLatest(OrderTypes.CEK_USER_REQUEST, cekUSer, api),
 
     takeLatest(MasterDataTypes.GET_LIST_USER_REQUEST, getListUser, api),
     takeLatest(MasterDataTypes.GET_LIST_KURIR_REQUEST, getListKurir, api),

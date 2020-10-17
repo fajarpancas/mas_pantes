@@ -13,7 +13,7 @@ import moment from 'moment'
 
 class ListKurirScreen extends Component {
     static navigationOptions = ({ navigation }) => ({
-        header: null
+        headerShown: false
     })
 
     constructor(props) {

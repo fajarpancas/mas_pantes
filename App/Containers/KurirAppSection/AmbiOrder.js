@@ -8,7 +8,7 @@ import ListOrder from './ListOrder'
 
 class OrderDiambilScreen extends Component {
     static navigationOptions = ({ navigation }) => ({
-        header: null
+        headerShown: false
     })
 
     render() {

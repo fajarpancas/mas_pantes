@@ -58,6 +58,10 @@ const { Types, Creators } = createActions({
   kurirSetorListRequest: ['data'],
   kurirSetorListSuccess: ['payload', 'page'],
   kurirSetorListFailure: null,
+
+  cekUserRequest: ['data'],
+  cekUserSuccess: ['payload', 'page'],
+  cekUserFailure: null,
 })
 
 export const OrderTypes = Types
@@ -88,7 +92,13 @@ export const INITIAL_STATE = Immutable({
   uploadFotoBarang: DEFAULT_STATE,
   kurirSetor: DEFAULT_STATE,
   kurirSetorList: DEFAULT_STATE,
-  kurirSetorListData: []
+  kurirSetorListData: [],
+  cekUser: DEFAULT_STATE,
+  dataUser: {
+    User_Id: '',
+    Nama_User: '',
+    No_Telepon: ''
+  }
 })
 
 /* ------------- Selectors ------------- */
@@ -326,6 +336,16 @@ export const kurirSetorListSuccess = (state, { payload ,page}) =>{
 export const kurirSetorListFailure = state =>
 state.merge({ ...state, kurirSetorList: { fetching: false, error: true, payload: null } })
 
+export const cekUserRequest = (state, { data }) =>
+state.merge({ ...state, cekUser: { fetching: true, data, payload: null } })
+
+// successful api lookup
+export const cekUserSuccess = (state, { payload }) =>
+state.merge({ ...state, cekUser: { fetching: false, error: null, payload }, dataUser: payload })
+
+// Something went wrong somewhere.
+export const cekUserFailure = state =>
+state.merge({ ...state, cekUser: { fetching: false, error: true, payload: null } })
 
 /* ------------- Hookup Reducers To Types ------------- */
 
@@ -379,4 +399,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.KURIR_SETOR_LIST_REQUEST]: kurirSetorListRequest,
   [Types.KURIR_SETOR_LIST_SUCCESS]: kurirSetorListSuccess,
   [Types.KURIR_SETOR_LIST_FAILURE]: kurirSetorListFailure,
+
+  [Types.CEK_USER_REQUEST]: cekUserRequest,
+  [Types.CEK_USER_SUCCESS]: cekUserSuccess,
+  [Types.CEK_USER_FAILURE]: cekUserFailure,
 })

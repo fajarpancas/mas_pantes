@@ -12,7 +12,7 @@ import { Method } from 'react-native-awesome-component';
 
 class HomeSalesScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    header: null
+    headerShown: false
   })
 
   componentDidMount() {

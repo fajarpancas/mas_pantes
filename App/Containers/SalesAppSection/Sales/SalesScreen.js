@@ -20,12 +20,13 @@ import CustomModalDelete from '../../../Components/CustomModalDelete'
 import CustomSelectOption from '../../../Components/CustomSelectOption'
 import moment from 'moment'
 import { Method } from 'react-native-awesome-component';
+import _ from 'lodash'
 
 const schema = Yup.object().shape({
   // noFaktur: Yup.string(),
   tanggal: Yup.string(),
-  // namaCustomer: Yup.string()
-  //   .required("Nama Customer harus diisi."),
+  namaCustomer: Yup.string()
+    .required("Nama Customer harus diisi."),
   // sales: Yup.string()
   //   .required("Sales harus diisi."),
   tanggal: Yup.string()
@@ -58,7 +59,7 @@ class SalesScreen extends Component {
   resetModal = undefined
 
   static navigationOptions = ({ navigation }) => ({
-    header: null
+    headerShown: false
   })
 
   constructor(props) {
@@ -86,6 +87,8 @@ class SalesScreen extends Component {
       // namaToko: 'abc',
       // alamat: 'Jl. Golf Cipanjalu no.42 RT.01 RW.11, Kec. Arcamanik, Kel.Cisaranten Binaharapan, Kota Bandung'
     }
+
+    this.checkDataUser = _.debounce(this.checkDataUser.bind(this), 800)
   }
 
   openCloseBarcode = () => {
@@ -168,6 +171,15 @@ class SalesScreen extends Component {
     getListKurirRequest()
   }
 
+  checkDataUser(text) {
+    const { cekUserRequest } = this.props
+
+    const param = {
+      No_Telepon: text
+    }
+    cekUserRequest(param)
+  }
+
   cariBarang = () => {
     const { getBarangRequest } = this.props
     const { kodeBarcode } = this.state
@@ -221,7 +233,7 @@ class SalesScreen extends Component {
   }
 
   renderForm = (props) => {
-    const { barang, user, noPenjualan, userData, kurirData } = this.props
+    const { barang, user, noPenjualan, userData, kurirData, dataUserCustomer } = this.props
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
@@ -249,13 +261,35 @@ class SalesScreen extends Component {
                     />
                   </View>
                 </View>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.labelStyle}>No. Nota </Text>
+                    <Text style={styles.labelStyle2}>:</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <CustomInput
+                      name="telephone"
+                      title={'No Telepon'}
+                      returnKeyType="go"
+                      maxLength={15}
+                      isReturnText={true}
+                      returnValue={(text) => this.checkDataUser(text)}
+                      placeholder={'Nomor Telepon'}
+                      setFieldValue={props.setFieldValue}
+                      value={props.values.telephone}
+                      error={props.errors.telephone}
+                      styleTitle={styles.formLabelText}
+                      styleInputText={styles.formPlacholderText}
+                    />
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={styles.labelStyle}>Customer </Text>
                     <Text style={styles.labelStyle2}>:</Text>
                   </View>
-                  <View style={{ flexDirection: 'column', flex: 1 }}>
-                    <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flex: 1 }}>
+                    {/* <View style={{ flexDirection: 'row' }}>
                       <TouchableOpacity
                         onPress={() => this.changeStateAcc(true)}
                         style={{ flexDirection: 'row', alignItems: 'center', marginRight: Scale(10) }}>
@@ -268,23 +302,22 @@ class SalesScreen extends Component {
                         <Image source={!this.state.haveAcc ? Images.radioActive : Images.radio} style={styles.radioIcon} />
                         <Text style={styles.cusSelect}>Tidak memiliki akun</Text>
                       </TouchableOpacity>
+                    </View> */}
+                    {/* {!this.state.haveAcc ? */}
+                    <View style={{ flex: 1 }}>
+                      <CustomInput
+                        name="namaCustomer"
+                        returnKeyType="go"
+                        maxLength={15}
+                        placeholder={'Nama Customer'}
+                        setFieldValue={props.setFieldValue}
+                        value={dataUserCustomer.User_Id ? dataUserCustomer.Nama_User :props.values.namaCustomer}
+                        error={dataUserCustomer.User_Id ? false : props.errors.namaCustomer}
+                        styleTitle={styles.formLabelText}
+                        styleInputText={styles.formPlacholderText}
+                      />
                     </View>
-                    {!this.state.haveAcc ?
-                      <View style={{ flex: 1 }}>
-                        <CustomInput
-                          name="namaCustomer"
-                          returnKeyType="go"
-                          maxLength={15}
-                          placeholder={'Nama Customer'}
-                          setFieldValue={props.setFieldValue}
-                          value={props.values.namaCustomer}
-                          error={props.errors.namaCustomer}
-                          styleTitle={styles.formLabelText}
-                          styleInputText={styles.formPlacholderText}
-                        />
-                      </View>
-                      :
-                      <CustomSelectOption
+                    {/* <CustomSelectOption
                         label='Pilih Customer'
                         title='Pilih Customer'
                         data={userData}
@@ -297,8 +330,8 @@ class SalesScreen extends Component {
                           props.setFieldValue('namaCustomer', value)
                         }}
                         setFieldValue={(value) => this.setState({ customerId: value })}
-                      />
-                    }
+                      /> */}
+                    {/* } */}
                   </View>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -366,27 +399,6 @@ class SalesScreen extends Component {
                           <Text style={styles.textError} />
                         )}
                     </View>
-                  </View>
-                </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={styles.labelStyle}>Telepon</Text>
-                    <Text style={styles.labelStyle2}>:</Text>
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <CustomInput
-                      name="telephone"
-                      title={'telephone'}
-                      keyboardType='numeric'
-                      returnKeyType="go"
-                      maxLength={15}
-                      placeholder={'Nomor Telepon'}
-                      setFieldValue={props.setFieldValue}
-                      value={props.values.telephone}
-                      error={props.errors.telephone}
-                      styleTitle={styles.formLabelText}
-                      styleInputText={styles.formPlacholderText}
-                    />
                   </View>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -643,7 +655,8 @@ const mapStateToProps = (state) => {
     kurirData,
     barang,
     user: state.session.userSession,
-    noPenjualan: state.session.noPenjualan
+    noPenjualan: state.session.noPenjualan,
+    dataUserCustomer: state.order.dataUser
   }
 }
 
@@ -654,7 +667,8 @@ const mapDispatchToProps = (dispatch) => {
     createOrderRequest: (param) => dispatch(OrderActions.createOrderRequest(param)),
     getBarangRequest: (param) => dispatch(OrderActions.getBarangRequest(param)),
     deleteBarangRequest: (param) => dispatch(OrderActions.deleteBarangRequest(param)),
-    resetBarangRequest: (param) => dispatch(OrderActions.resetBarang(param))
+    resetBarangRequest: (param) => dispatch(OrderActions.resetBarang(param)),
+    cekUserRequest: (param) => dispatch(OrderActions.cekUserRequest(param)),
   }
 }
 

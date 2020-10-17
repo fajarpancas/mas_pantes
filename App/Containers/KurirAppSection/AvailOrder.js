@@ -13,7 +13,7 @@ import { Colors } from '../../Themes'
 class AvailOrderScreen extends Component {
   estimasiModal = undefined
   static navigationOptions = ({ navigation }) => ({
-    header: null
+    headerShown: false
   })
 
   constructor(props) {
