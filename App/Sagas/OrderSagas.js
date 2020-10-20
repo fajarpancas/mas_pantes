@@ -391,12 +391,7 @@ export function* cekUSer(api, action) {
       if (status) {
         yield put(OrderActions.cekUserSuccess(response.data.data))
       } else {
-        const param = {
-          User_Id: '',
-          Nama_User: '',
-          No_Telepon: ''
-        }
-        yield put(OrderActions.cekUserSuccess(param))
+        yield put(OrderActions.cekUserFailure())
       }
     } else {
       yield put(OrderActions.cekUserFailure())

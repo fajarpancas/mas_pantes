@@ -415,4 +415,8 @@ export default StyleSheet.create({
     fontFamily: Fonts.type.acuminProMedium,
     fontSize: 13,
   },
+  titleTextName: {
+    fontFamily: Fonts.type.acuminProMedium,
+    fontSize: 12,
+  },
 })

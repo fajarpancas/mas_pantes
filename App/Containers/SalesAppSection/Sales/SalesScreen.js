@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StatusBar, Image, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, StatusBar, ActivityIndicator, TouchableOpacity, TextInput } from 'react-native'
 import { connect } from 'react-redux'
 // import BarcodeScannerScreen from './BarcodeScanner'
 import { Colors, Fonts, Images } from '../../../Themes'
@@ -21,12 +21,14 @@ import CustomSelectOption from '../../../Components/CustomSelectOption'
 import moment from 'moment'
 import { Method } from 'react-native-awesome-component';
 import _ from 'lodash'
+import Icons from 'react-native-vector-icons/MaterialIcons'
 
 const schema = Yup.object().shape({
   // noFaktur: Yup.string(),
   tanggal: Yup.string(),
   namaCustomer: Yup.string()
-    .required("Nama Customer harus diisi."),
+    .nullable(),
+  // .required("Nama Customer harus diisi."),
   // sales: Yup.string()
   //   .required("Sales harus diisi."),
   tanggal: Yup.string()
@@ -112,7 +114,7 @@ class SalesScreen extends Component {
   }
 
   handleSubmit(values, actions) {
-    const { barang, user, noPenjualan, createOrderRequest } = this.props
+    const { barang, user, noPenjualan, createOrderRequest, dataUserCustomer } = this.props
     const { errorCustomer, errorPembayaran, errorKurir } = this.state
     if (!errorCustomer && !errorPembayaran) {
       let parseBarang = []
@@ -138,8 +140,8 @@ class SalesScreen extends Component {
           No_Penjualan: noPenjualan,
           Id_Sales: user.Id_Sales,
           Id_Member: null,
-          User_Id: this.state.customerId,
-          Nama_Customer: values.namaCustomer,
+          User_Id: dataUserCustomer.User_Id ? dataUserCustomer.User_Id : null,
+          Nama_Customer: dataUserCustomer.User_Id ? dataUserCustomer.Nama_User : values.namaCustomer,
           Alamat: values.alamat,
           Kurir_Id: values.kurir,
           Nilai_Bayar: totalHarga,
@@ -195,7 +197,7 @@ class SalesScreen extends Component {
   }
 
   kemas = (props) => {
-    const { barang } = this.props
+    const { barang, dataUserCustomer } = this.props
 
     if (barang.length === 0) {
       DropDownHolder.alert('warn', 'Kemas Gagal', 'Tambahkan data barang untuk melakukan pengemasan')
@@ -207,7 +209,7 @@ class SalesScreen extends Component {
       this.setState({ errorAlamat: true })
     }
 
-    if (props.values.namaCustomer) {
+    if (props.values.namaCustomer || dataUserCustomer.User_Id) {
       this.setState({ errorCustomer: false })
     } else {
       this.setState({ errorCustomer: true })
@@ -233,7 +235,8 @@ class SalesScreen extends Component {
   }
 
   renderForm = (props) => {
-    const { barang, user, noPenjualan, userData, kurirData, dataUserCustomer } = this.props
+    const { barang, user, noPenjualan, cekUser, kurirData, dataUserCustomer } = this.props
+    const { fetching, error, payload } = cekUser
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
@@ -263,7 +266,7 @@ class SalesScreen extends Component {
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <View style={{ flexDirection: 'row' }}>
-                    <Text style={styles.labelStyle}>No. Nota </Text>
+                    <Text style={styles.labelStyle}>No. Telepon </Text>
                     <Text style={styles.labelStyle2}>:</Text>
                   </View>
                   <View style={{ flex: 1 }}>
@@ -271,6 +274,7 @@ class SalesScreen extends Component {
                       name="telephone"
                       title={'No Telepon'}
                       returnKeyType="go"
+                      keyboardType='numeric'
                       maxLength={15}
                       isReturnText={true}
                       returnValue={(text) => this.checkDataUser(text)}
@@ -283,6 +287,24 @@ class SalesScreen extends Component {
                     />
                   </View>
                 </View>
+                {payload && !fetching &&
+                  <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, alignSelf: 'flex-end' }}>
+                    <Icons name='verified-user' color={Colors.alertSuccess} size={15} style={{ marginRight: 5 }} />
+                    <Text style={styles.titleTextName}>Memiliki akun</Text>
+                  </View>
+                }
+                {error && !fetching &&
+                  <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, alignSelf: 'flex-end' }}>
+                    <Icons name='error' color={Colors.alertError} size={15} style={{ marginRight: 5 }} />
+                    <Text style={styles.titleTextName}>Tidak memiliki akun</Text>
+                  </View>
+                }
+                {fetching &&
+                  <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, alignSelf: 'flex-end' }}>
+                    <ActivityIndicator style={{ marginRight: 10 }} size={15} color={Colors.goldBasic} />
+                    <Text style={styles.titleTextName}>Mencari akun dengan no. telepone</Text>
+                  </View>
+                }
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={styles.labelStyle}>Customer </Text>
@@ -304,18 +326,31 @@ class SalesScreen extends Component {
                       </TouchableOpacity>
                     </View> */}
                     {/* {!this.state.haveAcc ? */}
-                    <View style={{ flex: 1 }}>
-                      <CustomInput
-                        name="namaCustomer"
-                        returnKeyType="go"
-                        maxLength={15}
-                        placeholder={'Nama Customer'}
-                        setFieldValue={props.setFieldValue}
-                        value={dataUserCustomer.User_Id ? dataUserCustomer.Nama_User :props.values.namaCustomer}
-                        error={dataUserCustomer.User_Id ? false : props.errors.namaCustomer}
-                        styleTitle={styles.formLabelText}
-                        styleInputText={styles.formPlacholderText}
-                      />
+                    <TextInput
+                      returnKeyType="go"
+                      maxLength={15}
+                      placeholder={'Nama Customer'}
+                      editable={dataUserCustomer.User_Id === ''}
+                      onChangeText={(text) => {
+                        props.setFieldValue('namaCustomer', text)
+                      }
+                      }
+                      defaultValue={dataUserCustomer.User_Id ? dataUserCustomer.Nama_User : props.values.namaCustomer}
+                      style={[styles.formPlacholderText, {
+                        color: Colors.textBlack,
+                        padding: 0,
+                        borderBottomColor: '#DDDDDD',
+                        borderBottomWidth: 1,
+                      }]}
+                    />
+                    <View style={{ marginBottom: 7 }}>
+                      {this.state.errorCustomer ? (
+                        <Text style={styles.textError}>
+                          Nama customer harus diisi
+                        </Text>
+                      ) : (
+                          <Text style={styles.textError} />
+                        )}
                     </View>
                     {/* <CustomSelectOption
                         label='Pilih Customer'
@@ -656,7 +691,8 @@ const mapStateToProps = (state) => {
     barang,
     user: state.session.userSession,
     noPenjualan: state.session.noPenjualan,
-    dataUserCustomer: state.order.dataUser
+    dataUserCustomer: state.order.dataUser,
+    cekUser: state.order.cekUser
   }
 }
 

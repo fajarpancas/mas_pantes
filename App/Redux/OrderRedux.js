@@ -306,23 +306,23 @@ export const uploadFotoBarangSuccess = (state, { payload }) => {
 export const uploadFotoBarangFailure = state =>
   state.merge({ ...state, uploadFotoBarang: { fetching: false, error: true, payload: null } })
 
-  
+
 export const kurirSetorRequest = (state, { data }) =>
-state.merge({ ...state, kurirSetor: { fetching: true, data, payload: null } })
+  state.merge({ ...state, kurirSetor: { fetching: true, data, payload: null } })
 
 // successful api lookup
 export const kurirSetorSuccess = (state, { payload }) =>
-state.merge({ ...state, kurirSetor: { fetching: false, error: null, payload } })
+  state.merge({ ...state, kurirSetor: { fetching: false, error: null, payload } })
 
 // Something went wrong somewhere.
 export const kurirSetorFailure = state =>
-state.merge({ ...state, kurirSetor: { fetching: false, error: true, payload: null } })
+  state.merge({ ...state, kurirSetor: { fetching: false, error: true, payload: null } })
 
 export const kurirSetorListRequest = (state, { data }) =>
-state.merge({ ...state, kurirSetorList: { fetching: true, data, payload: null } })
+  state.merge({ ...state, kurirSetorList: { fetching: true, data, payload: null } })
 
 // successful api lookup
-export const kurirSetorListSuccess = (state, { payload ,page}) =>{
+export const kurirSetorListSuccess = (state, { payload, page }) => {
   let newList = [...state.kurirSetorListData]
   if (page === 1) {
     newList = mergeAndReplace([], payload, 'Row_Id', 'Row_Id', 'asc', false)
@@ -334,18 +334,26 @@ export const kurirSetorListSuccess = (state, { payload ,page}) =>{
 
 // Something went wrong somewhere.
 export const kurirSetorListFailure = state =>
-state.merge({ ...state, kurirSetorList: { fetching: false, error: true, payload: null } })
+  state.merge({ ...state, kurirSetorList: { fetching: false, error: true, payload: null } })
 
 export const cekUserRequest = (state, { data }) =>
-state.merge({ ...state, cekUser: { fetching: true, data, payload: null } })
+  state.merge({ ...state, cekUser: { fetching: true, data, payload: null } })
 
 // successful api lookup
 export const cekUserSuccess = (state, { payload }) =>
-state.merge({ ...state, cekUser: { fetching: false, error: null, payload }, dataUser: payload })
+  state.merge({ ...state, cekUser: { fetching: false, error: null, payload }, dataUser: payload })
 
 // Something went wrong somewhere.
 export const cekUserFailure = state =>
-state.merge({ ...state, cekUser: { fetching: false, error: true, payload: null } })
+  state.merge({
+    ...state,
+    cekUser: { fetching: false, error: true, payload: null },
+    dataUser: {
+      User_Id: '',
+      Nama_User: '',
+      No_Telepon: ''
+    }
+  })
 
 /* ------------- Hookup Reducers To Types ------------- */
 
@@ -391,11 +399,11 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.GET_SALES_LIST_ORDER_REQUEST]: getSalesListOrderRequest,
   [Types.GET_SALES_LIST_ORDER_SUCCESS]: getSalesListOrderSuccess,
   [Types.GET_SALES_LIST_ORDER_FAILURE]: getSalesListOrderFailure,
-  
+
   [Types.KURIR_SETOR_REQUEST]: kurirSetorRequest,
   [Types.KURIR_SETOR_SUCCESS]: kurirSetorSuccess,
   [Types.KURIR_SETOR_FAILURE]: kurirSetorFailure,
-  
+
   [Types.KURIR_SETOR_LIST_REQUEST]: kurirSetorListRequest,
   [Types.KURIR_SETOR_LIST_SUCCESS]: kurirSetorListSuccess,
   [Types.KURIR_SETOR_LIST_FAILURE]: kurirSetorListFailure,
