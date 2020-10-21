@@ -11,6 +11,7 @@ import {
   LoadingModal,
   Method,
 } from 'react-native-awesome-component';
+import FCMNotification from '../Services/Notification'
 
 // Styles
 import styles from './Styles/RootContainerStyles'
@@ -29,6 +30,7 @@ class RootContainer extends Component {
       <View style={styles.applicationView}>
         <StatusBar barStyle='light-content' />
         <ReduxNavigation />
+        <FCMNotification />
         <InAppPopUp />
         <LoadingModal
           size={'large'}

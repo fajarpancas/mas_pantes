@@ -104,7 +104,8 @@ export const INITIAL_STATE = Immutable({
 /* ------------- Selectors ------------- */
 
 export const OrderSelectors = {
-  getData: state => state.order.listBarang
+  getData: state => state.order.listBarang,
+  getListOrderNextProcess: state => state.order.listOrderNextProcess
 }
 
 /* ------------- Reducers ------------- */

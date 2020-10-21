@@ -1,9 +1,10 @@
-import { call, put, all } from 'redux-saga/effects'
+import { call, put, all, take, select } from 'redux-saga/effects'
 import AuthActions from '../Redux/AuthRedux'
 import { DropDownHolder } from '../Components'
 import NavigationServices from '../Services/NavigationServices'
 import SessionActions from '../Redux/SessionRedux'
-import OrderActions from '../Redux/OrderRedux'
+import OrderActions, { OrderTypes, OrderSelectors } from '../Redux/OrderRedux'
+import { InboxSelectors } from '../Redux/InboxRedux'
 import { delay } from '../Lib/Helper';
 import { Method } from 'react-native-awesome-component';
 
@@ -13,6 +14,9 @@ export function* login(api, action) {
     const randomA = Math.floor(Math.random() * 100000) + 1
     const randomB = Math.floor(Math.random() * 100000) + 1
     const noPenjualan = randomA.toString() + randomB.toString()
+
+    const fcmToken = yield select(InboxSelectors.getFcmToken)
+    console.tron.error({ login: fcmToken })
 
     const response = yield call(api.login, data)
 
@@ -30,7 +34,27 @@ export function* login(api, action) {
         NavigationServices.navigate('AppSales')
         yield put(OrderActions.getSalesListOrderRequest(param))
       } else if (Id_Role === 2) {
-        NavigationServices.navigate('AppKurir')
+        let listKirim = [];
+        const param = {
+          page: 1,
+          Kurir_Id: data.Id_Kurir
+        }
+        yield put(OrderActions.getOrderNextProcessRequest(param))
+        const action = yield take([
+          OrderTypes.GET_ORDER_NEXT_PROCESS_SUCCESS,
+          OrderTypes.GET_ORDER_NEXT_PROCESS_FAILURE,
+        ]);
+
+        if (action.type === OrderTypes.GET_ORDER_NEXT_PROCESS_SUCCESS) {
+          listKirim = yield select(OrderSelectors.getListOrderNextProcess);
+        }
+
+        console.tron.error({ listKirim })
+        if (listKirim.length > 0) {
+          NavigationServices.navigate('KurirLocationTracking', { data: listKirim[0] })
+        } else {
+          NavigationServices.navigate('AppKurir')
+        }
       } else if (Id_Role === 3) {
         NavigationServices.navigate('App')
       }
