@@ -10,6 +10,7 @@ import { GithubTypes } from '../Redux/GithubRedux'
 import { OrderTypes } from '../Redux/OrderRedux'
 import { AuthTypes } from '../Redux/AuthRedux'
 import { MasterDataTypes } from '../Redux/MasterDataRedux'
+import { TrackingTypes } from '../Redux/TrackingRedux'
 
 /* ------------- Sagas ------------- */
 
@@ -36,6 +37,7 @@ import {
 } from './OrderSagas'
 import { login, logout } from './AuthSagas'
 import { getListKurir, getListUser } from './MasterDataSagas'
+import { getLokasiKurir, getTracking, postLokasiKurir } from './TrackingSagas'
 
 /* ------------- API ------------- */
 
@@ -73,6 +75,9 @@ export default function* root() {
     takeLatest(MasterDataTypes.GET_LIST_USER_REQUEST, getListUser, api),
     takeLatest(MasterDataTypes.GET_LIST_KURIR_REQUEST, getListKurir, api),
 
+    takeLatest(TrackingTypes.TRACKING_REQUEST, getTracking, api),
+    takeLatest(TrackingTypes.GET_LOKASI_KURIR_REQUEST, getLokasiKurir, api),
+    // takeLatest(TrackingTypes.POST_ALAMAT_REQUEST, postLokasiKurir, api),
     // some sagas receive extra parameters in addition to an action
     takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api)
   ])

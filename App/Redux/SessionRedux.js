@@ -8,7 +8,7 @@ const { Types, Creators } = createActions({
   saveTokenAuth: ['data'],
   logout: null,
   saveNoPenjualan: ['data'],
-  upIndexing: null
+  saveSalesId: ['data']
 })
 
 export const SessionTypes = Types
@@ -21,7 +21,7 @@ export const INITIAL_STATE = Immutable({
   userSession: null,
   token: null,
   noPenjualan: null,
-  indexing: 0
+  salesId: 0
 })
 
 /* ------------- Selectors ------------- */
@@ -29,6 +29,7 @@ export const INITIAL_STATE = Immutable({
 export const SessionSelectors = {
   getLoggedInStatus: state => state.session.isLoggedIn,
   getUser: state => state.session.userSession,
+  getSalesId: state => state.session.salesId,
   getToken: state => state.session.token
 }
 
@@ -48,9 +49,8 @@ export const logout = (state) =>
 export const saveNoPenjualan = (state, { data }) =>
   state.merge({ ...state, noPenjualan: data })
 
-export const upIndexing = (state) => {
-  const newIndex = state.indexing + 1
-  return state.merge({ ...state, indexing: newIndex })
+export const saveSalesId = (state, { data }) => {
+  return state.merge({ ...state, salesId: data })
 }
 
 /* ------------- Hookup Reducers To Types ------------- */
@@ -60,5 +60,5 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.SAVE_TOKEN_AUTH]: saveTokenAuth,
   [Types.LOGOUT]: logout,
   [Types.SAVE_NO_PENJUALAN]: saveNoPenjualan,
-  [Types.UP_INDEXING]: upIndexing
+  [Types.SAVE_SALES_ID]: saveSalesId
 })

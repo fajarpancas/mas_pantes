@@ -9,6 +9,7 @@ import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Colors } from '../../../Themes'
 import moment from 'moment'
 import { Method } from 'react-native-awesome-component';
+import TrackingActions from '../../../Redux/TrackingRedux'
 
 class HomeSalesScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -42,6 +43,19 @@ class HomeSalesScreen extends Component {
     Method.LoadingHelper.showLoading()
   }
 
+  getLokasi = (id, No_Penjualan) => {
+    const { user, getLokasiKurirRequest, setTrackingRequest } = this.props
+    const param = {
+      Id_Kurir: id,
+      Id_Sales: user.Id_Sales,
+      Nama_User: user.Nama_User,
+      No_Penjualan: No_Penjualan
+    }
+
+    setTrackingRequest()
+    getLokasiKurirRequest(param)
+  }
+
   renderStatus = (status) => {
     switch (status) {
       case 0:
@@ -65,6 +79,7 @@ class HomeSalesScreen extends Component {
 
   renderList = ({ item, index }) => {
     let status = 0
+    let isTracking = false
 
     if (item.Kurir_Id) {
       status = 1
@@ -76,6 +91,10 @@ class HomeSalesScreen extends Component {
 
     if (item.Jam_Terima) {
       status = 3
+    }
+
+    if (item.Jam_Kirim && !item.Jam_Terima) {
+      isTracking = true
     }
 
     return (
@@ -139,6 +158,13 @@ class HomeSalesScreen extends Component {
                 }
               </View>}
           </View>
+          {isTracking ?
+            <TouchableOpacity onPress={() => this.getLokasi(item.Kurir_Id, item.No_Penjualan)} style={styles.getlokasiWrapper}>
+              <Icons name="search" color={'white'} size={20} style={{ marginRight: 10 }} />
+              <Text style={styles.getLokasiText}>Cari lokasi kurir saat ini</Text>
+              <Icons name="pin-drop" color={'white'} size={20} style={{ marginLeft: 10 }} />
+            </TouchableOpacity>
+            : null}
         </View>
       </View>
     )
@@ -186,6 +212,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getLokasiKurirRequest: (param) => dispatch(TrackingActions.getLokasiKurirRequest(param)),
+    setTrackingRequest: () => dispatch(TrackingActions.setTrackingRequest()),
     kurirSetorRequest: (param) => dispatch(OrderActions.kurirSetorRequest(param)),
     getSalesListOrderRequest: (param) => dispatch(OrderActions.getSalesListOrderRequest(param))
   }

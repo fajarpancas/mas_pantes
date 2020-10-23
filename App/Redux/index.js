@@ -13,7 +13,8 @@ export const reducers = combineReducers({
   session: require('./SessionRedux').reducer,
   inbox: require('./InboxRedux').reducer,
   masterData: require('./MasterDataRedux').reducer,
-  order: require('./OrderRedux').reducer
+  order: require('./OrderRedux').reducer,
+  tracking: require('./TrackingRedux').reducer
 })
 
 export default () => {

@@ -55,14 +55,19 @@ class ListOrder extends Component {
 
   confirmSubmit = () => {
     const { noPenjualan, estimasi, date } = this.state
-    const { user, kirimBarangRequest } = this.props
+    const { user, kirimBarangRequest, listOrderNextProcess } = this.props
     const param = {
       No_Penjualan: noPenjualan,
       Jam_Kirim: `${moment(date, 'DD/MM/YYYY').format('YYYY-MM-DD')} ${estimasi}:00`,
       Kurir_Id: user.Id_Kurir
     }
-    Method.LoadingHelper.showLoading()
-    kirimBarangRequest(param)
+
+    if (listOrderNextProcess.length > 0) {
+      DropDownHolder.alert('warn', 'Gagal memproses pengiriman', 'selesaikan orderan yang sedang dalam proses pengiriman terlebih dahulu')
+    } else {
+      Method.LoadingHelper.showLoading()
+      kirimBarangRequest(param)
+    }
   }
 
   onConfirm(hour, minute) {
@@ -276,13 +281,15 @@ class ListOrder extends Component {
 }
 
 const mapStateToProps = (state) => {
+  const listOrderNextProcess = state.order.listOrderNextProcess
   const listOrder = state.order.listOrderProcess
   const getOrder = state.order.getOrderProcess
   console.tron.error({ listOrder })
   return {
     listOrder,
     getOrder,
-    user: state.session.userSession
+    user: state.session.userSession,
+    listOrderNextProcess
   }
 }
 

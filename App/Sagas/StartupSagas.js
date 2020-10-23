@@ -42,11 +42,11 @@ export function* startup(api, action) {
         }
 
         console.tron.error({ listKirim })
-        if (listKirim.length > 0) {
-          NavigationServices.navigate('KurirLocationTracking', { data: listKirim[0] })
-        } else {
+        // if (listKirim.length > 0) {
+        //   NavigationServices.navigate('KurirLocationTracking', { data: listKirim[0] })
+        // } else {
           NavigationServices.navigate('AppKurir')
-        }
+        // }
     } else if (idRole === 3) {
       NavigationServices.navigate('App')
     }

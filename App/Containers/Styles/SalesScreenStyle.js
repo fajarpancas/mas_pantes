@@ -419,4 +419,36 @@ export default StyleSheet.create({
     fontFamily: Fonts.type.acuminProMedium,
     fontSize: 12,
   },
+  wrapperLokasiTrack: {
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    paddingTop: 15,
+  },
+  infoKurir: {
+    fontSize: 14,
+    color: Colors.textBlack,
+    width: Scale(250),
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontFamily: Fonts.type.acuminProMedium,
+    marginVertical: 20,
+    lineHeight: 18
+  },
+  address: {
+    fontSize: 14,
+    color: Colors.textBlack,
+    width: Scale(300),
+    lineHeight: 18,
+    fontFamily: Fonts.type.acuminProMedium,
+  },
+  wrapperBorder: {
+    borderBottomColor: Colors.borderGrey,
+    borderBottomWidth: 1,
+    paddingBottom: 15
+  },
+  time: {
+    fontSize: 12,
+    color: Colors.textGrey,
+    fontFamily: Fonts.type.acuminProRegular,
+  }
 })

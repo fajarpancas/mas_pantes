@@ -380,4 +380,16 @@ export default StyleSheet.create({
     color: Colors.textBlack,
     textAlign: 'left'
   },
+  getlokasiWrapper: {
+    marginTop: Scale(10),
+    height: 40,
+    borderRadius: 4,
+    backgroundColor: Colors.alertInfo,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  getLokasiText: {
+    color: 'white',
+  }
 })

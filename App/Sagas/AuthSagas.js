@@ -16,13 +16,22 @@ export function* login(api, action) {
     const noPenjualan = randomA.toString() + randomB.toString()
 
     const fcmToken = yield select(InboxSelectors.getFcmToken)
-    console.tron.error({ login: fcmToken })
 
     const response = yield call(api.login, data)
 
     if (response.ok) {
       const { data } = response.data
-      const { token_user, Id_Role } = data
+      const { token_user, Id_Role, Id_User } = data
+
+      const paramFCM = {
+        Id_User,
+        token_fcm: fcmToken
+      }
+
+      const saveFCM = yield call(api.saveTokenFCM, paramFCM)
+      if(saveFCM.ok){
+        console.tron.error('saveFCMSuccess')
+      }
 
       api.api.setHeaders({ Authorization: `bearer ${token_user}` });
 
@@ -50,11 +59,11 @@ export function* login(api, action) {
         }
 
         console.tron.error({ listKirim })
-        if (listKirim.length > 0) {
-          NavigationServices.navigate('KurirLocationTracking', { data: listKirim[0] })
-        } else {
-          NavigationServices.navigate('AppKurir')
-        }
+        // if (listKirim.length > 0) {
+        //   NavigationServices.navigate('KurirLocationTracking', { data: listKirim[0] })
+        // } else {
+        NavigationServices.navigate('AppKurir')
+        // }
       } else if (Id_Role === 3) {
         NavigationServices.navigate('App')
       }

@@ -9,6 +9,7 @@ import HubungiKamiScreen from '../Containers/Profile/HubungiKamiScreen'
 import KebijakanPrivasiScreen from '../Containers/Profile/KebijakanPrivasiScreen'
 import PelajariFaqScreen from '../Containers/Profile/PelajariFaqScreen'
 import DetailOrderScreen from '../Containers/KurirAppSection/DetailOrder'
+import KurirLocationTracking from '../Containers/SalesAppSection/Home/KurirLocationTracking'
 
 const AppSalesStack = createStackNavigator(
     {
@@ -38,6 +39,9 @@ const AppSalesStack = createStackNavigator(
         },
         BerikanPenilaianScreen: {
             screen: BerikanPenilaianScreen,
+        },
+        KurirLocationTracking: {
+            screen: KurirLocationTracking,
         }
     },
     {
