@@ -11,10 +11,7 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
-
-// Styles
+import HeaderName from './HeaderName'
 import styles from '../Styles/HomeScreenStyle'
 import { Colors, Images } from '../../Themes'
 import Scale from '../../Transforms/Scale'
@@ -22,27 +19,19 @@ import QRCode from 'react-native-qrcode-svg'
 
 const dummyData = [
   { title: 'Discount 50% PromoOpening Toko Emas Pantes di Grage Citi Mall Cirebon' },
-  { title: 'Discount 50% PromoOpening Toko Emas Pantes di Grage Citi Mall Cirebon' },
-  { title: 'Discount 50% PromoOpening Toko Emas Pantes di Grage Citi Mall Cirebon' },
-  { title: 'Discount 50% PromoOpening Toko Emas Pantes di Grage Citi Mall Cirebon' },
-  { title: 'Discount 50% PromoOpening Toko Emas Pantes di Grage Citi Mall Cirebon' },
-  { title: 'Discount 50% PromoOpening Toko Emas Pantes di Grage Citi Mall Cirebon' }
 ]
 
 class HomeScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      qrValue: 'Pejuang Subuh'
+      qrValue: 'Fajar Panca Saputra'
     }
   }
 
   static navigationOptions = ({ navigation }) => ({
     headerLeft: () => (
-      <View style={styles.headerLeft}>
-        <Text style={styles.hiText}>Hai,</Text>
-        <Text style={styles.usernameText}>Pejuang Subuh</Text>
-      </View>
+      <HeaderName />
     ),
     headerRight: () => (
       <View style={{ marginRight: 20, marginTop: 10 }}>
@@ -69,36 +58,6 @@ class HomeScreen extends Component {
         <Text style={styles.listText}>{title}</Text>
       </TouchableOpacity>
     )
-  }
-
-  onButtonPress = () => {
-    BackHandler.exitApp()
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-  }
-
-  handleBackButton = () => {
-    Alert.alert(
-      'Exit App',
-      'Exiting the application?', [{
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel'
-      }, {
-        text: 'OK',
-        onPress: () => this.onButtonPress()
-      },], {
-      cancelable: false
-    }
-    )
-    return true;
-  }
-
-  componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-  }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   }
 
   render() {

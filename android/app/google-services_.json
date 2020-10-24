@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "391532344805",
+    "firebase_url": "https://newplanapp.firebaseio.com",
+    "project_id": "newplanapp",
+    "storage_bucket": "newplanapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391532344805:android:b9ad5299c8b3a204cb2b0c",
+        "android_client_info": {
+          "package_name": "com.tokomas.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "391532344805-3vkpc6fsakrk1o7jtslbkdsn9e1rdlbo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tokomas.app",
+            "certificate_hash": "0bf9fe3889d28a9c58f0c10ab70e4328d823f320"
+          }
+        },
+        {
+          "client_id": "391532344805-joqiqkq9fndi3t3hepmn1r9c23djseut.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeSUZZeiwmZ9Fosyu3uUCF8mhgX1PRHtA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "391532344805-joqiqkq9fndi3t3hepmn1r9c23djseut.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -66,6 +66,9 @@ export class CustomInput extends Component {
               keyboardType={this.props.keyboardType}
               returnKeyType={this.props.returnKeyType}
               onChangeText={text => {
+                if(this.props.isReturnText){
+                  this.props.returnValue(text)
+                }
                 if (text != null) {
                   this.props.setFieldValue(this.props.name, text);
                 }

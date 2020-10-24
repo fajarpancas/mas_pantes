@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { View, Text, ScrollView, Alert, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, StatusBar, ActivityIndicator, TouchableOpacity, TextInput } from 'react-native'
 import { connect } from 'react-redux'
-import BarcodeScannerScreen from './BarcodeScanner'
-import { Colors, Fonts } from '../../../Themes'
+// import BarcodeScannerScreen from './BarcodeScanner'
+import { Colors, Fonts, Images } from '../../../Themes'
 import styles from '../../Styles/SalesScreenStyle'
 import { CustomInput } from '../../../Components'
 import { Formik } from 'formik'
@@ -13,17 +13,24 @@ import { Styled, CustomDatepicker } from 'react-native-awesome-component'
 import PhoneRegion from '../../Auth/PhoneRegion'
 import Scale from '../../../Transforms/Scale'
 import OrderActions from '../../../Redux/OrderRedux'
+import MasterDataActions from '../../../Redux/MasterDataRedux'
 import HeaderMasPantes from '../../../Components/HeaderMasPantes'
 import CustomTableRow from '../../../Components/CustomTableRow'
+import CustomModalDelete from '../../../Components/CustomModalDelete'
+import CustomSelectOption from '../../../Components/CustomSelectOption'
 import moment from 'moment'
+import { Method } from 'react-native-awesome-component';
+import _ from 'lodash'
+import Icons from 'react-native-vector-icons/MaterialIcons'
 
 const schema = Yup.object().shape({
-  noFaktur: Yup.string(),
+  // noFaktur: Yup.string(),
   tanggal: Yup.string(),
   namaCustomer: Yup.string()
-    .required("Nama Customer harus diisi."),
-  sales: Yup.string()
-    .required("Sales harus diisi."),
+    .nullable(),
+  // .required("Nama Customer harus diisi."),
+  // sales: Yup.string()
+  //   .required("Sales harus diisi."),
   tanggal: Yup.string()
     .required("Tanggal harus diisi."),
   alamat: Yup.string()
@@ -32,28 +39,29 @@ const schema = Yup.object().shape({
     .required("Telepon harus diisi."),
   keterangan: Yup.string()
     .required("Keterangan harus diisi."),
-  kurir: Yup.string()
-    .required("Nama kurir harus diisi."),
+  // kurir: Yup.string()
+  //   .nullable(),
+  // .required("Nama kurir harus diisi."),
+  ongkir: Yup.string()
+    .required("Ongkos kirim harus diisi."),
+  // jenisPembayaran: Yup.string(),
+  namaToko: Yup.string()
+    .required("Nama Toko harus diisi."),
 })
 
-const randomA = Math.floor(Math.random() * 100000) + 1
-const randomB = Math.floor(Math.random() * 100000) + 1
+// const randomA = Math.floor(Math.random() * 100000) + 1
+// const randomB = Math.floor(Math.random() * 100000) + 1
 
-const initialValue = {
-  noFaktur: randomA.toString() + randomB.toString(),
-  phoneCode: '+62',
-  tanggal: moment(new Date()).format('DD-MM-YYYY'),
-  namaCustomer: 'Fajar',
-  sales: 'Panca',
-  telephone: '87847635259',
-  keterangan: 'abcd',
-  kurir: 'Akmal',
-  alamat: 'Jl. Golf Cipanjalu no.42 RT.01 RW.11, Kec. Arcamanik, Kel.Cisaranten Binaharapan, Kota Bandung'
-}
+const pembayaran = [
+  { id: 1, description: 'Pembayaran Tunai/COD' },
+  { id: 2, description: 'Transfer' }
+]
 
 class SalesScreen extends Component {
+  resetModal = undefined
+
   static navigationOptions = ({ navigation }) => ({
-    header: null
+    headerShown: false
   })
 
   constructor(props) {
@@ -61,8 +69,28 @@ class SalesScreen extends Component {
     this.state = {
       barcodeOpen: false,
       dataBarcode: 'No data barcode',
-      kodeBarcode: ''
+      kodeBarcode: '',
+      jenisPembayaran: '',
+      errorAlamat: false,
+      errorPembayaran: false,
+      customerName: '',
+      errorCustomer: false,
+      kurir: '',
+      errorKurir: false,
+      haveAcc: true,
+      customerId: null
     }
+
+    this.initialValue = {
+      tanggal: moment(new Date()).format('DD MMMM YYYY'),
+      // telephone: '87847635259',
+      // keterangan: 'abcd',
+      // ongkir: '90000',
+      // namaToko: 'abc',
+      // alamat: 'Jl. Golf Cipanjalu no.42 RT.01 RW.11, Kec. Arcamanik, Kel.Cisaranten Binaharapan, Kota Bandung'
+    }
+
+    this.checkDataUser = _.debounce(this.checkDataUser.bind(this), 800)
   }
 
   openCloseBarcode = () => {
@@ -74,7 +102,6 @@ class SalesScreen extends Component {
     const param = {
       Kode_Barcode: value
     }
-
     getBarangRequest(param)
   }
 
@@ -87,7 +114,72 @@ class SalesScreen extends Component {
   }
 
   handleSubmit(values, actions) {
-    this.props.navigation.navigate('AppSales')
+    const { barang, user, noPenjualan, createOrderRequest, dataUserCustomer } = this.props
+    const { errorCustomer, errorPembayaran, errorKurir } = this.state
+    if (!errorCustomer && !errorPembayaran) {
+      let parseBarang = []
+      let totalHarga = 0
+
+      if (barang.length > 0) {
+        parseBarang = barang.map((obj) => {
+          return {
+            No_Penjualan: noPenjualan,
+            No_Nota: noPenjualan,
+            Kd_Barang: obj.id,
+            Nama_Barang: obj.Nama_Barang,
+            Harga: obj.harga,
+            Harga_Jual: obj.harga,
+            Url_Foto_Barang: obj.nameFoto
+          }
+        })
+        for (let i = 0; i < barang.length; i++) {
+          totalHarga = totalHarga + parseInt(barang[i].harga)
+        }
+
+        const params = {
+          No_Penjualan: noPenjualan,
+          Id_Sales: user.Id_Sales,
+          Id_Member: null,
+          User_Id: dataUserCustomer.User_Id ? dataUserCustomer.User_Id : null,
+          Nama_Customer: dataUserCustomer.User_Id ? dataUserCustomer.Nama_User : values.namaCustomer,
+          Alamat: values.alamat,
+          Kurir_Id: values.kurir,
+          Nilai_Bayar: totalHarga,
+          Ongkos_Kirim: values.ongkir,
+          No_Telepon: values.telephone,
+          Id_Jenis_Pembayaran: values.jenisPembayaran,
+          Data_Barang: JSON.stringify(parseBarang)
+        }
+        Method.LoadingHelper.showLoading()
+
+        createOrderRequest(params)
+      }
+    }
+  }
+
+  resetPropsValues = (props) => {
+    props.setFieldValue('namaCustomer', '')
+    props.setFieldValue('alamat', '')
+    props.setFieldValue('telephone', '')
+    props.setFieldValue('keterangan', '')
+    props.setFieldValue('ongkir', '')
+    props.setFieldValue('namaToko', '')
+    this.setState({ kurir: '', jenisPembayaran: '', customerName: '' })
+  }
+
+  componentDidMount() {
+    const { getListUserRequest, getListKurirRequest } = this.props
+    getListUserRequest()
+    getListKurirRequest()
+  }
+
+  checkDataUser(text) {
+    const { cekUserRequest } = this.props
+
+    const param = {
+      No_Telepon: text
+    }
+    cekUserRequest(param)
   }
 
   cariBarang = () => {
@@ -100,187 +192,404 @@ class SalesScreen extends Component {
     getBarangRequest(param)
   }
 
+  reset = () => {
+    this.props.resetBarangRequest()
+  }
+
+  kemas = (props) => {
+    const { barang, dataUserCustomer } = this.props
+
+    if (barang.length === 0) {
+      DropDownHolder.alert('warn', 'Kemas Gagal', 'Tambahkan data barang untuk melakukan pengemasan')
+    }
+
+    if (props.values.alamat) {
+      this.setState({ errorAlamat: false })
+    } else {
+      this.setState({ errorAlamat: true })
+    }
+
+    if (props.values.namaCustomer || dataUserCustomer.User_Id) {
+      this.setState({ errorCustomer: false })
+    } else {
+      this.setState({ errorCustomer: true })
+    }
+
+    if (props.values.jenisPembayaran) {
+      this.setState({ errorPembayaran: false })
+    } else {
+      this.setState({ errorPembayaran: true })
+    }
+
+    // if (props.values.kurir) {
+    //   this.setState({ errorKurir: false })
+    // } else {
+    //   this.setState({ errorKurir: true })
+    // }
+
+    props.handleSubmit()
+  }
+
+  changeStateAcc = (state) => {
+    this.setState({ haveAcc: state })
+  }
+
   renderForm = (props) => {
-    const { barang } = this.props
+    const { barang, user, noPenjualan, cekUser, kurirData, dataUserCustomer } = this.props
+    const { fetching, error, payload } = cekUser
     return (
-      <KeyboardAwareScrollView extraScrollHeight={40}>
-        <Styled.Container style={{ borderRadius: 10, marginHorizontal: 5, marginTop: 5 }}>
-          <View style={{ paddingHorizontal: 15, paddingTop: 5 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.labelStyle}>No. Nota </Text>
-                <Text style={styles.labelStyle2}>:</Text>
-              </View>
-              <View style={{ flex: 1 }}>
-                <CustomInput
-                  editable={false}
-                  name="noFaktur"
-                  title={'No. Nota'}
-                  returnKeyType="go"
-                  maxLength={15}
-                  placeholder={'Nomor Nota'}
-                  setFieldValue={props.setFieldValue}
-                  value={props.values.noFaktur}
-                  error={props.errors.noFaktur}
-                  styleTitle={styles.formLabelTextDisable}
-                  styleInputText={styles.formPlacholderTextDisable}
-                />
-              </View>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.labelStyle}>Customer </Text>
-                <Text style={styles.labelStyle2}>:</Text>
-              </View>
-              <View style={{ flex: 1 }}>
-                <CustomInput
-                  name="namaCustomer"
-                  returnKeyType="go"
-                  maxLength={15}
-                  placeholder={'Nama Customer'}
-                  setFieldValue={props.setFieldValue}
-                  value={props.values.namaCustomer}
-                  error={props.errors.namaCustomer}
-                  styleTitle={styles.formLabelText}
-                  styleInputText={styles.formPlacholderText}
-                />
-              </View>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.labelStyle}>Sales</Text>
-                <Text style={styles.labelStyle2}>:</Text>
-              </View>
-              <View style={{ flex: 1 }}>
-                <CustomInput
-                  name="sales"
-                  title={'sales'}
-                  returnKeyType="go"
-                  maxLength={15}
-                  placeholder={'Nama Sales'}
-                  setFieldValue={props.setFieldValue}
-                  value={props.values.sales}
-                  error={props.errors.sales}
-                  styleTitle={styles.formLabelText}
-                  styleInputText={styles.formPlacholderText}
-                />
-              </View>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.labelStyle}>Tanggal</Text>
-                <Text style={styles.labelStyle2}>:</Text>
-              </View>
-              <View style={{ flex: 1 }}>
-                <CustomInput
-                  name="tanggal"
-                  title={'Tanggal'}
-                  returnKeyType="go"
-                  maxLength={15}
-                  placeholder={'Tanggal'}
-                  setFieldValue={props.setFieldValue}
-                  value={props.values.tanggal}
-                  error={props.errors.tanggal}
-                  styleTitle={styles.formLabelTextDisable}
-                  styleInputText={styles.formPlacholderTextDisable}
-                />
-              </View>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flexDirection: 'row', paddingTop: 5 }}>
-                <Text style={styles.labelStyle}>Alamat</Text>
-                <Text style={styles.labelStyle2}>:</Text>
-              </View>
-              <View style={{ flex: 1 }}>
-                <TextInput
-                  style={styles.formAlamat}
-                  placeholder='Alamat'
-                  multiline={true}
-                  autoCorrect={false}
-                  defaultValue={props.values.alamat}
-                  onChangeText={(value) => props.setFieldValue('alamat', value)}
-                />
-              </View>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.labelStyle}>Telepon</Text>
-                <Text style={styles.labelStyle2}>:</Text>
-              </View>
-              <View style={{ flex: 1 }}>
-                <CustomInput
-                  name="telephone"
-                  title={'No. Telepon'}
-                  returnKeyType="go"
-                  keyboardType="numeric"
-                  maxLength={15}
-                  setFieldValue={props.setFieldValue}
-                  placeholder={'Nomor telepon'}
-                  value={props.values.telephone}
-                  error={props.errors.telephone}
-                  styleTitle={styles.formLabelText}
-                  styleInputText={styles.formPlacholderText}
-                  renderLeft={() => {
-                    return (
-                      <PhoneRegion
-                        editable={false}
-                        value={props.values.phoneCode}
-                        onSubmit={({ label, value }) => {
-                          console.tron.log('onSubmit ', label, value)
-                          props.setFieldValue('phoneCode', value)
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
+          <KeyboardAwareScrollView extraScrollHeight={40}>
+            <Styled.Container style={{ borderRadius: 10, marginHorizontal: 5, marginTop: 5 }}>
+              <View style={{ paddingHorizontal: 15, paddingTop: 5 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.labelStyle}>No. Nota </Text>
+                    <Text style={styles.labelStyle2}>:</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <CustomInput
+                      editable={false}
+                      name="noFaktur"
+                      title={'No. Nota'}
+                      returnKeyType="go"
+                      maxLength={15}
+                      placeholder={'Nomor Nota'}
+                      setFieldValue={props.setFieldValue}
+                      value={noPenjualan}
+                      error={false}
+                      styleTitle={styles.formLabelTextDisable}
+                      styleInputText={styles.formPlacholderTextDisable}
+                    />
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.labelStyle}>No. Telepon </Text>
+                    <Text style={styles.labelStyle2}>:</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <CustomInput
+                      name="telephone"
+                      title={'No Telepon'}
+                      returnKeyType="go"
+                      keyboardType='numeric'
+                      maxLength={15}
+                      isReturnText={true}
+                      returnValue={(text) => this.checkDataUser(text)}
+                      placeholder={'Nomor Telepon'}
+                      setFieldValue={props.setFieldValue}
+                      value={props.values.telephone}
+                      error={props.errors.telephone}
+                      styleTitle={styles.formLabelText}
+                      styleInputText={styles.formPlacholderText}
+                    />
+                  </View>
+                </View>
+                {payload && !fetching &&
+                  <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, alignSelf: 'flex-end' }}>
+                    <Icons name='verified-user' color={Colors.alertSuccess} size={15} style={{ marginRight: 5 }} />
+                    <Text style={styles.titleTextName}>Memiliki akun</Text>
+                  </View>
+                }
+                {error && !fetching &&
+                  <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, alignSelf: 'flex-end' }}>
+                    <Icons name='error' color={Colors.alertError} size={15} style={{ marginRight: 5 }} />
+                    <Text style={styles.titleTextName}>Tidak memiliki akun</Text>
+                  </View>
+                }
+                {fetching &&
+                  <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, alignSelf: 'flex-end' }}>
+                    <ActivityIndicator style={{ marginRight: 10 }} size={15} color={Colors.goldBasic} />
+                    <Text style={styles.titleTextName}>Mencari akun dengan no. telepone</Text>
+                  </View>
+                }
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.labelStyle}>Customer </Text>
+                    <Text style={styles.labelStyle2}>:</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    {/* <View style={{ flexDirection: 'row' }}>
+                      <TouchableOpacity
+                        onPress={() => this.changeStateAcc(true)}
+                        style={{ flexDirection: 'row', alignItems: 'center', marginRight: Scale(10) }}>
+                        <Image source={this.state.haveAcc ? Images.radioActive : Images.radio} style={styles.radioIcon} />
+                        <Text style={styles.cusSelect}>Memiliki akun</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => this.changeStateAcc(false)}
+                        style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image source={!this.state.haveAcc ? Images.radioActive : Images.radio} style={styles.radioIcon} />
+                        <Text style={styles.cusSelect}>Tidak memiliki akun</Text>
+                      </TouchableOpacity>
+                    </View> */}
+                    {/* {!this.state.haveAcc ? */}
+                    <TextInput
+                      returnKeyType="go"
+                      maxLength={15}
+                      placeholder={'Nama Customer'}
+                      editable={dataUserCustomer.User_Id === ''}
+                      onChangeText={(text) => {
+                        props.setFieldValue('namaCustomer', text)
+                      }
+                      }
+                      defaultValue={dataUserCustomer.User_Id ? dataUserCustomer.Nama_User : props.values.namaCustomer}
+                      style={[styles.formPlacholderText, {
+                        color: Colors.textBlack,
+                        padding: 0,
+                        borderBottomColor: '#DDDDDD',
+                        borderBottomWidth: 1,
+                      }]}
+                    />
+                    <View style={{ marginBottom: 7 }}>
+                      {this.state.errorCustomer ? (
+                        <Text style={styles.textError}>
+                          Nama customer harus diisi
+                        </Text>
+                      ) : (
+                          <Text style={styles.textError} />
+                        )}
+                    </View>
+                    {/* <CustomSelectOption
+                        label='Pilih Customer'
+                        title='Pilih Customer'
+                        data={userData}
+                        defaultValue={this.state.customerName}
+                        error={this.state.errorCustomer}
+                        selectTitle={'Pilih Customer'}
+                        errorMessage={'Nama Customer diisi'}
+                        onSelect={(value) => {
+                          this.setState({ customerName: value })
+                          props.setFieldValue('namaCustomer', value)
                         }}
-                      />
-                    )
-                  }}
-                />
+                        setFieldValue={(value) => this.setState({ customerId: value })}
+                      /> */}
+                    {/* } */}
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.labelStyle}>Sales</Text>
+                    <Text style={styles.labelStyle2}>:</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <CustomInput
+                      name="sales"
+                      title={'sales'}
+                      returnKeyType="go"
+                      maxLength={15}
+                      placeholder={'Nama Sales'}
+                      setFieldValue={props.setFieldValue}
+                      value={user && user.Nama_User ? user.Nama_User : ''}
+                      error={false}
+                      editable={false}
+                      styleTitle={styles.formLabelTextDisable}
+                      styleInputText={styles.formPlacholderTextDisable}
+                    />
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.labelStyle}>Tanggal</Text>
+                    <Text style={styles.labelStyle2}>:</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <CustomInput
+                      name="tanggal"
+                      title={'Tanggal'}
+                      returnKeyType="go"
+                      maxLength={15}
+                      placeholder={'Tanggal'}
+                      editable={false}
+                      setFieldValue={props.setFieldValue}
+                      value={props.values.tanggal}
+                      error={props.errors.tanggal}
+                      styleTitle={styles.formLabelTextDisable}
+                      styleInputText={styles.formPlacholderTextDisable}
+                    />
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flexDirection: 'row', paddingTop: 5 }}>
+                    <Text style={styles.labelStyle}>Alamat</Text>
+                    <Text style={styles.labelStyle2}>:</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <TextInput
+                      style={styles.formAlamat}
+                      placeholder='Alamat'
+                      multiline={true}
+                      autoCorrect={false}
+                      defaultValue={props.values.alamat}
+                      onChangeText={(value) => props.setFieldValue('alamat', value)}
+                    />
+                    <View style={{ marginBottom: 7 }}>
+                      {this.state.errorAlamat ? (
+                        <Text style={styles.textError}>
+                          Alamat harus diisi
+                        </Text>
+                      ) : (
+                          <Text style={styles.textError} />
+                        )}
+                    </View>
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.labelStyle}>Ket.</Text>
+                    <Text style={styles.labelStyle2}>:</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <CustomInput
+                      name="keterangan"
+                      returnKeyType="go"
+                      maxLength={15}
+                      placeholder={'Keterangan'}
+                      setFieldValue={props.setFieldValue}
+                      value={props.values.keterangan}
+                      error={props.errors.keterangan}
+                      styleTitle={styles.formLabelText}
+                      styleInputText={styles.formPlacholderText}
+                    />
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.labelStyle}>Kurir</Text>
+                    <Text style={styles.labelStyle2}>:</Text>
+                  </View>
+                  {/* <View style={{ flex: 1 }}>
+                    <CustomInput
+                      name="kurir"
+                      title={'kurir'}
+                      returnKeyType="go"
+                      maxLength={15}
+                      placeholder={'Nama kurir'}
+                      setFieldValue={props.setFieldValue}
+                      value={props.values.kurir}
+                      error={props.errors.kurir}
+                      styleTitle={styles.formLabelText}
+                      styleInputText={styles.formPlacholderText}
+                    />
+                  </View> */}
+                  <CustomSelectOption
+                    label='Nama Kurir'
+                    title='Pilih Kurir (Optional)'
+                    data={kurirData}
+                    defaultValue={this.state.kurir}
+                    error={this.state.errorKurir}
+                    selectTitle={'Pilih Kurir'}
+                    errorMessage={'Nama Kurir diisi'}
+                    onSelect={(value) => this.setState({ kurir: value })}
+                    setFieldValue={(value) => props.setFieldValue('kurir', value)}
+                  />
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.labelStyle}>Ongkos</Text>
+                    <Text style={styles.labelStyle2}>:</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <CustomInput
+                      name="ongkir"
+                      title={'ongkir'}
+                      keyboardType='numeric'
+                      returnKeyType="go"
+                      maxLength={15}
+                      placeholder={'Ongkos kirim'}
+                      setFieldValue={props.setFieldValue}
+                      value={props.values.ongkir}
+                      error={props.errors.ongkir}
+                      styleTitle={styles.formLabelText}
+                      styleInputText={styles.formPlacholderText}
+                    />
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flexDirection: 'row', paddingTop: 10 }}>
+                    <Text style={styles.labelStyle}>Pembayaran</Text>
+                    <Text style={styles.labelStyle2}>:</Text>
+                  </View>
+                  <CustomSelectOption
+                    label='Jenis Pembayaran'
+                    title='Pilih Jenis Pembayaran'
+                    data={pembayaran}
+                    defaultValue={this.state.jenisPembayaran}
+                    // error={errorPembayaran}
+                    error={this.state.errorPembayaran}
+                    selectTitle={'Pilih pembayaran'}
+                    errorMessage={'Pembayaran harus diisi'}
+                    onSelect={(value) => this.setState({ jenisPembayaran: value })}
+                    setFieldValue={(value) => props.setFieldValue('jenisPembayaran', value)}
+                  />
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.labelStyle}>Nama Toko</Text>
+                    <Text style={styles.labelStyle2}>:</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <CustomInput
+                      name="namaToko"
+                      title={'namaToko'}
+                      returnKeyType="go"
+                      maxLength={15}
+                      placeholder={'Nama Cabang/Toko'}
+                      setFieldValue={props.setFieldValue}
+                      value={props.values.namaToko}
+                      error={props.errors.namaToko}
+                      styleTitle={styles.formLabelText}
+                      styleInputText={styles.formPlacholderText}
+                    />
+                  </View>
+                </View>
               </View>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.labelStyle}>Ket.</Text>
-                <Text style={styles.labelStyle2}>:</Text>
+              {/* {this.renderSearchBar()} */}
+              <View style={{ marginTop: 10 }}>
+                <CustomTableRow
+                  onPressEdit={(data) => this.props.navigation.navigate('EditBarang', { data })}
+                  onDeleteData={(id) => this.deleteDataBarang(id)}
+                  data={barang} />
               </View>
-              <View style={{ flex: 1 }}>
-                <CustomInput
-                  name="keterangan"
-                  returnKeyType="go"
-                  maxLength={15}
-                  placeholder={'Keterangan'}
-                  setFieldValue={props.setFieldValue}
-                  value={props.values.keterangan}
-                  error={props.errors.keterangan}
-                  styleTitle={styles.formLabelText}
-                  styleInputText={styles.formPlacholderText}
-                />
-              </View>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.labelStyle}>Kurir</Text>
-                <Text style={styles.labelStyle2}>:</Text>
-              </View>
-              <View style={{ flex: 1 }}>
-                <CustomInput
-                  name="kurir"
-                  title={'kurir'}
-                  returnKeyType="go"
-                  maxLength={15}
-                  placeholder={'Nama kurir'}
-                  setFieldValue={props.setFieldValue}
-                  value={props.values.kurir}
-                  error={props.errors.kurir}
-                  styleTitle={styles.formLabelText}
-                  styleInputText={styles.formPlacholderText}
-                />
-              </View>
-            </View>
-          </View>
-          {/* {this.renderSearchBar()} */}
-          <CustomTableRow
-            onDeleteData={(id) => this.deleteDataBarang(id)}
-            data={barang} />
-        </Styled.Container>
-      </KeyboardAwareScrollView>
+            </Styled.Container>
+          </KeyboardAwareScrollView>
+        </View>
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          backgroundColor: '#f5f5f5',
+          paddingVertical: 10,
+          justifyContent: 'center',
+        }}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('TambahBarang')}
+            style={styles.addButton}>
+            <Text style={styles.addText}>Tambah</Text>
+          </TouchableOpacity>
+          {/* <TouchableOpacity style={styles.scanButton} onPress={this.openCloseBarcode}>
+            <Text style={styles.scanText}>SCAN</Text>
+          </TouchableOpacity> */}
+          <TouchableOpacity
+            onPress={() => {
+              if (barang.length > 0) {
+                this.resetModal.show()
+                this.resetPropsValues(props)
+              } else {
+                this.resetPropsValues(props)
+              }
+            }
+            }
+            style={styles.scanButton}
+          >
+            <Text style={styles.scanText}>Reset</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.kemas(props)} style={styles.kemasButton}>
+            <Text style={styles.kemasText}>Kemas</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     )
   }
 
@@ -315,9 +624,11 @@ class SalesScreen extends Component {
   }
 
   render() {
+    const { barang } = this.props
     const { barcodeOpen } = this.state
     return (
       <View style={{ flex: 1, backgroundColor: Colors.white }}>
+        <StatusBar translucent={false} hidden={false} barStyle="light-content" backgroundColor={'#ccb102'} />
         {barcodeOpen ?
           <BarcodeScannerScreen closeScanner={this.openCloseBarcode} dataScanner={(value) => this.setData(value)} />
           :
@@ -331,38 +642,20 @@ class SalesScreen extends Component {
                   validationSchema={schema}
                   render={this.renderForm.bind(this)}
                   validateOnChange={false}
-                  initialValues={initialValue}
+                  initialValues={this.initialValue}
                 />
               </View>
             </View>
 
-            <View>
-              <View style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                backgroundColor: '#f5f5f5',
-                paddingVertical: 10,
-                justifyContent: 'center',
-              }}>
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('TambahBarang')}
-                  style={styles.addButton}>
-                  <Text style={styles.addText}>Tambah</Text>
-                </TouchableOpacity>
-                {/* <TouchableOpacity style={styles.scanButton} onPress={this.openCloseBarcode}>
-                  <Text style={styles.scanText}>SCAN</Text>
-                </TouchableOpacity> */}
-                <TouchableOpacity
-                  onPress={() => this.props.resetBarangRequest()}
-                  style={styles.scanButton}
-                >
-                  <Text style={styles.scanText}>Reset</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.kemasButton}>
-                  <Text style={styles.kemasText}>Kemas</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+            <CustomModalDelete
+              type={'delete'}
+              title={'Reset Data Barang'}
+              confirmText={'Ya, Reset'}
+              onConfirm={this.reset}
+              idBarang={this.state.idBarang}
+              message={'Apakah anda yakin ingin menghapus semua barang?'}
+              setRef={r => this.resetModal = r}
+            />
           </View>
         }
       </View>
@@ -382,16 +675,36 @@ const mapStateToProps = (state) => {
     })
   }
 
+  const userLists = state.masterData.listUser;
+  let userData = userLists.map((obj) => {
+    return { id: obj.User_Id, description: obj.Nama_User };
+  });
+
+  const kurirLists = state.masterData.listKurir;
+  let kurirData = kurirLists.map((obj) => {
+    return { id: obj.Kurir_Id, description: obj.Nama_User };
+  });
+
   return {
-    barang
+    userData,
+    kurirData,
+    barang,
+    user: state.session.userSession,
+    noPenjualan: state.session.noPenjualan,
+    dataUserCustomer: state.order.dataUser,
+    cekUser: state.order.cekUser
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getListUserRequest: () => dispatch(MasterDataActions.getListUserRequest()),
+    getListKurirRequest: () => dispatch(MasterDataActions.getListKurirRequest()),
+    createOrderRequest: (param) => dispatch(OrderActions.createOrderRequest(param)),
     getBarangRequest: (param) => dispatch(OrderActions.getBarangRequest(param)),
     deleteBarangRequest: (param) => dispatch(OrderActions.deleteBarangRequest(param)),
-    resetBarangRequest: (param) => dispatch(OrderActions.resetBarang(param))
+    resetBarangRequest: (param) => dispatch(OrderActions.resetBarang(param)),
+    cekUserRequest: (param) => dispatch(OrderActions.cekUserRequest(param)),
   }
 }
 

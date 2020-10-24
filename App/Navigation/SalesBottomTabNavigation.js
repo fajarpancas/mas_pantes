@@ -6,6 +6,8 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import HomeSalesScreen from '../Containers/SalesAppSection/Home/HomeSalesScreen';
 import SalesScreen from '../Containers/SalesAppSection/Sales/SalesScreen';
+import AkunScreen from '../Containers/SalesAppSection/Akun/AkunScreen';
+import ListKurirScreen from '../Containers/SalesAppSection/Sales/ListKurirScreen';
 
 import I18n from '../I18n';
 import { Images, Colors, Fonts, ApplicationStyles } from '../Themes';
@@ -42,7 +44,7 @@ const stackNav = screen =>
                     fontWeight: '600',
                     textTransform: 'capitalize',
                 },
-                headerTitleAlign: 'center',
+                headerTitleAlign: 'left',
                 headerStyle: {
                     //   backgroundColor: Colors.blueBasic,
                     elevation: 0,
@@ -57,18 +59,36 @@ const SalesBottomTabNavigation = createBottomTabNavigator(
         HomeSales: {
             screen: stackNav(HomeSalesScreen),
             navigationOptions: navigation => ({
-                title: I18n.t('home.home'),
+                title: 'List Order',
                 tabBarIcon: ({ focused, tintColor }) => (
-                    <Icon name="home" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
+                    <Icon name="list" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
+                ),
+            }),
+        },
+        ListKurir: {
+            screen: stackNav(ListKurirScreen),
+            navigationOptions: navigation => ({
+                title: 'List Kurir',
+                tabBarIcon: ({ focused, tintColor }) => (
+                    <Icon name="list" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
                 ),
             }),
         },
         Sales: {
             screen: stackNav(SalesScreen),
             navigationOptions: () => ({
-                title: I18n.t('laporan.laporan'),
+                title: 'Buat Orderan',
                 tabBarIcon: ({ focused, tintColor }) => (
-                    <Icon name="payment" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
+                    <Icon name="chrome-reader-mode" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
+                ),
+            }),
+        },
+        Setting: {
+            screen: stackNav(AkunScreen),
+            navigationOptions: () => ({
+                title: 'Akun',
+                tabBarIcon: ({ focused, tintColor }) => (
+                    <Icon name="account-circle" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
                 ),
             }),
         },

@@ -13,6 +13,7 @@ export default StyleSheet.create({
     fontFamily: Fonts.type.acuminProRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: Colors.textGrey
+    color: Colors.textGrey,
+    textAlign: 'justify'
   }
 })

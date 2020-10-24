@@ -15,7 +15,9 @@ const AppCustomerStack = createStackNavigator(
     {
         MainScreen: {
             screen: BottomTabNavigation,
-            navigationOptions: { header: null }
+            navigationOptions: {
+                headerShown: false
+            }
         },
         HistoryDetailScreen: {
             screen: HistoryDetailScreen,

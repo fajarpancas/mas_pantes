@@ -23,3 +23,5 @@ export const DEFAULT_STATE = {
     payload: undefined,
     error: undefined
 }
+
+export const API_KEY = 'AIzaSyAxFl6bFMkhCi_tCRjoSdOjBRj4a4fRKS0'

@@ -11,7 +11,7 @@ const AuthStack = createStackNavigator(
   {
     SignInScreen: {
       screen: SignInScreen, navigationOptions: {
-        header: null
+        headerShown: false
       }
     },
   },
@@ -30,7 +30,7 @@ const PrimaryNav = createSwitchNavigator({
 }, {
   // Default config for all screens
   headerMode: 'none',
-  initialRouteName: 'Auth',
+  initialRouteName: 'Splash',
   navigationOptions: {
     headerStyle: styles.header
   }

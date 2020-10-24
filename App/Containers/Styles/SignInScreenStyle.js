@@ -13,6 +13,22 @@ export default StyleSheet.create({
     paddingVertical: 15,
     marginHorizontal: 17
   },
+  modalDeleteWrapper: {
+    width: Scale(300),
+    height: 'auto',
+    paddingHorizontal: Scale(20),
+    paddingTop: Scale(20),
+    paddingBottom: Scale(10),
+    backgroundColor: Colors.white,
+    alignSelf: 'center',
+    borderRadius: 10
+  },
+  cutomList: {
+    borderBottomColor: Colors.borderGrey,
+    borderBottomWidth: 1,
+    paddingVertical: 10,
+    marginBottom: 10
+  },
   textError: {
     textAlign: 'left',
     fontSize: 10,
@@ -57,10 +73,22 @@ export default StyleSheet.create({
     color: '#00ace6',
     marginBottom: 25
   },
-  logoPantes:{
+  logoPantes: {
     position: 'absolute',
     top: 0,
     width: Scale(375),
     height: Scale(350)
+  },
+  chooseButton: {
+    borderBottomColor: Colors.alertInfo,
+    borderBottomWidth: 1,
+    justifyContent: 'center',
+    height: 30,
+    flex: 1,
+  },
+  textUser: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 12,
+    color: Colors.alertInfo,
   }
 })

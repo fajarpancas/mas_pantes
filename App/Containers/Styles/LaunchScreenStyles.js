@@ -14,5 +14,9 @@ export default StyleSheet.create({
   },
   centered: {
     alignItems: 'center'
+  },
+  logoPantes: {
+    alignSelf: 'center',
+    borderRadius: 200
   }
 })

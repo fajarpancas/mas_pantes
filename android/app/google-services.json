@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "391532344805",
-    "firebase_url": "https://newplanapp.firebaseio.com",
-    "project_id": "newplanapp",
-    "storage_bucket": "newplanapp.appspot.com"
+    "project_number": "769127795647",
+    "firebase_url": "https://pantes-gold.firebaseio.com",
+    "project_id": "pantes-gold",
+    "storage_bucket": "pantes-gold.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:391532344805:android:b9ad5299c8b3a204cb2b0c",
+        "mobilesdk_app_id": "1:769127795647:android:22cb1e20d1f9bb70986f0a",
         "android_client_info": {
           "package_name": "com.tokomas.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "391532344805-3vkpc6fsakrk1o7jtslbkdsn9e1rdlbo.apps.googleusercontent.com",
+          "client_id": "769127795647-9u1fc73i1o6ueog44bb55u31kbqj4k3n.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.tokomas.app",
@@ -23,20 +23,20 @@
           }
         },
         {
-          "client_id": "391532344805-joqiqkq9fndi3t3hepmn1r9c23djseut.apps.googleusercontent.com",
+          "client_id": "769127795647-kibop52cusmr41emr0cv3a2ud42ducj4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDeSUZZeiwmZ9Fosyu3uUCF8mhgX1PRHtA"
+          "current_key": "AIzaSyAIIMil9ilZ1mZlxYXPtTGeVGeKsY24Md4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "391532344805-joqiqkq9fndi3t3hepmn1r9c23djseut.apps.googleusercontent.com",
+              "client_id": "769127795647-kibop52cusmr41emr0cv3a2ud42ducj4.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

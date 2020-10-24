@@ -6,6 +6,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import HomeKurirScreen from '../Containers/KurirAppSection/HomeKurirScreen';
 import ListOrderScreen from '../Containers/KurirAppSection/ListOrderScreen';
+import AkunScreen from '../Containers/SalesAppSection/Akun/AkunScreen';
 
 import I18n from '../I18n';
 import { Images, Colors, Fonts, ApplicationStyles } from '../Themes';
@@ -33,7 +34,7 @@ const stackNav = screen =>
             },
         },
         {
-            headerMode: 'none',
+            headerMode: 'screen',
             defaultNavigationOptions: {
                 title: '',
                 headerTitleStyle: {
@@ -42,9 +43,9 @@ const stackNav = screen =>
                     fontWeight: '600',
                     textTransform: 'capitalize',
                 },
-                headerTitleAlign: 'center',
+                headerTitleAlign: 'left',
                 headerStyle: {
-                    //   backgroundColor: Colors.blueBasic,
+                    backgroundColor: Colors.goldBasic,
                     elevation: 0,
                     borderBottomWidth: 0,
                 }
@@ -54,27 +55,27 @@ const stackNav = screen =>
 
 const KurirBottomTabNavigation = createBottomTabNavigator(
     {
-        HomeSales: {
-            screen: stackNav(HomeKurirScreen),
-            navigationOptions: navigation => ({
-                title: I18n.t('home.home'),
-                tabBarIcon: ({ focused, tintColor }) => (
-                    <Icon name="home" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
-                ),
-            }),
-        },
         Sales: {
             screen: stackNav(ListOrderScreen),
             navigationOptions: () => ({
-                title: I18n.t('List Orderan'),
+                title: 'List Orderan',
                 tabBarIcon: ({ focused, tintColor }) => (
                     <Icon name="list" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
                 ),
             }),
         },
+        Setting: {
+            screen: stackNav(AkunScreen),
+            navigationOptions: () => ({
+                title: 'Akun',
+                tabBarIcon: ({ focused, tintColor }) => (
+                    <Icon name="account-circle" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
+                ),
+            }),
+        },
     },
     {
-        initialRouteName: 'HomeSales',
+        initialRouteName: 'Sales',
         tabBarOptions: {
             activeTintColor: '#ccb102',
             labelStyle: {

@@ -3,16 +3,18 @@ import { createAppContainer } from 'react-navigation';
 import ProgressOrderScreen from './ProgressOrder'
 import AvailOrderScreen from './AvailOrder'
 import FinishOrderScreen from './FinishOrder'
+import OrderDiambilScreen from './AmbiOrder'
 import Scale from '../../Transforms/Scale';
 import { Colors, Fonts } from '../../Themes';
 
 const TabNavigator = createMaterialTopTabNavigator({
-  Avail: AvailOrderScreen,
-  Progress: ProgressOrderScreen,
-  Finish: FinishOrderScreen,
+  Tersedia: AvailOrderScreen,
+  Diambil: OrderDiambilScreen,
+  Proses: ProgressOrderScreen,
+  History: FinishOrderScreen,
 },
   {
-    initialRouteName: 'Avail',
+    initialRouteName: 'Tersedia',
     tabBarOptions: {
       upperCaseLabel: false,
       activeTintColor: Colors.goldBasic,
@@ -22,7 +24,7 @@ const TabNavigator = createMaterialTopTabNavigator({
         fontFamily: Fonts.type.acuminProRegular
       },
       tabStyle: {
-        width: Scale(125),
+        width: Scale(94),
         height: 44
       },
       indicatorStyle: {

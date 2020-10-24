@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {
   StatusBar,
   TouchableOpacity,
+  ActivityIndicator,
   View,
   Text,
   Image
@@ -16,6 +17,8 @@ import PhoneRegion from './PhoneRegion'
 import images from '../../Themes/Images'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
+import Modal from 'react-native-modal'
+import AuthActions from '../../Redux/AuthRedux'
 
 const schema = Yup.object().shape({
   phoneNumber: Yup.string()
@@ -25,34 +28,107 @@ const schema = Yup.object().shape({
 })
 
 const initialValue = {
-  phoneCode: '+62',
-  phoneNumber: '242424',
-  password: 'dasda'
+  // phoneNumber: '081',
+  // password: '123456'
 }
 
 class SignInScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      phoneCode: '+62',
       phoneNumber: '',
       password: '',
       errorPhoneNumber: false,
-      errorPassword: false
+      errorPassword: false,
+      user: 'customer',
+      modal: false
     }
   }
 
   handleSubmit(values, actions) {
-    this.props.navigation.navigate('AppSales')
+    const { loginRequest } = this.props
+
+    const params = {
+      email: values.phoneNumber,
+      password: values.password
+    }
+
+    loginRequest(params)
+
+    // switch (this.state.user) {
+    //   case 'customer':
+    //     this.props.navigation.navigate('App')
+    //     break;
+    //   case 'sales':
+    //     this.props.navigation.navigate('AppSales')
+    //     break;
+    //   case 'kurir':
+    //     this.props.navigation.navigate('AppKurir')
+    //     break;
+    // }
+  }
+
+  showOffModal = () => {
+    this.setState({ modal: !this.state.modal })
+  }
+
+  modalPickUser = () => {
+    return (
+      <Modal
+        onBackButtonPress={this.showOffModal}
+        onBackdropPress={this.showOffModal}
+        backdropTransitionOutTiming={0}
+        animationIn={'slideInUp'}
+        animationOut={'slideOutDown'}
+        isVisible={this.state.modal}>
+        <View style={styles.modalDeleteWrapper}>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({ user: 'customer' }, () => {
+                this.showOffModal()
+              })
+            }}
+            style={styles.cutomList}>
+            <Text style={styles.title}>Customer</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({ user: 'sales' }, () => {
+                this.showOffModal()
+              })
+            }}
+            style={styles.cutomList}>
+            <Text style={styles.title}>Sales</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({ user: 'kurir' }, () => {
+                this.showOffModal()
+              })
+            }}
+            style={styles.cutomList}>
+            <Text style={styles.title}>Kurir</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    )
   }
 
   renderForm = (props) => {
+    const { login } = this.props
+    const { fetching } = login
     return (
       <KeyboardAwareScrollView extraScrollHeight={40} style={{ marginHorizontal: 25 }}>
         <Styled.Container padded style={{ borderRadius: 10 }}>
           <View style={{ padding: 15 }}>
             <Text style={styles.titleSignIn}>Masuk ke Aplikasi</Text>
-            <CustomInput
+            {/* <View style={{ flexDirection: 'column', marginBottom: 15 }}>
+              <Text style={styles.formLabelText}>Masuk sebagai</Text>
+              <TouchableOpacity style={styles.chooseButton} onPress={this.showOffModal}>
+                <Text style={styles.textUser}>{this.state.user} (mode develop only while waiting API)</Text>
+              </TouchableOpacity>
+            </View> */}
+            {/* <CustomInput
               label
               name="phoneNumber"
               title={'No. Telepon'}
@@ -77,6 +153,21 @@ class SignInScreen extends Component {
                   />
                 )
               }}
+            /> */}
+            <CustomInput
+              label
+              name="phoneNumber"
+              title={'Nomor Telepon'}
+              autoCapitalize="none"
+              keyboardType='numeric'
+              returnKeyType="go"
+              maxLength={15}
+              placeholder={'Masukkan nomor telepon'}
+              setFieldValue={props.setFieldValue}
+              value={props.values.phoneNumber}
+              error={props.errors.phoneNumber}
+              styleTitle={styles.formLabelText}
+              styleInputText={styles.formPlacholderText}
             />
 
             <CustomInput
@@ -96,7 +187,7 @@ class SignInScreen extends Component {
               styleInputText={styles.formPlacholderText}
             />
 
-            {false
+            {fetching
               ? <ActivityIndicator style={{ marginVertical: 10 }} />
               :
               <TouchableOpacity style={styles.signInBtn} onPress={props.handleSubmit}>
@@ -128,6 +219,7 @@ class SignInScreen extends Component {
           />
           {/* {this.renderForm()} */}
         </View>
+        {this.modalPickUser()}
       </View>
     )
   }
@@ -135,11 +227,13 @@ class SignInScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    login: state.auth.login
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    loginRequest: (params) => dispatch(AuthActions.loginRequest(params))
   }
 }
 

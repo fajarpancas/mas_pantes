@@ -2,7 +2,7 @@
 import apisauce from 'apisauce'
 
 // our "constructor"
-const create = (baseURL = 'https://tokoemaspantes.000webhostapp.com/') => {
+const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
   // ------
   // STEP 1
   // ------
@@ -38,8 +38,27 @@ const create = (baseURL = 'https://tokoemaspantes.000webhostapp.com/') => {
   const getRate = () => api.get('rate_limit')
   const getUser = (username) => api.get('search/users', { q: username })
 
+  const getListUser = () => api.get('/api/list-user')
+  const cekUser = (param) => api.post('/api/get-list-user', param)
+  const getListKurir = () => api.get('/api/list-kurir')
+  const login = (param) => api.post('/api/login', param)
+  const logout = () => api.post('/api/logout')
+  const createOrder = (param) => api.post('/api/penjualan', param)
   const getBarang = (param) => api.post('/api/getbarang', param)
-
+  const getListOrder = (param) => api.get('/api/get-list-order', param)
+  const getListOrderProcess = (param) => api.post('/api/get-list-order-by-kurir', param)
+  const getListOrderNextProcess = (param) => api.post('/api/get-list-order-kirim', param)
+  const getListOrderFinish = (param) => api.post('/api/get-list-order-finish', param)
+  const getSalesListOrder = (param) => api.post('/api/get-sales-list-order', param)
+  const pickBarang = (param) => api.post('/api/pick-barang', param)
+  const kirimBarang = (param) => api.post('/api/kirim-barang', param)
+  const barangSampai = (param) => api.post('/api/barang-sampai', param)
+  const uploadFotoBarang = (param) => api.post('/api/upload-foto-barang', param)
+  const kurirSetor = (param) => api.post('/api/kurir-setor', param)
+  const kurirSetorList = (param) => api.post('api/detail-setor-by-sales', param)
+  const saveTokenFCM = (param) => api.post('api/save-token-fcm', param)
+  const getLokasiKurir = (param) => api.post('api/push-notif', param)
+  const postLokasiKurir = (param) => api.post('api/save-lokasi-tracking', param)
   // ------
   // STEP 3
   // ------
@@ -57,8 +76,28 @@ const create = (baseURL = 'https://tokoemaspantes.000webhostapp.com/') => {
     getRoot,
     getRate,
     getUser,
-    api, 
-    getBarang
+    api,
+    login,
+    logout,
+    createOrder,
+    getListOrderProcess,
+    getBarang,
+    getListOrder,
+    getListUser,
+    getListKurir,
+    getListOrderNextProcess,
+    getListOrderFinish,
+    pickBarang,
+    kirimBarang,
+    barangSampai,
+    getSalesListOrder,
+    uploadFotoBarang,
+    kurirSetor,
+    kurirSetorList,
+    cekUser,
+    saveTokenFCM,
+    getLokasiKurir,
+    postLokasiKurir
   }
 }
 

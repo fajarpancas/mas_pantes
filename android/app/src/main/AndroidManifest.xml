@@ -3,6 +3,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
@@ -11,6 +15,10 @@
       android:allowBackup="false"
       android:usesCleartextTraffic="true"
       android:theme="@style/AppTheme">
+      <meta-data
+        android:name="com.google.firebase.messaging.default_notification_icon"
+        android:resource="@mipmap/ic_launcher"
+      />
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
@@ -22,9 +30,15 @@
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-      <meta-data
+      <service android:name="io.invertase.firebase.messaging.RNFirebaseMessagingService">
+        <intent-filter>
+          <action android:name="com.google.firebase.MESSAGING_EVENT" />
+        </intent-filter>
+      </service>
+      <service android:name="io.invertase.firebase.messaging.RNFirebaseBackgroundMessagingService" />
+      <!-- <meta-data
               android:name="com.google.mlkit.vision.DEPENDENCIES"
-              android:value="barcode" />
+              android:value="barcode" /> -->
       <meta-data
         android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyDvvi116cFvMalTvVuCQgXBblgLNHTKdnE"/>

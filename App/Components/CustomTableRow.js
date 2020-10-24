@@ -30,6 +30,16 @@ class CustomTableRow extends Component {
         this.props.onDeleteData(id)
     }
 
+    toEditScreen = (id, nama, harga, foto) => {
+        const data = {
+            id,
+            nama,
+            harga,
+            foto
+        }
+        this.props.onPressEdit(data)
+    }
+
     renderTableHeader = () => {
         return (
             <View style={styles.headerTable}>
@@ -62,7 +72,7 @@ class CustomTableRow extends Component {
         )
     }
 
-    renderTableValue = ({ id, no, Nama_Barang, harga }) => {
+    renderTableValue = ({ id, no, Nama_Barang, harga, foto }) => {
         return (
             <View style={styles.headerTable}>
                 <View style={styles.borderTableNoValue}>
@@ -74,16 +84,28 @@ class CustomTableRow extends Component {
                 <View style={styles.borderTableHargaValue}>
                     <Text style={styles.valueTableFill}>{harga}</Text>
                 </View>
-                <View style={styles.borderTableFotoValue}>
-                    <TouchableOpacity
-                        style={{ marginRight: 10 }}>
-                        <Icons name='edit' size={20} color={'lightgrey'} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => this.showPopUp(id)}>
-                        <Icons name='delete' size={20} color={'lightgrey'} />
-                    </TouchableOpacity>
-                </View>
+                {this.props.disableEdit &&
+                    <View style={styles.borderTableFotoValue}>
+                        <TouchableOpacity
+                            onPress={() => this.toEditScreen(id, Nama_Barang, harga, foto)}
+                            style={{ marginRight: 10 }}>
+                            <Icons name='visibility' size={20} color={'grey'} />
+                        </TouchableOpacity>
+                    </View>
+                }
+                {!this.props.disableEdit &&
+                    <View style={styles.borderTableFotoValue}>
+                        <TouchableOpacity
+                            onPress={() => this.toEditScreen(id, Nama_Barang, harga, foto)}
+                            style={{ marginRight: 10 }}>
+                            <Icons name='visibility' size={20} color={'grey'} />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => this.showPopUp(id)}>
+                            <Icons name='delete' size={20} color={'grey'} />
+                        </TouchableOpacity>
+                    </View>
+                }
             </View >
         )
     }

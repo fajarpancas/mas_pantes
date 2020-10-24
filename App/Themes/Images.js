@@ -24,7 +24,17 @@ const images = {
   gold: require('../Images/gold.png'),
   pantes: require('../Images/pantes.jpg'),
   emptyTrans: require('../Images/empty-transactions.png'),
-  iconHistory: require('../Images/icon-medical-history.png')
+  DefaultAvatar: require('../Images/DefaultAvatar.png'),
+  iconHistory: require('../Images/icon-medical-history.png'),
+  FlashOff: require('../Images/FlashOff.png'),
+  FlashOn: require('../Images/FlashOn.png'),
+  IconCancel: require('../Images/IconCancel.png'),
+  cameraClick: require('../Images/cameraClick.png'),
+  CameraSwitch: require('../Images/CameraSwitch.png'),
+  camera: require('../Images/camera.png'),
+  iconDropdown: require('../Images/icon-dropdown.png'),
+  radioActive: require('../Images/radio-active.png'),
+  radio: require('../Images/radio.png'),
 }
 
 export default images

@@ -1,5 +1,6 @@
-import {StyleSheet} from 'react-native'
-import {Fonts, Metrics, Colors} from '../../Themes/'
+import { StyleSheet } from 'react-native'
+import { Fonts, Metrics, Colors } from '../../Themes/'
+import Scale from '../../Transforms/Scale'
 
 export default StyleSheet.create({
   applicationView: {
@@ -20,5 +21,21 @@ export default StyleSheet.create({
     width: 200,
     height: 200,
     alignSelf: 'center'
+  },
+  wrapper: {
+    backgroundColor: 'white',
+    width: Scale(300),
+    alignSelf: 'center',
+    borderRadius: 10,
+    padding: 15,
+    minHeight: Scale(250),
+    justifyContent: 'center'
+  },
+  textGetLokasi:{
+    marginTop: Scale(10),
+    alignSelf: 'center',
+    marginTop: Scale(45),
+    fontFamily: Fonts.type.acuminProMedium,
+    color: Colors.textBlack
   }
 })

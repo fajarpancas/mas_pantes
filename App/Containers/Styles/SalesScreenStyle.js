@@ -15,9 +15,31 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  cusSelect: {
+    fontFamily: Fonts.type.acuminProRegular,
+    color: Colors.textBlack,
+    fontSize: 12,
+    marginLeft: 5
+  },
+  radioIcon: {
+    width: Scale(15),
+    height: Scale(15)
+  },
+  textError: {
+    textAlign: 'left',
+    fontSize: 10,
+    color: 'red',
+    fontFamily: Fonts.type.azoSansRegular,
+  },
   textBarcode: {
     flex: 1,
     textAlign: 'center'
+  },
+  rupiah: {
+    fontSize: 14,
+    fontFamily: Fonts.type.acuminProBold,
+    color: Colors.textGrey,
+    width: Scale(30)
   },
   labelStyle: {
     width: Scale(80),
@@ -34,24 +56,30 @@ export default StyleSheet.create({
     color: Colors.textBlack
   },
   formPlacholderText: {
-    height: Scale(23),
+    height: Scale(35),
     fontFamily: Fonts.type.acuminProRegular,
-    paddingHorizontal: 5,
+    // paddingHorizontal: 5,
+    fontSize: 13,
+    padding: 0
+  },
+  formPlacholderTextTelepon: {
+    // height: Scale(35),
+    fontFamily: Fonts.type.acuminProRegular,
+    // paddingHorizontal: 5,
     fontSize: 13,
     padding: 0
   },
   formAlamat: {
     fontFamily: Fonts.type.acuminProRegular,
     fontSize: 13,
-    paddingHorizontal: 5,
+    // paddingHorizontal: 5,
     padding: 0,
     height: Scale(45),
     lineHeight: 18,
     borderBottomColor: '#DDDDDD',
     borderBottomWidth: 1,
     paddingVertical: 5,
-    textAlignVertical: 'top',
-    marginBottom: 10
+    textAlignVertical: 'top'
   },
   formLabelText: {
     fontFamily: Fonts.type.acuminProBold,
@@ -62,8 +90,9 @@ export default StyleSheet.create({
     height: Scale(23),
     fontFamily: Fonts.type.acuminProRegular,
     fontSize: 13,
-    backgroundColor: Colors.borderGrey,
-    paddingHorizontal: 5,
+    backgroundColor: '#f2f2f2',
+    // paddingHorizontal: 5,
+    marginTop: 10,
     padding: 0
   },
   formLabelTextDisable: {
@@ -88,8 +117,8 @@ export default StyleSheet.create({
   },
   kemasButton: {
     height: Scale(30),
-    width: Scale(100),
-    backgroundColor: 'green',
+    width: Scale(110),
+    backgroundColor: Colors.alertSuccess,
     borderRadius: 4,
     justifyContent: 'center'
   },
@@ -102,8 +131,8 @@ export default StyleSheet.create({
   },
   addButton: {
     height: Scale(30),
-    width: Scale(100),
-    backgroundColor: 'blue',
+    width: Scale(110),
+    backgroundColor: Colors.alertInfo,
     borderRadius: 4,
     justifyContent: 'center'
   },
@@ -116,8 +145,8 @@ export default StyleSheet.create({
   },
   scanButton: {
     height: Scale(30),
-    width: Scale(100),
-    backgroundColor: 'red',
+    width: Scale(110),
+    backgroundColor: Colors.alertError,
     borderRadius: 4,
     justifyContent: 'center',
     marginHorizontal: 10
@@ -130,7 +159,7 @@ export default StyleSheet.create({
     textTransform: 'uppercase'
   },
   headerTable: {
-    marginHorizontal: 10,
+    // marginHorizontal: 5
     flexDirection: 'row',
     alignSelf: 'center'
   },
@@ -149,7 +178,7 @@ export default StyleSheet.create({
     backgroundColor: Colors.goldBasic,
     paddingVertical: 10,
     borderWidth: 1,
-    width: Scale(150),
+    width: Scale(100),
     justifyContent: 'center',
   },
   borderTableFoto: {
@@ -168,6 +197,15 @@ export default StyleSheet.create({
     paddingVertical: 10,
     borderWidth: 1,
     width: Scale(80),
+    justifyContent: 'center',
+  },
+  borderTableHargaNama: {
+    marginHorizontal: Scale(-0.5),
+    borderColor: Colors.goldBasic,
+    backgroundColor: Colors.goldBasic,
+    paddingVertical: 10,
+    borderWidth: 1,
+    width: Scale(100),
     justifyContent: 'center',
   },
   valueTable: {
@@ -197,7 +235,7 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     borderLeftWidth: 1,
     borderRightWidth: 1,
-    width: Scale(150),
+    width: Scale(100),
     justifyContent: 'center',
   },
   borderTableFotoValue: {
@@ -224,6 +262,19 @@ export default StyleSheet.create({
     width: Scale(80),
     justifyContent: 'center',
   },
+  borderTableHargaValueNama: {
+    marginHorizontal: Scale(-0.5),
+    borderBottomColor: 'lightgrey',
+    borderLeftColor: 'lightgrey',
+    borderRightColor: 'lightgrey',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    width: Scale(100),
+    justifyContent: 'center',
+    padding: 4
+  },
   valueTableFill: {
     fontSize: 12,
     color: Colors.textGrey,
@@ -240,8 +291,27 @@ export default StyleSheet.create({
     borderLeftWidth: 1,
     borderRightWidth: 1,
     backgroundColor: Colors.goldBasic,
-    flex: 1,
-    justifyContent: 'center',
+    width: Scale(240),
+  },
+  borderTableTotalValue: {
+    marginHorizontal: Scale(-0.5),
+    borderBottomColor: 'white',
+    borderLeftColor: 'white',
+    borderRightColor: 'white',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    backgroundColor: Colors.goldBasic,
+    width: Scale(80),
+  },
+  borderNoValue: {
+    marginHorizontal: Scale(-0.5),
+    borderBottomColor: 'white',
+    borderBottomWidth: 1,
+    paddingVertical: 10,
+    backgroundColor: Colors.goldBasic,
+    width: Scale(79),
   },
   formPlacholderTextTambah: {
     height: 36,
@@ -260,5 +330,125 @@ export default StyleSheet.create({
     marginBottom: 15,
     height: Scale(40),
     justifyContent: 'center'
+  },
+  photoContainerNoBorder: {
+    flexDirection: 'row',
+    marginTop: 7
+  },
+  photoContainer: {
+    height: 64,
+    flexDirection: 'row',
+    width: Scale(335),
+    alignSelf: 'center',
+    borderColor: '#CCCCCC',
+    borderWidth: 1,
+    marginTop: 7,
+    borderRadius: 4
+  },
+  icPhoto: {
+    fontFamily: Fonts.type.acuminProMedium,
+    fontSize: 14,
+    color: Colors.textBlack
+  },
+  uploadPhoto: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 12,
+    color: '#57A9DD',
+  },
+  changePhoto: {
+    fontFamily: Fonts.type.acuminProMedium,
+    fontSize: 12,
+    color: '#57A9DD',
+    marginLeft: 10
+  },
+  photo: {
+    height: Scale(100),
+    width: Scale(100),
+    borderRadius: 4,
+  },
+  photoView: {
+    height: Scale(500),
+    width: Scale(325),
+    borderRadius: 4,
+    alignSelf: 'center'
+  },
+  uploadIcon: {
+    height: Scale(30),
+    width: Scale(35),
+    marginHorizontal: 20
+  },
+  viewIcon: {
+    height: Scale(64),
+    width: Scale(64),
+    marginHorizontal: 12
+  },
+  unggah: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 10,
+    color: '#57A9DD',
+    marginTop: 5
+  },
+  unggahGagal: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 10,
+    color: 'red',
+    marginTop: 5
+  },
+  wrapperListKurir: {
+    backgroundColor: 'white',
+    width: Scale(355),
+    padding: 10,
+    elevation: 1,
+    alignSelf: 'center',
+    borderRadius: 5
+  },
+  namaKurirText2: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 13,
+    width: Scale(100)
+  },
+  namaKurirText: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 13,
+  },
+  titleTextTotal: {
+    fontFamily: Fonts.type.acuminProMedium,
+    fontSize: 13,
+  },
+  titleTextName: {
+    fontFamily: Fonts.type.acuminProMedium,
+    fontSize: 12,
+  },
+  wrapperLokasiTrack: {
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    paddingTop: 15,
+  },
+  infoKurir: {
+    fontSize: 14,
+    color: Colors.textBlack,
+    width: Scale(250),
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontFamily: Fonts.type.acuminProMedium,
+    marginVertical: 20,
+    lineHeight: 18
+  },
+  address: {
+    fontSize: 14,
+    color: Colors.textBlack,
+    width: Scale(300),
+    lineHeight: 18,
+    fontFamily: Fonts.type.acuminProMedium,
+  },
+  wrapperBorder: {
+    borderBottomColor: Colors.borderGrey,
+    borderBottomWidth: 1,
+    paddingBottom: 15
+  },
+  time: {
+    fontSize: 12,
+    color: Colors.textGrey,
+    fontFamily: Fonts.type.acuminProRegular,
   }
 })
