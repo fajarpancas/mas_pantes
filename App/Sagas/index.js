@@ -19,12 +19,14 @@ import { getUserAvatar } from './GithubSagas'
 import {
   addBarang,
   barangSampai,
+  cancelOrder,
   cekUSer,
   createOrder,
   deleteBarang,
   editBarang,
   getBarang,
   getKurirSetorList,
+  getListToko,
   getOrderList,
   getOrderListDiambil,
   getOrderListFinish,
@@ -37,7 +39,7 @@ import {
 } from './OrderSagas'
 import { login, logout } from './AuthSagas'
 import { getListKurir, getListUser } from './MasterDataSagas'
-import { getLokasiKurir, getTracking, postLokasiKurir } from './TrackingSagas'
+import { changeStatusKurir, getLokasiKurir, getTracking, postLokasiKurir } from './TrackingSagas'
 
 /* ------------- API ------------- */
 
@@ -71,12 +73,15 @@ export default function* root() {
     takeLatest(OrderTypes.KURIR_SETOR_REQUEST, kurirSetor, api),
     takeLatest(OrderTypes.KURIR_SETOR_LIST_REQUEST, getKurirSetorList, api),
     takeLatest(OrderTypes.CEK_USER_REQUEST, cekUSer, api),
+    takeLatest(OrderTypes.GET_LIST_TOKO_REQUEST, getListToko, api),
+    takeLatest(OrderTypes.CANCEL_ORDER_REQUEST, cancelOrder, api),
 
     takeLatest(MasterDataTypes.GET_LIST_USER_REQUEST, getListUser, api),
     takeLatest(MasterDataTypes.GET_LIST_KURIR_REQUEST, getListKurir, api),
 
     takeLatest(TrackingTypes.TRACKING_REQUEST, getTracking, api),
     takeLatest(TrackingTypes.GET_LOKASI_KURIR_REQUEST, getLokasiKurir, api),
+    takeLatest(TrackingTypes.CHANGE_STATUS_KURIR_REQUEST, changeStatusKurir, api),
     // takeLatest(TrackingTypes.POST_ALAMAT_REQUEST, postLokasiKurir, api),
     // some sagas receive extra parameters in addition to an action
     takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api)

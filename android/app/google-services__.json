@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "769127795647-44k4ve1ko0t1rp9rirfc2s653ag6v6ui.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.tokomas.app",
-            "certificate_hash": "858e4f51c5016e3095c983e75261fd5411df8308"
-          }
-        },
-        {
           "client_id": "769127795647-9u1fc73i1o6ueog44bb55u31kbqj4k3n.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

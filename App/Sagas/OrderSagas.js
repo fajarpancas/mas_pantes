@@ -146,10 +146,10 @@ export function* getSalesListOrder(api, action) {
     const response = yield call(api.getSalesListOrder, data)
     if (response.ok) {
       yield put(OrderActions.getSalesListOrderSuccess(response.data.data, page))
+      console.tron.error('get sales order success')
     } else {
       DropDownHolder.alert('error', 'GAGAL', `Gagal mengambil data order.`)
       yield put(OrderActions.getSalesListOrderFailure())
-
     }
   } catch (err) {
     DropDownHolder.alert('error', 'Gagal', err.message)
@@ -273,7 +273,11 @@ export function* kirimBarang(api, action) {
         `Cek orderan yang sudah diisi estimasi waktu sampai pada tab menu PROSES.`)
       Method.LoadingHelper.hideLoading()
     } else {
-      DropDownHolder.alert('error', 'GAGAL', `Gagal mengirim orderan.`)
+      if (response.data && response.data.message) {
+        DropDownHolder.alert('error', 'GAGAL', response.data.message)
+      } else {
+        DropDownHolder.alert('error', 'GAGAL', `Gagal mengirim orderan.`)
+      }
       yield all([
         put(OrderActions.kirimBarangFailure()),
         put(OrderActions.getOrderProcessRequest(param)),
@@ -374,7 +378,6 @@ export function* getKurirSetorList(api, action) {
     } else {
       DropDownHolder.alert('error', 'GAGAL', `Gagal mengambil data.`)
       yield put(OrderActions.kurirSetorListFailure())
-
     }
   } catch (err) {
     DropDownHolder.alert('error', 'Gagal', err.message)
@@ -399,5 +402,41 @@ export function* cekUSer(api, action) {
   } catch (err) {
     DropDownHolder.alert('error', 'Gagal', err.message)
     yield put(OrderActions.cekUserFailure())
+  }
+}
+
+export function* getListToko(api, action) {
+  try {
+    const response = yield call(api.getListToko)
+    if (response.ok) {
+      yield put(OrderActions.getListTokoSuccess(response.data.data))
+    } else {
+      yield put(OrderActions.getListTokoFailure())
+    }
+  } catch {
+    yield put(OrderActions.getListTokoFailure())
+  }
+}
+
+export function* cancelOrder(api, action) {
+  const { data } = action
+  const { Id_Sales } = data
+  const param = {
+    page: 1,
+    Id_Sales
+  }
+  try {
+    const response = yield call(api.cancelOrder, data)
+    if (response.ok) {
+      yield put(OrderActions.cancelOrderSuccess(response.data))
+      yield put(OrderActions.getSalesListOrderRequest(param))
+      Method.LoadingHelper.hideLoading()
+    } else {
+      yield put(OrderActions.cancelOrderFailure())
+      Method.LoadingHelper.hideLoading()
+    }
+  } catch {
+    yield put(OrderActions.cancelOrderFailure())
+    Method.LoadingHelper.hideLoading()
   }
 }

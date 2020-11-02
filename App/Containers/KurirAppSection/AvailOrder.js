@@ -9,6 +9,7 @@ import styles from '../Styles/ListOrderScreenStyle'
 import { Method } from 'react-native-awesome-component'
 import moment from 'moment'
 import { Colors } from '../../Themes'
+import Scale from '../../Transforms/Scale'
 
 class AvailOrderScreen extends Component {
   estimasiModal = undefined
@@ -55,6 +56,10 @@ class AvailOrderScreen extends Component {
           <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
             <View style={{ flexDirection: 'column', flex: 1 }}>
               <Text style={styles.textName}>{item.Nama_Customer}</Text>
+              <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+                <Text style={[styles.pembayaranTitle, { lineHeight: 17 }]}>Keterangan:</Text>
+                <Text style={[styles.pembayaran, { width: Scale(195), lineHeight: 17 }]}>{item.Keterangan ? item.Keterangan : "-"}</Text>
+              </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
                 <Icons name="place" size={25} color={'red'} style={{ marginRight: 10 }} />
                 <Text style={styles.textInfoAlamat}>{item.Alamat}</Text>
@@ -107,6 +112,8 @@ class AvailOrderScreen extends Component {
             refreshing={getOrder.fetching}
             onRefresh={this.onRefresh}
             error={false}
+            emptyTitle='Tidak ada data'
+            emptyMessage='Belum ada orderan yang tersedia'
             errorMessage={'Tidak ada data order'}
             onEndReached={() => { }}
           />

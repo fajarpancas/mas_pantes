@@ -45,8 +45,7 @@ const schema = Yup.object().shape({
   ongkir: Yup.string()
     .required("Ongkos kirim harus diisi."),
   // jenisPembayaran: Yup.string(),
-  namaToko: Yup.string()
-    .required("Nama Toko harus diisi."),
+  namaToko: Yup.string().nullable(),
 })
 
 // const randomA = Math.floor(Math.random() * 100000) + 1
@@ -78,7 +77,9 @@ class SalesScreen extends Component {
       kurir: '',
       errorKurir: false,
       haveAcc: true,
-      customerId: null
+      customerId: null,
+      namaToko: '',
+      errorToko: false
     }
 
     this.initialValue = {
@@ -115,8 +116,8 @@ class SalesScreen extends Component {
 
   handleSubmit(values, actions) {
     const { barang, user, noPenjualan, createOrderRequest, dataUserCustomer } = this.props
-    const { errorCustomer, errorPembayaran, errorKurir } = this.state
-    if (!errorCustomer && !errorPembayaran) {
+    const { errorCustomer, errorPembayaran, errorKurir, errorToko } = this.state
+    if (!errorCustomer && !errorPembayaran && !errorToko) {
       let parseBarang = []
       let totalHarga = 0
 
@@ -145,9 +146,11 @@ class SalesScreen extends Component {
           Alamat: values.alamat,
           Kurir_Id: values.kurir,
           Nilai_Bayar: totalHarga,
+          Keterangan: values.keterangan,
           Ongkos_Kirim: values.ongkir,
           No_Telepon: values.telephone,
           Id_Jenis_Pembayaran: values.jenisPembayaran,
+          Nama_Toko: this.state.namaToko,
           Data_Barang: JSON.stringify(parseBarang)
         }
         Method.LoadingHelper.showLoading()
@@ -168,8 +171,9 @@ class SalesScreen extends Component {
   }
 
   componentDidMount() {
-    const { getListUserRequest, getListKurirRequest } = this.props
+    const { getListUserRequest, getListKurirRequest, getListTokoRequest } = this.props
     getListUserRequest()
+    getListTokoRequest()
     getListKurirRequest()
   }
 
@@ -221,6 +225,12 @@ class SalesScreen extends Component {
       this.setState({ errorPembayaran: true })
     }
 
+    if (props.values.namaToko) {
+      this.setState({ errorToko: false })
+    } else {
+      this.setState({ errorToko: true })
+    }
+
     // if (props.values.kurir) {
     //   this.setState({ errorKurir: false })
     // } else {
@@ -235,7 +245,7 @@ class SalesScreen extends Component {
   }
 
   renderForm = (props) => {
-    const { barang, user, noPenjualan, cekUser, kurirData, dataUserCustomer } = this.props
+    const { barang, user, noPenjualan, cekUser, toko, kurirData, dataUserCustomer } = this.props
     const { fetching, error, payload } = cekUser
     return (
       <View style={{ flex: 1 }}>
@@ -525,25 +535,23 @@ class SalesScreen extends Component {
                     setFieldValue={(value) => props.setFieldValue('jenisPembayaran', value)}
                   />
                 </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flexDirection: 'row', paddingTop: 10 }}>
                     <Text style={styles.labelStyle}>Nama Toko</Text>
                     <Text style={styles.labelStyle2}>:</Text>
                   </View>
-                  <View style={{ flex: 1 }}>
-                    <CustomInput
-                      name="namaToko"
-                      title={'namaToko'}
-                      returnKeyType="go"
-                      maxLength={15}
-                      placeholder={'Nama Cabang/Toko'}
-                      setFieldValue={props.setFieldValue}
-                      value={props.values.namaToko}
-                      error={props.errors.namaToko}
-                      styleTitle={styles.formLabelText}
-                      styleInputText={styles.formPlacholderText}
-                    />
-                  </View>
+                  <CustomSelectOption
+                    label='Nama Toko'
+                    title='Pilih Toko/Cabang'
+                    data={toko}
+                    defaultValue={this.state.namaToko}
+                    // error={errorPembayaran}
+                    error={this.state.errorToko}
+                    selectTitle={'Pilih Toko/Cabang'}
+                    errorMessage={'Toko/Cabang harus diisi'}
+                    onSelect={(value) => this.setState({ namaToko: value })}
+                    setFieldValue={(value) => props.setFieldValue('namaToko', value)}
+                  />
                 </View>
               </View>
               {/* {this.renderSearchBar()} */}
@@ -675,6 +683,11 @@ const mapStateToProps = (state) => {
     })
   }
 
+  const tokoLists = state.order.listToko
+  let toko = tokoLists.map((obj) => {
+    return { id: obj.Kd_Toko, description: obj.Nama_Toko };
+  });
+
   const userLists = state.masterData.listUser;
   let userData = userLists.map((obj) => {
     return { id: obj.User_Id, description: obj.Nama_User };
@@ -686,6 +699,7 @@ const mapStateToProps = (state) => {
   });
 
   return {
+    toko,
     userData,
     kurirData,
     barang,
@@ -698,6 +712,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getListTokoRequest: () => dispatch(OrderActions.getListTokoRequest()),
     getListUserRequest: () => dispatch(MasterDataActions.getListUserRequest()),
     getListKurirRequest: () => dispatch(MasterDataActions.getListKurirRequest()),
     createOrderRequest: (param) => dispatch(OrderActions.createOrderRequest(param)),

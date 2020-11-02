@@ -21,12 +21,16 @@ import { delay } from '../Lib/Helper';
 import { DropDownHolder } from '../Components'
 
 export function* getTracking(api, action) {
-  let lokasi = 'Gagal mendapatkan lokasi kurir'
+  let locationResult = 'Gagal mendapatkan lokasi detail kurir, koneksi kurir mungkin tidak stabil'
+  let latitude = -6.914864
+  let longitude = 107.608238
 
   Geocoder.init(API_KEY)
   Geolocation.getCurrentPosition(
     (position) => {
-      console.log(position)
+      console.tron.error(position)
+      latitude = position.coords.latitude
+      longitude = position.coords.longitude
       Geocoder.from(position.coords.latitude, position.coords.longitude)
         .then(json => {
           console.log(json);
@@ -39,9 +43,9 @@ export function* getTracking(api, action) {
               fullAddress += `${addressComponent[i].long_name}.`
             }
           }
-          lokasi = fullAddress
+          locationResult = json.results[0].formatted_address
         })
-        .catch(error => console.warn(error));
+        .catch(error => console.tron.error({ error }));
     },
     (error) => {
       console.log(error.code, error.message);
@@ -53,18 +57,19 @@ export function* getTracking(api, action) {
     }
   );
 
-  yield delay(2500)
+  yield delay(3000)
 
-  console.tron.error({ thisisbrazil: lokasi })
+  console.tron.error({ thisisbrazil: locationResult })
 
   const data = yield select(SessionSelectors.getSalesId)
-  const { keterangan } = data
-  const { Id_Sales, No_Penjualan } = keterangan
+  const { Id_Sales, No_Penjualan } = data
 
   const param = {
     Id_Sales: Id_Sales,
     No_Penjualan: No_Penjualan,
-    Detail_Address: lokasi
+    Detail_Address: locationResult,
+    Lat: latitude,
+    Long: longitude
   }
 
   console.tron.error({ param })
@@ -90,6 +95,21 @@ export function* getLokasiKurir(api, action) {
   } catch (err) {
     DropDownHolder.alert('error', 'Gagal', err.message)
     yield put(TrackingActions.getLokasiKurirFailure())
+  }
+}
+
+export function* changeStatusKurir(api, action) {
+  try {
+    const { data } = action
+    const response = yield call(api.changeStatusKurir, data)
+    if (response.ok) {
+      yield put(TrackingActions.changeStatusKurirSuccess())
+    } else {
+      yield put(TrackingActions.changeStatusKurirFailure())
+    }
+  } catch (err) {
+    DropDownHolder.alert('error', 'Gagal', err.message)
+    yield put(TrackingActions.changeStatusKurirFailure())
   }
 }
 

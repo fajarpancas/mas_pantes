@@ -9,6 +9,7 @@ import Scale from '../../Transforms/Scale'
 import Modal from 'react-native-modal'
 import CustomModalDelete from '../../Components/CustomModalDelete'
 import AuthActions from '../../Redux/AuthRedux'
+import DeviceInfo from 'react-native-device-info'
 
 const privacyInform = [
   {
@@ -150,11 +151,11 @@ class ProfileScreen extends Component {
               <Text style={styles.namaToko}>{this.state.qrValue}</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2 }}>
                 <Icons name='email' style={{ marginTop: Scale(1) }} size={13} color={Colors.textGrey} />
-                <Text style={styles.namaSales}>pejuangsubuh@vs.me</Text>
+                <Text style={styles.namaSales}>-</Text>
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2 }}>
                 <Icons name='phone' size={13} color={Colors.textGrey} />
-                <Text style={styles.namaSales}>+6287847635123</Text>
+                <Text style={styles.namaSales}>-</Text>
               </View>
             </View>
             <TouchableOpacity onPress={this.showOffModal}>
@@ -182,7 +183,7 @@ class ProfileScreen extends Component {
 
           <View style={{ marginTop: 10, marginBottom: 40 }}>
             <Text style={styles.copyright}>© 2020 Toko Mas Pantes. All Rights Reserved.</Text>
-            <Text style={styles.copyright}>App Customer Section, App Version 1.0</Text>
+            <Text style={styles.copyright}>App Sales Section, App Version {DeviceInfo.getReadableVersion()}</Text>
           </View>
         </ScrollView>
         <CustomModalDelete

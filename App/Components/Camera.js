@@ -17,7 +17,7 @@ class CustomTableRow extends Component {
         this.state = {
             isVisible: false,
             cameraTypeBack: true,
-            flashMode: true,
+            flashMode: false,
         }
         this.show = this.show.bind(this)
         this.hide = this.hide.bind(this)

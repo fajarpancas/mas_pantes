@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, StatusBar, Image } from 'react-native'
+import { Text, View, TouchableOpacity, Image } from 'react-native'
 import { connect } from 'react-redux'
 import HeaderMasPantes from '../../Components/HeaderMasPantes'
 import EstimasiModal from '../../Components/EstimasiModal'
@@ -15,6 +15,7 @@ import OrdeActions from '../../Redux/OrderRedux'
 import { CustomFlatList } from '../../Components'
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Method } from 'react-native-awesome-component'
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 class ListOrder extends Component {
   constructor(props) {
@@ -62,12 +63,8 @@ class ListOrder extends Component {
       Kurir_Id: user.Id_Kurir
     }
 
-    if (listOrderNextProcess.length > 0) {
-      DropDownHolder.alert('warn', 'Gagal memproses pengiriman', 'selesaikan orderan yang sedang dalam proses pengiriman terlebih dahulu')
-    } else {
-      Method.LoadingHelper.showLoading()
-      kirimBarangRequest(param)
-    }
+    Method.LoadingHelper.showLoading()
+    kirimBarangRequest(param)
   }
 
   onConfirm(hour, minute) {
@@ -82,6 +79,86 @@ class ListOrder extends Component {
   hideShowDatePicker = () => {
     this.setState({ modalDate: !this.state.modalDate })
   }
+
+  finelocationCheckPermission = (id) => {
+    check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+      .then((result) => {
+        switch (result) {
+          case RESULTS.DENIED:
+            this.finelocationRequestPermission(id);
+            break;
+          case RESULTS.GRANTED:
+            console.tron.error('fine acc')
+            this.ambilAction(id);
+            break;
+          default:
+            break;
+        }
+      })
+      .catch((error) => {
+        console.tron.error({ err: error.message })
+      });
+  };
+
+  finelocationRequestPermission = (id) => {
+    request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+      .then((result) => {
+        switch (result) {
+          case RESULTS.DENIED:
+            DropDownHolder.alert('error', 'Gagal memproses pengiriman', 'harus mengaktifkan lokasi permission')
+            break;
+          case RESULTS.GRANTED:
+            console.tron.error('fine acc')
+            this.ambilAction(id);
+            break;
+          default:
+            break;
+        }
+      })
+      .catch((error) => {
+        console.tron.error({ err: error.message })
+      });
+  };
+
+  backgroundlocationCheckPermission = (id) => {
+    check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+      .then((result) => {
+        switch (result) {
+          case RESULTS.DENIED:
+            this.backgroundlocationRequestPermission(id);
+            break;
+          case RESULTS.GRANTED:
+            console.tron.error('bg acc')
+            this.finelocationCheckPermission(id);
+            break;
+          default:
+            break;
+        }
+      })
+      .catch((error) => {
+        console.tron.error({ err: error.message })
+      });
+  };
+
+  backgroundlocationRequestPermission = (id) => {
+    request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+      .then((result) => {
+        switch (result) {
+          case RESULTS.DENIED:
+            DropDownHolder.alert('error', 'Gagal memproses pengiriman', 'harus mengaktifkan lokasi permission')
+            break;
+          case RESULTS.GRANTED:
+            console.tron.error('bg acc')
+            this.finelocationCheckPermission(id);
+            break;
+          default:
+            break;
+        }
+      })
+      .catch((error) => {
+        console.tron.error({ err: error.message })
+      });
+  };
 
   ambilAction = (id) => {
     this.setState({ rowIdOpen: id })
@@ -184,6 +261,10 @@ class ListOrder extends Component {
               <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                 <View style={{ flexDirection: 'column', flex: 1 }}>
                   <Text style={styles.textName}>{item.Nama_Customer}</Text>
+                  <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+                    <Text style={[styles.pembayaranTitle, { lineHeight: 17 }]}>Keterangan:</Text>
+                    <Text style={[styles.pembayaran, { width: Scale(195), lineHeight: 17 }]}>{item.Keterangan ? item.Keterangan : "-"}</Text>
+                  </View>
                   <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
                     <Icons name="place" size={25} color={'red'} style={{ marginRight: 10 }} />
                     <Text style={styles.textInfoAlamat}>{item.Alamat}</Text>
@@ -192,7 +273,7 @@ class ListOrder extends Component {
                 <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                   <TouchableOpacity
                     style={item.Row_Id === this.state.rowIdOpen ? styles.cancelButton : styles.ambilButton}
-                    onPress={() => item.Row_Id === this.state.rowIdOpen ? this.batalAction() : this.ambilAction(item.Row_Id)}>
+                    onPress={() => item.Row_Id === this.state.rowIdOpen ? this.batalAction() : this.backgroundlocationCheckPermission(item.Row_Id)}>
                     <Icons
                       name={item.Row_Id === this.state.rowIdOpen ? 'close' : 'near-me'}
                       color={item.Row_Id === this.state.rowIdOpen ? 'red' : '#00b9f2'}
@@ -256,6 +337,8 @@ class ListOrder extends Component {
           refreshing={this.props.fetching}
           onRefresh={this.onRefresh}
           error={false}
+          emptyTitle='Tidak ada data'
+          emptyMessage='Belum ada orderan yang diambil'
           errorMessage={'Tidak ada data order'}
           onEndReached={() => { }}
         />

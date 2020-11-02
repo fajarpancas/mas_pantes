@@ -6,7 +6,7 @@ import styles from '../Styles/HistoryScreenStyle'
 import { Fonts, Colors } from '../../Themes'
 import Geolocation from '@react-native-community/geolocation';
 import Geocoder from 'react-native-geocoding';
-import {API_KEY} from '../../Data/Const'
+import { API_KEY } from '../../Data/Const'
 
 const dummyData = [
   {
@@ -81,38 +81,38 @@ class HistoryScreen extends Component {
   }
 
   async componentDidMount() {
-    Geocoder.init(API_KEY)
-    Geolocation.getCurrentPosition(
-      (position) => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        });
-        console.log(position)
-        Geocoder.from(position.coords.latitude, position.coords.longitude)
-          .then(json => {
-            console.log(json);
-            var addressComponent = json.results[0].address_components;
-            this.setState({
-              Address: addressComponent
-            })
-            console.log(addressComponent);
-          })
-          .catch(error => console.warn(error));
-      },
-      (error) => {
-        // See error code charts below.
-        this.setState({
-          error: error.message
-        }),
-          console.log(error.code, error.message);
-      },
-      {
-        enableHighAccuracy: false,
-        timeout: 10000,
-        maximumAge: 100000
-      }
-    );
+    // Geocoder.init(API_KEY)
+    // Geolocation.getCurrentPosition(
+    //   (position) => {
+    //     this.setState({
+    //       latitude: position.coords.latitude,
+    //       longitude: position.coords.longitude,
+    //     });
+    //     console.log(position)
+    //     Geocoder.from(position.coords.latitude, position.coords.longitude)
+    //       .then(json => {
+    //         console.log(json);
+    //         var addressComponent = json.results[0].address_components;
+    //         this.setState({
+    //           Address: addressComponent
+    //         })
+    //         console.log(addressComponent);
+    //       })
+    //       .catch(error => console.warn(error));
+    //   },
+    //   (error) => {
+    //     // See error code charts below.
+    //     this.setState({
+    //       error: error.message
+    //     }),
+    //       console.log(error.code, error.message);
+    //   },
+    //   {
+    //     enableHighAccuracy: false,
+    //     timeout: 10000,
+    //     maximumAge: 100000
+    //   }
+    // );
   }
 
   renderList = ({ item, index }) => {
@@ -155,14 +155,17 @@ class HistoryScreen extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
+      <View style={{ flex: 1, justifyContent: 'center', backgroundColor: '#f5f5f5' }}>
         <StatusBar translucent={false} hidden={false} barStyle="light-content" backgroundColor={'#ccb102'} />
         <View style={{ marginTop: 5 }}>
           <FlatList
-            data={dummyData}
+            data={[]}
             renderItem={this.renderList.bind(this)}
             keyExtractor={(item, index) => item.key}
           />
+          <Text style={[styles.titleText, { alignSelf: 'center' }]}>
+            Belum ada data
+          </Text>
         </View>
       </View>
 

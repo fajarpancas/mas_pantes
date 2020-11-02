@@ -62,6 +62,18 @@ const { Types, Creators } = createActions({
   cekUserRequest: ['data'],
   cekUserSuccess: ['payload', 'page'],
   cekUserFailure: null,
+
+  getListTokoRequest: null,
+  getListTokoSuccess: ['payload'],
+  getListTokoFailure: null,
+
+  cancelOrderRequest: ['data'],
+  cancelOrderSuccess: ['payload'],
+  cancelOrderFailure: null,
+
+  getListHistoryRequest: ['data'],
+  getListHistorySuccess: ['payload', 'page'],
+  getListHistoryFailure: null,
 })
 
 export const OrderTypes = Types
@@ -98,7 +110,12 @@ export const INITIAL_STATE = Immutable({
     User_Id: '',
     Nama_User: '',
     No_Telepon: ''
-  }
+  },
+  getListToko: DEFAULT_STATE,
+  listToko: [],
+  cancelOrder: DEFAULT_STATE,
+  getListHistory: DEFAULT_STATE,
+  listHistory: []
 })
 
 /* ------------- Selectors ------------- */
@@ -356,6 +373,49 @@ export const cekUserFailure = state =>
     }
   })
 
+export const getListTokoRequest = (state) =>
+  state.merge({ ...state, getListToko: { fetching: true, payload: null } })
+
+export const getListTokoSuccess = (state, action) => {
+  const { payload } = action
+  return state.merge({ ...state, getListToko: { fetching: false, error: null, payload }, listToko: payload })
+}
+
+// Something went wrong somewhere.
+export const getListTokoFailure = state =>
+  state.merge({ ...state, getListToko: { fetching: false, error: true, payload: null } })
+
+export const cancelOrderRequest = (state, { data }) =>
+  state.merge({ ...state, cancelOrder: { fetching: true, data, payload: null } })
+
+export const cancelOrderSuccess = (state, action) => {
+  const { payload } = action
+  return state.merge({ ...state, cancelOrder: { fetching: false, error: null, payload } })
+}
+
+// Something went wrong somewhere.
+export const cancelOrderFailure = state =>
+  state.merge({ ...state, cancelOrder: { fetching: false, error: true, payload: null } })
+
+export const getListHistoryRequest = (state, { data }) => {
+  console.tron.error({ data })
+  return state.merge({ ...state, getListHistory: { fetching: true, data, payload: null } })
+}
+
+export const getListHistorySuccess = (state, { payload, page }) => {
+  let newList = [...state.listHistory]
+  if (page === 1) {
+    newList = payload
+  } else {
+    newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+  }
+  return state.merge({ ...state, getListHistory: { fetching: false, error: null, payload }, listHistory: newList })
+}
+
+export const getListHistoryFailure = state =>
+  state.merge({ ...state, getListHistory: { fetching: false, error: true, payload: null } })
+
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -412,4 +472,16 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.CEK_USER_REQUEST]: cekUserRequest,
   [Types.CEK_USER_SUCCESS]: cekUserSuccess,
   [Types.CEK_USER_FAILURE]: cekUserFailure,
+
+  [Types.GET_LIST_TOKO_REQUEST]: getListTokoRequest,
+  [Types.GET_LIST_TOKO_SUCCESS]: getListTokoSuccess,
+  [Types.GET_LIST_TOKO_FAILURE]: getListTokoFailure,
+
+  [Types.CANCEL_ORDER_REQUEST]: cancelOrderRequest,
+  [Types.CANCEL_ORDER_SUCCESS]: cancelOrderSuccess,
+  [Types.CANCEL_ORDER_FAILURE]: cancelOrderFailure,
+
+  [Types.GET_LIST_HISTORY_REQUEST]: getListHistoryRequest,
+  [Types.GET_LIST_HISTORY_SUCCESS]: getListHistorySuccess,
+  [Types.GET_LIST_HISTORY_FAILURE]: getListHistoryFailure,
 })

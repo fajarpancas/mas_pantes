@@ -68,9 +68,9 @@ const SalesBottomTabNavigation = createBottomTabNavigator(
         ListKurir: {
             screen: stackNav(ListKurirScreen),
             navigationOptions: navigation => ({
-                title: 'List Kurir',
+                title: 'List Setor',
                 tabBarIcon: ({ focused, tintColor }) => (
-                    <Icon name="list" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
+                    <Icon name="playlist-add-check" size={28} color={focused ? '#ccb102' : '#b5b3ae'} />
                 ),
             }),
         },

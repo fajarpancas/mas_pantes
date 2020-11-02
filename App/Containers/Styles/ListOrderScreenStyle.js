@@ -149,6 +149,49 @@ export default StyleSheet.create({
     padding: 12,
     color: Colors.textBlack
   },
+  namaKurirBold: {
+    fontFamily: Fonts.type.acuminProRegular,
+    color: Colors.textGrey,
+    fontSize: 12
+  },
+  statusTextKurirAktif: {
+    fontFamily: Fonts.type.acuminProMedium,
+    color: 'green',
+    fontSize: 10,
+    marginLeft: Scale(5)
+  },
+  statusTextKurir: {
+    fontFamily: Fonts.type.acuminProMedium,
+    color: 'red',
+    fontSize: 10,
+    marginLeft: Scale(5)
+  },
+  statusBullet: {
+    marginTop: Scale(2),
+    marginLeft: Scale(15),
+    height: Scale(7),
+    width: Scale(7),
+    borderRadius: 7,
+    backgroundColor: 'red',
+  },
+  statusBulletAktif: {
+    marginTop: Scale(2),
+    marginLeft: Scale(15),
+    height: Scale(7),
+    width: Scale(7),
+    borderRadius: 7,
+    backgroundColor: 'green',
+  },
+  valueKurirBold: {
+    fontFamily: Fonts.type.acuminProMedium,
+    color: Colors.textBlack,
+    fontSize: 13
+  },
+  valueKurirBoldRed: {
+    fontFamily: Fonts.type.acuminProMedium,
+    color: Colors.alertError,
+    fontSize: 13,
+  },
   textKirim: {
     fontFamily: Fonts.type.acuminProMedium,
     marginTop: 2,
@@ -305,7 +348,7 @@ export default StyleSheet.create({
     textAlign: 'center'
   },
   terimaButton: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.alertSuccess,
     borderColor: Colors.alertSuccess,
     borderWidth: 1,
     width: Scale(335),
@@ -329,7 +372,7 @@ export default StyleSheet.create({
   terimaText: {
     fontFamily: Fonts.type.acuminProMedium,
     fontSize: 14,
-    color: Colors.alertSuccess,
+    color: Colors.white,
     textAlign: 'center'
   },
   rejectText: {
@@ -360,7 +403,6 @@ export default StyleSheet.create({
   statusText: {
     fontFamily: Fonts.type.acuminProBold,
     fontSize: 14,
-    marginTop: 13,
     marginBottom: 1,
     color: Colors.textBlack,
     textAlign: 'left'
@@ -382,14 +424,97 @@ export default StyleSheet.create({
   },
   getlokasiWrapper: {
     marginTop: Scale(10),
-    height: 40,
+    height: 30,
+    paddingHorizontal: 12,
     borderRadius: 4,
     backgroundColor: Colors.alertInfo,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
   },
+  getlokasiWrapperDisabled: {
+    marginTop: Scale(10),
+    height: 30,
+    paddingHorizontal: 12,
+    borderRadius: 4,
+    backgroundColor: Colors.alertInfo,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    opacity: 0.5
+  },
   getLokasiText: {
     color: 'white',
+    fontFamily: Fonts.type.acuminProExtraLight,
+    fontSize: 12
+  },
+  border: {
+    borderTopColor: '#c7c6c1',
+    borderTopWidth: 0.6,
+    flex: 1
+  },
+  storModalContainer: {
+    backgroundColor: 'white',
+    padding: 15,
+    width: Scale(300),
+    alignSelf: 'center',
+    borderRadius: 6
+  },
+  textStorconfirm: {
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 13,
+    marginHorizontal: Scale(20),
+    color: Colors.textGrey,
+    lineHeight: 18,
+    textAlign: 'center'
+  },
+  textStorconfirmTitle: {
+    fontFamily: Fonts.type.acuminProMedium,
+    fontSize: 18,
+    marginBottom: 10,
+    marginTop: 5,
+    color: Colors.textBlack,
+    textAlign: 'center'
+  },
+  tandaiButton: {
+    height: Scale(35),
+    backgroundColor: Colors.alertSuccess,
+    marginTop: 20,
+    borderRadius: 4,
+    justifyContent: 'center',
+    marginHorizontal: 10
+  },
+  batalkanButton: {
+    height: Scale(35),
+    backgroundColor: Colors.alertError,
+    marginTop: 20,
+    borderRadius: 4,
+    justifyContent: 'center',
+    marginHorizontal: 10
+  },
+  tandaiText: {
+    fontFamily: Fonts.type.acuminProMedium,
+    color: Colors.white,
+    textAlign: 'center'
+  },
+  batalButton: {
+    height: Scale(35),
+    marginTop: 5,
+    borderRadius: 4,
+    justifyContent: 'center'
+  },
+  batalText: {
+    fontFamily: Fonts.type.acuminProMedium,
+    color: Colors.textGrey,
+    textAlign: 'center'
+  },
+  batalkanWrapper:{
+    backgroundColor: Colors.alertError,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    height: Scale(33),
+    marginTop: 10,
+    borderRadius: 4
   }
 })

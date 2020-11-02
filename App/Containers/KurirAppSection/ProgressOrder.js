@@ -8,6 +8,7 @@ import OrderActions from '../../Redux/OrderRedux'
 import { CustomFlatList } from '../../Components'
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import moment from 'moment'
+import Scale from '../../Transforms/Scale'
 
 class ProgressOrderScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -44,6 +45,10 @@ class ProgressOrderScreen extends Component {
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
                 <Icons name="place" size={25} color={'red'} style={{ marginRight: 10 }} />
                 <Text style={styles.textInfoAlamat}>{item.Alamat}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+                <Text style={[styles.pembayaranTitle, { lineHeight: 17 }]}>Keterangan:</Text>
+                <Text style={[styles.pembayaran, { width: Scale(195), lineHeight: 17 }]}>{item.Keterangan ? item.Keterangan : "-"}</Text>
               </View>
             </View>
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
@@ -94,6 +99,8 @@ class ProgressOrderScreen extends Component {
             refreshing={getOrderProcess.fetching}
             onRefresh={this.onRefresh}
             error={false}
+            emptyTitle='Tidak ada data'
+            emptyMessage='Belum ada orderan yang sedang dalam proses pengiriman'
             errorMessage={'Tidak ada data order'}
             onEndReached={() => { }}
           />

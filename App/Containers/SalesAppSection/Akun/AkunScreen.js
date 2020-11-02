@@ -7,6 +7,7 @@ import styles from '../../Styles/AkunScreenStyle'
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import CustomModalDelete from '../../../Components/CustomModalDelete'
 import AuthActions from '../../../Redux/AuthRedux'
+import DeviceInfo from 'react-native-device-info'
 
 const privacyInform = [
     {
@@ -73,11 +74,16 @@ class AkunScreen extends Component {
     }
 
     render() {
-        const {user} = this.props
+        const { user } = this.props
         let name = ''
+        let namaToko = '-'
 
-        if(user && user.Nama_User){
+        if (user && user.Nama_User) {
             name = user.Nama_User
+        }
+
+        if (user && user.Nama_Toko) {
+            namaToko = user.Nama_Toko
         }
 
         return (
@@ -95,7 +101,7 @@ class AkunScreen extends Component {
                             <Text style={styles.namaSales}>{name}
                                 <Text style={styles.sales}></Text>
                             </Text>
-                            <Text style={styles.namaToko}>-</Text>
+                            <Text style={styles.namaToko}>{namaToko}</Text>
                         </View>
                     </View>
 
@@ -111,7 +117,7 @@ class AkunScreen extends Component {
 
                     <View style={{ marginTop: 10 }}>
                         <Text style={styles.copyright}>© 2020 Toko Mas Pantes. All Rights Reserved.</Text>
-                        <Text style={styles.copyright}>App Sales Section, App Version 1.0</Text>
+                        <Text style={styles.copyright}>App Sales Section, App Version {DeviceInfo.getReadableVersion()}</Text>
                     </View>
                 </View>
                 <CustomModalDelete

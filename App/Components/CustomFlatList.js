@@ -27,7 +27,7 @@ export default class CustomFlatList extends Component {
           <FlatList
             data={this.props.data}
             renderItem={this.props.renderItem}
-            refreshing={false}
+            refreshing={this.props.refreshing}
             onRefresh={this.props.onRefresh}
             keyExtractor={(item, index) => index.toString()}
             ListHeaderComponent={this.props.ListHeaderComponent}

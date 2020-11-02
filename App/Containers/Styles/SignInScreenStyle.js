@@ -90,5 +90,16 @@ export default StyleSheet.create({
     fontFamily: Fonts.type.acuminProRegular,
     fontSize: 12,
     color: Colors.alertInfo,
+  },
+  buatAkun: {
+    fontFamily: Fonts.type.azoSansRegular,
+    color: Colors.textBlack,
+    fontSize: 13
+  },
+  buatAkunBlue: {
+    fontFamily: Fonts.type.azoSansRegular,
+    color: '#00BFFF',
+    fontSize: 13,
+    marginLeft: 3
   }
 })

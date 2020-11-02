@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, KeyboardAvoidingView } from 'react-native'
+import { View, Text, KeyboardAvoidingView } from 'react-native'
 import { connect } from 'react-redux'
 import styles from '../Styles/InboxScreenStyle'
 import { Fonts, Colors } from '../../Themes'
@@ -22,10 +22,11 @@ class InboxScreen extends Component {
     }
   })
 
-  render () {
+  render() {
     return (
-      <ScrollView style={styles.container}>
-      </ScrollView>
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <Text style={{ alignSelf: 'center' }}>Belum ada inbox</Text>
+      </View>
     )
   }
 }

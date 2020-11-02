@@ -1,6 +1,5 @@
 import { Platform, PushNotificationIOS, Alert } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
-import firebase from 'react-native-firebase'
 import { DropDownHolder } from '../Components'
 import { connect } from 'react-redux'
 import { getLocation } from './Location'
@@ -8,28 +7,24 @@ import NavigationServices from '../Services/NavigationServices'
 import InboxAction from '../Redux/InboxRedux'
 import TrackingAction from '../Redux/TrackingRedux'
 import SessionAction from '../Redux/SessionRedux'
+import messaging from '@react-native-firebase/messaging';
 
 const OS = Platform.OS
 
 const displayNotification = (notification) => {
-  console.tron.log('displayNotification ', notification, notification.data, notification.body)
   try {
-    const localNotification = new firebase.notifications.Notification({
-      sound: 'default',
-      show_in_foreground: true,
-    })
-      .setNotificationId(notification.notificationId)
-      .setTitle(notification.title)
-      .setSubtitle(notification.body)
-      .setBody(notification.body)
-      .setData(notification.data)
-      .setSound("default")
-      .android.setDefaults()
-      .android.setVisibility(firebase.notifications.Android.Visibility.Public)
-      .android.setChannelId('test-channel')
-      .android.setSmallIcon('ic_launcher')
-      .android.setVibrate([300])
-      .android.setPriority(firebase.notifications.Android.Importance.High)
+    const localNotification = new firebase.notifications.Notification(notification)
+    localNotification.android.setChannelId('pantes-gold');
+    localNotification.android.setSmallIcon('ic_launcher');
+    localNotification.android.setAutoCancel(true);
+    localNotification.android.setPriority(
+      firebase.notifications.Android.Priority.High,
+    );
+    localNotification.android.setOngoing(false);
+    localNotification.android.setVibrate([300]);
+    // change small icon
+    // notification.android.setSmallIcon('ic_stat_2')
+    localNotification.setSound('default');
 
     firebase
       .notifications()
@@ -55,22 +50,22 @@ function notificationListener(props) {
   })
 
   firebase.notifications().onNotification((notification) => {
-    console.tron.log('onNotification 23', notification)
-    const { android, data } = notification
-    const { clickAction } = android
-    const { actions } = data
+    // console.tron.log('onNotification 23', notification)
+    // const { android, data } = notification
+    // const { clickAction } = android
+    // const { actions } = data
     try {
-      if (clickAction === 'get_lokasi') {
-        DropDownHolder.alert('info', `${notification.title}`, `${notification.body}`)
-        props.saveSalesId(JSON.parse(actions))
-        props.tracking()
-      }
+      // DropDownHolder.alert('info', `${notification.title}`, `${notification.body}`)
+      // if (clickAction === 'get_lokasi') {
+      //   props.saveSalesId(JSON.parse(actions))
+      //   props.tracking()
+      // }
 
-      if (clickAction === 'info_lokasi') {
-        props.saveTrackingLokasi(JSON.parse(actions))
-        props.setTrackingFinish()
-        NavigationServices.navigate("KurirLocationTracking")
-      }
+      // if (clickAction === 'info_lokasi') {
+      //   props.saveTrackingLokasi(JSON.parse(actions))
+      //   props.setTrackingFinish()
+      //   NavigationServices.navigate("KurirLocationTracking")
+      // }
 
       displayNotification(notification)
     } catch (err) {
@@ -78,15 +73,31 @@ function notificationListener(props) {
     }
   })
 
-  firebase.notifications().onNotificationOpened(({ notification }) => {
+  firebase.notifications().onNotificationOpened((notification) => {
     console.tron.display({
       name: 'FCM_NOTIFICATION', preview: 'On Notification Open',
       value: notification,
       important: true
     })
+    // const { android, data } = notification
+    // const { clickAction } = android
+    // const { actions } = data
     try {
-      console.tron.log('onNotificationOpen ', notification.data)
+    //   console.tron.log('onNotificationOpen ', notification.data)
       // props.setActionInbox(notification.data)
+      // if (clickAction === 'get_lokasi') {
+      //   DropDownHolder.alert('info', `${notification.title}`, `${notification.body}`)
+      //   props.saveSalesId(JSON.parse(actions))
+      //   props.tracking()
+      // }
+
+      // if (clickAction === 'info_lokasi') {
+      //   props.saveTrackingLokasi(JSON.parse(actions))
+      //   props.setTrackingFinish()
+      //   NavigationServices.navigate("KurirLocationTracking")
+      // }
+
+      // NavigationServices.navigate('')
       clearNotification()
     } catch (err) {
       console.tron.error('FCM_NOTIFICATION.onOpen')
@@ -94,7 +105,7 @@ function notificationListener(props) {
     }
   })
 
-  firebase.notifications().getInitialNotification().then(({ notification }) => {
+  firebase.notifications().getInitialNotification().then((notification) => {
     // props.addInbox([notification._data])
     console.tron.display({
       name: 'FCM_NOTIFICATION', preview: 'On Notification Open',
@@ -102,9 +113,9 @@ function notificationListener(props) {
       important: true
     })
     try {
-      console.tron.log('getInitialNotification ', notification.data)
+
       // props.setActionInbox(notification.data)
-      clearNotification()
+      // clearNotification()
     } catch (err) {
       console.tron.error('FCM_NOTIFICATION.onOpenBackground')
       console.tron.log('err FCM_NOTIFICATION.onOpenBackground', err.message)

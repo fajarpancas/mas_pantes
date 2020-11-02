@@ -14,13 +14,16 @@ import Geocoder from 'react-native-geocoding';
 import SessionActions from '../Redux/SessionRedux'
 
 export function* getLocation() {
-
-    let lokasi = ''
+    let locationResult = 'Gagal mendapatkan lokasi detail kurir, koneksi kurir mungkin tidak stabil'
+    let latitude = -6.914864
+    let longitude = 107.608238
 
     Geocoder.init(API_KEY)
     Geolocation.getCurrentPosition(
         (position) => {
-            console.log(position)
+            console.tron.error(position)
+            latitude = position.coords.latitude
+            longitude = position.coords.longitude
             Geocoder.from(position.coords.latitude, position.coords.longitude)
                 .then(json => {
                     console.log(json);
@@ -33,9 +36,17 @@ export function* getLocation() {
                             fullAddress += `${addressComponent[i].long_name}.`
                         }
                     }
-                    lokasi = fullAddress
+                    locationResult = json.results[0].formatted_address
+
+                    const param = {
+                        latitude,
+                        longitude,
+                        locationResult
+                    }
+
+                    return param
                 })
-                .catch(error => console.warn(error));
+                .catch(error => console.tron.error({ error }));
         },
         (error) => {
             console.log(error.code, error.message);
@@ -46,6 +57,4 @@ export function* getLocation() {
             maximumAge: 100000
         }
     );
-    yield put(SessionActions.upIndexing())
-    console.tron.error({ fullAddress })
 }

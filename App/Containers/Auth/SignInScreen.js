@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   View,
   Text,
+  Linking,
   Image
 } from 'react-native'
 import I18n from '../../I18n'
@@ -70,6 +71,10 @@ class SignInScreen extends Component {
 
   showOffModal = () => {
     this.setState({ modal: !this.state.modal })
+  }
+
+  createAccount = () => {
+    Linking.openURL('http://pantesgold.motekarindo.com/register')
   }
 
   modalPickUser = () => {
@@ -196,6 +201,12 @@ class SignInScreen extends Component {
               </Text>
               </TouchableOpacity>
             }
+            {/* <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 15 }}>
+              <Text style={styles.buatAkun}>Belum punya Akun?</Text>
+              <TouchableOpacity onPress={this.createAccount}>
+                <Text style={styles.buatAkunBlue}>Buat akun baru</Text>
+              </TouchableOpacity>
+            </View> */}
           </View>
         </Styled.Container>
       </KeyboardAwareScrollView>

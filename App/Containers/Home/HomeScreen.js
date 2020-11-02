@@ -35,11 +35,11 @@ class HomeScreen extends Component {
     ),
     headerRight: () => (
       <View style={{ marginRight: 20, marginTop: 10 }}>
-        <View style={styles.notificationWrapper}>
+        {/* <View style={styles.notificationWrapper}>
           <Text style={styles.notificationTotal}>
             10
           </Text>
-        </View>
+        </View> */}
         <TouchableOpacity onPress={() => navigation.navigate('InboxScreen')}>
           <Icon name="notifications" size={26} color={Colors.white} />
         </TouchableOpacity>

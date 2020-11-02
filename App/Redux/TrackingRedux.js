@@ -15,6 +15,10 @@ const { Types, Creators } = createActions({
   saveTrackingLokasi: ['lokasi'],
   setTrackingRequest: null,
   setTrackingFinish: null,
+
+  changeStatusKurirRequest: ['data'],
+  changeStatusKurirSuccess: ['payload'],
+  changeStatusKurirFailure: null
 })
 
 export const TrackingTypes = Types
@@ -27,7 +31,8 @@ export const INITIAL_STATE = Immutable({
   getLokasiKurir: DEFAULT_STATE,
   lokasiData: [],
   noPenjualanTracking: null,
-  trackingRequest: false
+  trackingRequest: false,
+  statusKurir: DEFAULT_STATE
 })
 
 /* ------------- Selectors ------------- */
@@ -77,6 +82,17 @@ export const getLokasiKurirSuccess = (state) => {
 export const getLokasiKurirFailure = state =>
   state.merge({ ...state, getLokasiKurir: { fetching: false, error: true, payload: null } })
 
+export const changeStatusKurirRequest = (state, { data }) =>
+  state.merge({ ...state, statusKurir: { fetching: true, data, payload: null } })
+
+// successful api lookup
+export const changeStatusKurirSuccess = (state) => {
+  return state.merge({ ...state, statusKurir: { fetching: false, error: null, payload: 'success' } })
+}
+
+// Something went wrong somewhere.
+export const changeStatusKurirFailure = state =>
+  state.merge({ ...state, statusKurir: { fetching: false, error: true, payload: null } })
 
 
 /* ------------- Hookup Reducers To Types ------------- */
@@ -93,4 +109,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.SAVE_TRACKING_LOKASI]: saveTrackingLokasi,
   [Types.SET_TRACKING_REQUEST]: setTrackingRequest,
   [Types.SET_TRACKING_FINISH]: setTrackingFinish,
+
+  [Types.CHANGE_STATUS_KURIR_REQUEST]: changeStatusKurirRequest,
+  [Types.CHANGE_STATUS_KURIR_SUCCESS]: changeStatusKurirSuccess,
+  [Types.CHANGE_STATUS_KURIR_FAILURE]: changeStatusKurirFailure,
 })

@@ -359,15 +359,15 @@ class DetailOrderScreen extends Component {
                     }
 
                     {!dataOrder.viewOnly &&
-                    <View style={{ marginBottom: 7 }}>
-                        {this.state.errorFoto ? (
-                            <Text style={styles.textError}>
-                                Foto harus diisi
-                            </Text>
-                        ) : (
-                                <Text style={styles.textError} />
-                            )}
-                    </View>}
+                        <View style={{ marginBottom: 7 }}>
+                            {this.state.errorFoto ? (
+                                <Text style={styles.textError}>
+                                    Foto harus diisi
+                                </Text>
+                            ) : (
+                                    <Text style={styles.textError} />
+                                )}
+                        </View>}
                     {!dataOrder.viewOnly &&
                         <View style={{ marginVertical: 20 }}>
                             <TouchableOpacity
@@ -375,11 +375,11 @@ class DetailOrderScreen extends Component {
                                 style={styles.terimaButton}>
                                 <Text style={styles.terimaText}>Terima</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                                 onPress={this.reject}
                                 style={styles.rejectButton}>
                                 <Text style={styles.rejectText}>Reject</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
                     }
 
@@ -439,7 +439,18 @@ const mapStateToProps = (state, props) => {
     console.tron.error({ dataOrder })
 
     let barang = []
-    if (dataOrder && dataOrder.Order_Detail && dataOrder.Order_Detail.length > 0) {
+    if (dataOrder && dataOrder.isSales) {
+        console.tron.error('console cude')
+        const { Detail_Barang } = dataOrder
+        for (let i = 0; i < Detail_Barang.length; i++) {
+            barang.push({
+                no: i + 1,
+                Nama_Barang: Detail_Barang[i].Nama_Barang,
+                harga: Detail_Barang[i].Harga,
+                foto: Detail_Barang[i].Url_Foto_Barang,
+            })
+        }
+    } else {
         const { Order_Detail } = dataOrder
         for (let i = 0; i < Order_Detail.length; i++) {
             barang.push({

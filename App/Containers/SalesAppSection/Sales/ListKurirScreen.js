@@ -217,7 +217,7 @@ class ListKurirScreen extends Component {
                         error={false}
                         errorMessage={'Tidak ada data'}
                         emptyTitle={'Data Kosong'}
-                        emptyMessage={'Belum ada order yang dibuat'}
+                        emptyMessage={'Belum ada orderan yang selesai'}
                         onEndReached={() => { }}
                     />
                 </View>

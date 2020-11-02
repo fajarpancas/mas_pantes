@@ -2,9 +2,10 @@ import { call, put, all, take, select } from 'redux-saga/effects'
 import AuthActions from '../Redux/AuthRedux'
 import { DropDownHolder } from '../Components'
 import NavigationServices from '../Services/NavigationServices'
-import SessionActions from '../Redux/SessionRedux'
+import SessionActions, { SessionSelectors } from '../Redux/SessionRedux'
 import OrderActions, { OrderTypes, OrderSelectors } from '../Redux/OrderRedux'
 import { InboxSelectors } from '../Redux/InboxRedux'
+import TrackingAcions from '../Redux/TrackingRedux'
 import { delay } from '../Lib/Helper';
 import { Method } from 'react-native-awesome-component';
 
@@ -28,12 +29,12 @@ export function* login(api, action) {
         token_fcm: fcmToken
       }
 
-      const saveFCM = yield call(api.saveTokenFCM, paramFCM)
-      if(saveFCM.ok){
-        console.tron.error('saveFCMSuccess')
-      }
-
       api.api.setHeaders({ Authorization: `bearer ${token_user}` });
+
+      const saveFCM = yield call(api.saveTokenFCM, paramFCM)
+      if (saveFCM.ok) {
+        // DropDownHolder.alert('success', 'FCM Token', 'save fcm Token to db success')
+      }
 
       if (Id_Role === 1) {
         const param = {
@@ -43,27 +44,13 @@ export function* login(api, action) {
         NavigationServices.navigate('AppSales')
         yield put(OrderActions.getSalesListOrderRequest(param))
       } else if (Id_Role === 2) {
-        let listKirim = [];
+        const { Id_Kurir } = data
         const param = {
-          page: 1,
-          Kurir_Id: data.Id_Kurir
+          Kurir_Id: Id_Kurir,
+          Status_Active: 1
         }
-        yield put(OrderActions.getOrderNextProcessRequest(param))
-        const action = yield take([
-          OrderTypes.GET_ORDER_NEXT_PROCESS_SUCCESS,
-          OrderTypes.GET_ORDER_NEXT_PROCESS_FAILURE,
-        ]);
-
-        if (action.type === OrderTypes.GET_ORDER_NEXT_PROCESS_SUCCESS) {
-          listKirim = yield select(OrderSelectors.getListOrderNextProcess);
-        }
-
-        console.tron.error({ listKirim })
-        // if (listKirim.length > 0) {
-        //   NavigationServices.navigate('KurirLocationTracking', { data: listKirim[0] })
-        // } else {
+        yield put(TrackingAcions.changeStatusKurirRequest(param))
         NavigationServices.navigate('AppKurir')
-        // }
       } else if (Id_Role === 3) {
         NavigationServices.navigate('App')
       }
@@ -89,6 +76,16 @@ export function* login(api, action) {
 export function* logout(api, action) {
   try {
     Method.LoadingHelper.showLoading()
+    const userSession = yield select(SessionSelectors.getUser)
+    if (userSession.Id_Role === 2) {
+      const { Id_Kurir } = userSession
+      const param = {
+        Kurir_Id: Id_Kurir,
+        Status_Active: 0
+      }
+      yield put(TrackingAcions.changeStatusKurirRequest(param))
+    }
+
     const response = yield call(api.logout)
     if (response.ok) {
       yield all([

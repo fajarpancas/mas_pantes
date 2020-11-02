@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, KeyboardAvoidingView } from 'react-native'
+import { View, Text, KeyboardAvoidingView } from 'react-native'
 import { connect } from 'react-redux'
+import { ErrorContent } from '../../Components'
 import { Fonts, Colors } from '../../Themes'
 import styles from '../Styles/KebijakanPrivasiScreenStyle'
 
@@ -22,12 +23,13 @@ class KebijakanPrivasiScreen extends Component {
     }
   })
 
-  render () {
+  render() {
     return (
-      <ScrollView style={styles.container}>
-        <KeyboardAvoidingView behavior='position'>
-        </KeyboardAvoidingView>
-      </ScrollView>
+      <View style={styles.container}>
+        <ErrorContent
+          title="Tidak ada data"
+          message="Mohon maaf, data Kebijakan Privasi belum tersedia" />
+      </View>
     )
   }
 }

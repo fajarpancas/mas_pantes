@@ -58,7 +58,11 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
   const kurirSetorList = (param) => api.post('api/detail-setor-by-sales', param)
   const saveTokenFCM = (param) => api.post('api/save-token-fcm', param)
   const getLokasiKurir = (param) => api.post('api/push-notif', param)
+  const cancelOrder = (param) => api.post('api/cancel-order', param)
   const postLokasiKurir = (param) => api.post('api/save-lokasi-tracking', param)
+  const changeStatusKurir = (param) => api.post('api/status-kurir', param)
+  const getListToko = () => api.get('/api/list-toko')
+  const getListOrderHistory = (param) => api.post('/api/get-list', param)
   // ------
   // STEP 3
   // ------
@@ -97,7 +101,11 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
     cekUser,
     saveTokenFCM,
     getLokasiKurir,
-    postLokasiKurir
+    postLokasiKurir,
+    getListToko,
+    cancelOrder,
+    changeStatusKurir,
+    getListOrderHistory
   }
 }
 

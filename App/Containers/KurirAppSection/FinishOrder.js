@@ -8,6 +8,7 @@ import Icons from 'react-native-vector-icons/MaterialIcons'
 import styles from '../Styles/ListOrderScreenStyle'
 import moment from 'moment'
 import { Colors } from '../../Themes'
+import Scale from '../../Transforms/Scale'
 
 class FinishOrderScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -44,6 +45,10 @@ class FinishOrderScreen extends Component {
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
                 <Icons name="place" size={25} color={'red'} style={{ marginRight: 10 }} />
                 <Text style={styles.textInfoAlamat}>{item.Alamat}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+                <Text style={[styles.pembayaranTitle, { lineHeight: 17 }]}>Keterangan:</Text>
+                <Text style={[styles.pembayaran, { width: Scale(195), lineHeight: 17 }]}>{item.Keterangan ? item.Keterangan : "-"}</Text>
               </View>
             </View>
             <View style={{ alignItems: 'center' }}>
@@ -93,10 +98,11 @@ class FinishOrderScreen extends Component {
             refreshing={getOrder.fetching}
             onRefresh={this.onRefresh}
             error={false}
+            emptyTitle='Tidak ada data'
+            emptyMessage='Belum ada orderan yang selesai di kirim'
             errorMessage={'Tidak ada data order'}
             onEndReached={() => { }}
           />
-
         </View>
       </View>
     )

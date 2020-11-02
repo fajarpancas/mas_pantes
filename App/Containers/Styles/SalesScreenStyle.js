@@ -4,6 +4,11 @@ import Scale from '../../Transforms/Scale'
 
 export default StyleSheet.create({
   ...ApplicationStyles.screen,
+  map: {
+    ...StyleSheet.absoluteFillObject,
+    height:Scale(1000),
+    top: Scale(-300)
+  },
   preview: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -433,6 +438,13 @@ export default StyleSheet.create({
     fontFamily: Fonts.type.acuminProMedium,
     marginVertical: 20,
     lineHeight: 18
+  },
+  latlong: {
+    fontSize: 14,
+    color: Colors.textGrey,
+    width: Scale(300),
+    lineHeight: 18,
+    fontFamily: Fonts.type.acuminProMedium,
   },
   address: {
     fontSize: 14,

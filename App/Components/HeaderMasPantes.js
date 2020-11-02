@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import {
     View,
     Text,
@@ -7,13 +8,19 @@ import { Colors, Fonts } from '../Themes'
 
 class HeaderMasPantes extends Component {
     render() {
+        const { user } = this.props
+        let namaToko = '-'
+
+        if (user && user.Nama_Toko) {
+            namaToko = user.Nama_Toko
+        }
         return (
             <View>
                 <View style={styles.headerWrapper}>
                     <Text style={styles.textTokoMas}>TOKO MAS PANTES</Text>
                 </View>
                 <View style={styles.headerWrapperCabang}>
-                    <Text style={styles.textCabang}>Cabang : Garage City Mall</Text>
+                    <Text style={styles.textCabang}>Cabang : {namaToko}</Text>
                 </View>
             </View>
         )
@@ -46,4 +53,10 @@ const styles = {
     }
 }
 
-export default HeaderMasPantes;
+const mapStateToProps = (state) => {
+    return {
+        user: state.session.userSession,
+    }
+}
+
+export default connect(mapStateToProps, null)(HeaderMasPantes)
