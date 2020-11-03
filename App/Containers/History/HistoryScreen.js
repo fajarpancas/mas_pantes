@@ -5,49 +5,9 @@ import Icons from 'react-native-vector-icons/MaterialIcons'
 import styles from '../Styles/HistoryScreenStyle'
 import { Fonts, Colors } from '../../Themes'
 import OrderAction from '../../Redux/OrderRedux'
-
-const dummyData = [
-  {
-    key: 1,
-    transactionCode: 'Order #928322',
-    date: '1 Maret 2020',
-    itemName: 'Liontin Emas Discoball',
-    gram: '0.644 gr',
-    price: 'Rp. 1.632.000',
-    tokoName: 'Toko Mas Pantes CSB',
-    totalPoint: '10 Points'
-  },
-  {
-    key: 2,
-    transactionCode: 'Order #928323',
-    date: '1 Maret 2020',
-    itemName: 'Liontin Emas Discoball',
-    gram: '0.644 gr',
-    price: 'Rp. 1.632.000',
-    tokoName: 'Toko Mas Pantes CSB',
-    totalPoint: '23 Points'
-  },
-  {
-    key: 3,
-    transactionCode: 'Order #928324',
-    date: '1 Maret 2020',
-    itemName: 'Liontin Emas Discoball',
-    gram: '0.644 gr',
-    price: 'Rp. 1.632.000',
-    tokoName: 'Toko Mas Pantes CSB',
-    totalPoint: '40 Points'
-  },
-  {
-    key: 4,
-    transactionCode: 'Order #928325',
-    date: '1 Maret 2020',
-    itemName: 'Liontin Emas Discoball',
-    gram: '0.644 gr',
-    price: 'Rp. 1.632.000',
-    tokoName: 'Toko Mas Pantes CSB',
-    totalPoint: '5 Points'
-  }
-]
+import { CustomFlatList } from '../../Components'
+import Scale from '../../Transforms/Scale'
+import moment from 'moment'
 
 class HistoryScreen extends Component {
 
@@ -79,14 +39,15 @@ class HistoryScreen extends Component {
   }
 
   componentDidMount() {
+    console.tron.error('get')
     this.onRefresh()
-  } 
+  }
 
   onRefresh = () => {
     const { getListHistoryRequest, user } = this.props
     const { Id_User } = user
     const param = {
-      Id_User,
+      User_Id: Id_User,
       page: 1
     }
     getListHistoryRequest(param)
@@ -94,56 +55,74 @@ class HistoryScreen extends Component {
 
   renderList = ({ item, index }) => {
     return (
-      <TouchableOpacity style={styles.listWrapper} onPress={() => this.props.navigation.navigate('HistoryDetailScreen')}>
-        <View style={{ paddingHorizontal: 15, paddingBottom: 15 }}>
+      <View style={{ flex: 1, marginBottom: 10 }}>
+        <View style={styles.listOrderWrapper}>
           <View style={{ flexDirection: 'row' }}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.codeOrder}>{item.transactionCode}</Text>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.date}>{item.date}</Text>
-            </View>
+            <Text style={[{ flex: 1 }, styles.textInfo]}>{item.No_Penjualan}</Text>
+            <Text style={styles.textInfo}>{moment(item.Tgl_Penjualan, 'YYYY-MM-DD hh:mm:ss').format('DD MMM YYYY, hh:mm')}</Text>
           </View>
-
-          <View style={{ flexDirection: 'row', marginTop: 10 }}>
-            <View style={{ flex: 2 }}>
-              <Text style={styles.valueText}>{item.itemName}</Text>
+          <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
+            <View style={{ flexDirection: 'column', flex: 1 }}>
+              <Text style={styles.textName}>{item.Nama_Customer}</Text>
+              {/* <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+                <Text style={[styles.pembayaranTitle, { lineHeight: 17 }]}>Keterangan:</Text>
+                <Text style={[styles.pembayaran, { width: Scale(195), lineHeight: 17 }]}>{item.Keterangan ? item.Keterangan : "-"}</Text>
+              </View> */}
+              <Text style={styles.textInfoAlamat}>Nilai Bayar: {item.Nilai_Bayar}</Text>
+              <Text style={styles.textInfoAlamat}>Ongkos Kirim: {item.Ongkos_Kirim}</Text>
+              {!item.Jam_Kirim && !item.Jam_Terima &&
+                <View style={{ marginTop: 5 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
+                    <Text style={styles.textInfoKirim}>Orderan pending, masih menunggu kurir</Text>
+                    <Icons name="timer" color={'red'} size={20} style={{ alignSelf: 'center' }} />
+                  </View>
+                  <Text style={styles.textInfoAlamat}>Jam Kemas: {moment(item.Jam_Kemas, 'YYYY-MM-DD hh:mm:ss').format('DD MMM YYYY, hh:mm')}</Text>
+                </View>}
+                {item.Jam_Kirim && !item.Jam_Terima &&
+                <View style={{ marginTop: 5 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
+                    <Text style={styles.textInfoKirim}>Orderan sedang dalam pengiriman</Text>
+                    <Icons name="directions-bike" color={'#00b9f2'} size={20} style={{ alignSelf: 'center' }} />
+                  </View>
+                  <Text style={styles.textInfoAlamat}>Jam Kirim: {moment(item.Jam_Kirim, 'YYYY-MM-DD hh:mm:ss').format('DD MMM YYYY, hh:mm')}</Text>
+                </View>}
+                {item.Jam_Terima &&
+                <View style={{ marginTop: 5 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
+                    <Text style={styles.textInfoKirim}>Orderan sudah diterima</Text>
+                    <Icons name="check" color={'lightgreen'} size={20} style={{ alignSelf: 'center' }} />
+                  </View>
+                  <Text style={styles.textInfoAlamat}>Jam Terima: {moment(item.Jam_Terima, 'YYYY-MM-DD hh:mm:ss').format('DD MMM YYYY, hh:mm')}</Text>
+                </View>}
             </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.valueText}>{item.gram}</Text>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={[styles.valueText, { textAlign: 'right' }]}>{item.price}</Text>
-            </View>
+            {/* <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+              <TouchableOpacity style={styles.detailButton} onPress={() => this.ambilBarang(item.No_Penjualan)}>
+                <Icons name="add" color={'#00b9f2'} size={30} style={{ alignSelf: 'center' }} />
+              </TouchableOpacity>
+              <Text style={styles.textKirim}>Ambil</Text>
+            </View> */}
           </View>
         </View>
-        <View style={styles.bottomWrapper}>
-          <Icons name={'location-on'} color={'red'} size={20} />
-          <Text style={styles.tokomasName}>{item.tokoName}</Text>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.poin}>
-              {item.totalPoint}
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
+      </View>
     )
   }
 
   render() {
+    const { listHistory, getListHistory } = this.props
     return (
-      <View style={{ flex: 1, justifyContent: 'center', backgroundColor: '#f5f5f5' }}>
+      <View style={{ flex: 1, paddingTop: 15, justifyContent: 'center', backgroundColor: '#f5f5f5' }}>
         <StatusBar translucent={false} hidden={false} barStyle="light-content" backgroundColor={'#ccb102'} />
-        <View style={{ marginTop: 5 }}>
-          <FlatList
-            data={[]}
-            renderItem={this.renderList.bind(this)}
-            keyExtractor={(item, index) => item.key}
-          />
-          <Text style={[styles.titleText, { alignSelf: 'center' }]}>
-            Belum ada data
-          </Text>
-        </View>
+        <CustomFlatList
+          data={listHistory}
+          renderItem={this.renderList.bind(this)}
+          refreshing={getListHistory.fetching}
+          onRefresh={this.onRefresh}
+          error={false}
+          emptyTitle='Tidak ada data'
+          emptyMessage='Belum ada orderan yang tersedia'
+          errorMessage={'Tidak ada data order'}
+          onEndReached={() => { }}
+        />
       </View>
 
     )

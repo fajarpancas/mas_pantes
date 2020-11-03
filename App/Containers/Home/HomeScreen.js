@@ -74,7 +74,7 @@ class HomeScreen extends Component {
             }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
                 <Text style={styles.pointText}>Poin Anda</Text>
-                <Text style={styles.numberText}>9328329</Text>
+                <Text style={styles.numberText}>0</Text>
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={styles.tukarPointText}>Tuker Point</Text>

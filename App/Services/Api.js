@@ -62,7 +62,7 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
   const postLokasiKurir = (param) => api.post('api/save-lokasi-tracking', param)
   const changeStatusKurir = (param) => api.post('api/status-kurir', param)
   const getListToko = () => api.get('/api/list-toko')
-  const getListOrderHistory = (param) => api.post('/api/get-list', param)
+  const getListOrderHistory = (param) => api.post('/api/get-order-user', param)
   // ------
   // STEP 3
   // ------
