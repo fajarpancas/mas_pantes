@@ -440,3 +440,20 @@ export function* cancelOrder(api, action) {
     Method.LoadingHelper.hideLoading()
   }
 }
+
+export function* getListHistory(api, action) {
+  try {
+    const { data } = action
+    const { page } = data
+    const response = yield call(api.getListOrderHistory, data)
+    if (response.ok) {
+      yield put(OrderActions.getListHistorySuccess(response.data.data, page))
+    } else {
+      DropDownHolder.alert('error', 'GAGAL', `Gagal mengambil data order.`)
+      yield put(OrderActions.getListHistoryFailure())
+    }
+  } catch (err) {
+    DropDownHolder.alert('error', 'Gagal', err.message)
+    yield put(OrderActions.getListHistoryFailure())
+  }
+}

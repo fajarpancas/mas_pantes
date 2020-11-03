@@ -26,6 +26,7 @@ import {
   editBarang,
   getBarang,
   getKurirSetorList,
+  getListHistory,
   getListToko,
   getOrderList,
   getOrderListDiambil,
@@ -75,6 +76,7 @@ export default function* root() {
     takeLatest(OrderTypes.CEK_USER_REQUEST, cekUSer, api),
     takeLatest(OrderTypes.GET_LIST_TOKO_REQUEST, getListToko, api),
     takeLatest(OrderTypes.CANCEL_ORDER_REQUEST, cancelOrder, api),
+    takeLatest(OrderTypes.GET_LIST_HISTORY_REQUEST, getListHistory, api),
 
     takeLatest(MasterDataTypes.GET_LIST_USER_REQUEST, getListUser, api),
     takeLatest(MasterDataTypes.GET_LIST_KURIR_REQUEST, getListKurir, api),

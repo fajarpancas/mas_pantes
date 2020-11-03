@@ -19,7 +19,6 @@ import styles from './Styles/RootContainerStyles'
 import { Colors } from '../Themes'
 import Scale from '../Transforms/Scale'
 import TrackingAction from '../Redux/TrackingRedux'
-import BackgroundService from 'react-native-background-actions';
 import SessionAction from '../Redux/SessionRedux'
 import InboxAction from '../Redux/InboxRedux'
 import OrderAction from '../Redux/OrderRedux'

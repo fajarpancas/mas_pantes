@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { View, Text, KeyboardAvoidingView } from 'react-native'
 import { connect } from 'react-redux'
 import { View, Text, KeyboardAvoidingView } from 'react-native'
 import { ErrorContent } from '../../Components'

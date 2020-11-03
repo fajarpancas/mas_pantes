@@ -4,9 +4,7 @@ import { connect } from 'react-redux'
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import styles from '../Styles/HistoryScreenStyle'
 import { Fonts, Colors } from '../../Themes'
-import Geolocation from '@react-native-community/geolocation';
-import Geocoder from 'react-native-geocoding';
-import { API_KEY } from '../../Data/Const'
+import OrderAction from '../../Redux/OrderRedux'
 
 const dummyData = [
   {
@@ -80,39 +78,18 @@ class HistoryScreen extends Component {
     }
   }
 
-  async componentDidMount() {
-    // Geocoder.init(API_KEY)
-    // Geolocation.getCurrentPosition(
-    //   (position) => {
-    //     this.setState({
-    //       latitude: position.coords.latitude,
-    //       longitude: position.coords.longitude,
-    //     });
-    //     console.log(position)
-    //     Geocoder.from(position.coords.latitude, position.coords.longitude)
-    //       .then(json => {
-    //         console.log(json);
-    //         var addressComponent = json.results[0].address_components;
-    //         this.setState({
-    //           Address: addressComponent
-    //         })
-    //         console.log(addressComponent);
-    //       })
-    //       .catch(error => console.warn(error));
-    //   },
-    //   (error) => {
-    //     // See error code charts below.
-    //     this.setState({
-    //       error: error.message
-    //     }),
-    //       console.log(error.code, error.message);
-    //   },
-    //   {
-    //     enableHighAccuracy: false,
-    //     timeout: 10000,
-    //     maximumAge: 100000
-    //   }
-    // );
+  componentDidMount() {
+    this.onRefresh()
+  } 
+
+  onRefresh = () => {
+    const { getListHistoryRequest, user } = this.props
+    const { Id_User } = user
+    const param = {
+      Id_User,
+      page: 1
+    }
+    getListHistoryRequest(param)
   }
 
   renderList = ({ item, index }) => {
@@ -175,11 +152,15 @@ class HistoryScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    getListHistory: state.order.getListHistory,
+    listHistory: state.order.listHistory,
+    user: state.session.userSession
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getListHistoryRequest: (param) => dispatch(OrderAction.getListHistoryRequest(param))
   }
 }
 
