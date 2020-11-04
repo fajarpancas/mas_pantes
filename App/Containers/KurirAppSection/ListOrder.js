@@ -30,7 +30,9 @@ class ListOrder extends Component {
       mode: 'date',
       modalDate: false,
       rowIdOpen: '',
-      noPenjualan: ''
+      noPenjualan: '',
+      itemBatal: undefined,
+      batalModal: false,
     }
   }
 
@@ -174,6 +176,30 @@ class ListOrder extends Component {
     })
   }
 
+  batalModalState = () => {
+    this.setState({ batalModal: !this.state.batalModal })
+  }
+
+  batalkanOrderan = (item) => {
+    this.setState({ itemBatal: item }, () => {
+      this.batalModalState()
+    })
+  }
+
+  onSubmitBatalOrder = (item) => {
+    const { No_Penjualan } = item
+    const {  user, cancelPickRequest } = this.props
+    this.setState({ batalModal: false }, () => {
+      const param = {
+        Id_Kurir: user.Id_Kurir,
+        No_Penjualan
+      }
+
+      Method.LoadingHelper.showLoading()
+      cancelPickRequest(param)
+    })
+  }
+
   renderDatePicker = () => {
     return (
       <Modal
@@ -298,6 +324,12 @@ class ListOrder extends Component {
                   </TouchableOpacity>
                 </View>
               }
+              <TouchableOpacity
+                onPress={() => this.batalkanOrderan(item)}
+                style={styles.batalkanWrapper}>
+                <Icons name="cancel" color={'white'} size={20} style={{ marginRight: 10 }} />
+                <Text style={styles.getLokasiText}>Batalkan</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -311,6 +343,13 @@ class ListOrder extends Component {
 
     if (user && user.Nama_User) {
       name = user.Nama_User
+    }
+
+    const { itemBatal } = this.state
+    let noPenjualanBatal = ''
+   
+    if (itemBatal && itemBatal.No_Penjualan) {
+      noPenjualanBatal = itemBatal.No_Penjualan
     }
 
     return (
@@ -358,6 +397,26 @@ class ListOrder extends Component {
           onConfirm={(hour, minute) => this.onConfirm(hour, minute)}
         />
         {this.renderDatePicker()}
+        <Modal
+          isVisible={this.state.batalModal}
+          onBackButtonPress={this.batalModalState}
+          onBackdropPress={this.batalModalState}
+          animationIn={'fadeIn'}
+          animationOut={'fadeOut'}
+        >
+          <View style={styles.storModalContainer}>
+            <Text style={styles.textStorconfirmTitle}>Batalkan Orderan</Text>
+            <Text style={styles.textStorconfirm}>Yakin akan membatalkan orderan {noPenjualanBatal}?</Text>
+
+            <TouchableOpacity onPress={() => this.onSubmitBatalOrder(itemBatal)} style={styles.batalkanButton}>
+              <Text style={styles.tandaiText}>Ya, Batalkan</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.batalModalState} style={styles.batalButton}>
+              <Text style={styles.batalText}>Kembali</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+
       </View>
     )
   }
@@ -379,6 +438,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getOrderProcessRequest: (params) => dispatch(OrdeActions.getOrderProcessRequest(params)),
+    cancelPickRequest: (params) => dispatch(OrdeActions.cancelPickRequest(params)),
     kirimBarangRequest: (params) => dispatch(OrdeActions.kirimBarangRequest(params))
   }
 }

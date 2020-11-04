@@ -200,7 +200,7 @@ export function* createOrder(api, action) {
       NavigationService.navigate('HomeSales')
     } else {
       let message = 'Kemas penjualan gagal'
-      if(response.data && response.data.message){
+      if (response.data && response.data.message) {
         message = response.data.message
       }
       DropDownHolder.alert('error', 'Kemas Gagal', message)
@@ -210,7 +210,7 @@ export function* createOrder(api, action) {
         put(OrderActions.createOrderFailure())
       ])
     }
-  } catch (err){
+  } catch (err) {
     DropDownHolder.alert('error', 'Kemas Gagal', `Kemas penjualan gagal, ${err.message}`)
     Method.LoadingHelper.hideLoading()
     yield all([
@@ -459,5 +459,33 @@ export function* getListHistory(api, action) {
   } catch (err) {
     DropDownHolder.alert('error', 'Gagal', err.message)
     yield put(OrderActions.getListHistoryFailure())
+  }
+}
+
+export function* cancelPick(api, action) {
+  const { data } = action
+  const { Id_Kurir } = data
+  const param = {
+    page: 1,
+    Kurir_Id: Id_Kurir
+  }
+  try {
+    const response = yield call(api.cancelPickUp, data)
+    if (response.ok) {
+      DropDownHolder.alert('info', 'Berhasil', 'Orderan berhasil di batalkan')
+      yield all([
+        put(OrderActions.cancelPickSuccess(response.data)),
+        put(OrderActions.getOrderProcessRequest(param)),
+        put(OrderActions.getOrderNextProcessRequest(param)),
+        put(OrderActions.getOrderRequest(param))
+      ])
+      Method.LoadingHelper.hideLoading()
+    } else {
+      yield put(OrderActions.cancelPickFailure())
+      Method.LoadingHelper.hideLoading()
+    }
+  } catch {
+    yield put(OrderActions.cancelPickFailure())
+    Method.LoadingHelper.hideLoading()
   }
 }

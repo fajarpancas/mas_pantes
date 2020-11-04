@@ -61,7 +61,7 @@ class HistoryScreen extends Component {
             <Text style={[{ flex: 1 }, styles.textInfo]}>{item.No_Penjualan}</Text>
             <Text style={styles.textInfo}>{moment(item.Tgl_Penjualan, 'YYYY-MM-DD hh:mm:ss').format('DD MMM YYYY, hh:mm')}</Text>
           </View>
-          <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', marginTop: 0, alignItems: 'center' }}>
             <View style={{ flexDirection: 'column', flex: 1 }}>
               <Text style={styles.textName}>{item.Nama_Customer}</Text>
               {/* <View style={{ flexDirection: 'row', marginVertical: 5 }}>
@@ -73,24 +73,24 @@ class HistoryScreen extends Component {
               {!item.Jam_Kirim && !item.Jam_Terima &&
                 <View style={{ marginTop: 5 }}>
                   <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
-                    <Text style={styles.textInfoKirim}>Orderan pending, masih menunggu kurir</Text>
+                    <Text style={[styles.textInfoKirim, { color: 'red' }]}>Orderan pending, masih menunggu kurir</Text>
                     <Icons name="timer" color={'red'} size={20} style={{ alignSelf: 'center' }} />
                   </View>
                   <Text style={styles.textInfoAlamat}>Jam Kemas: {moment(item.Jam_Kemas, 'YYYY-MM-DD hh:mm:ss').format('DD MMM YYYY, hh:mm')}</Text>
                 </View>}
-                {item.Jam_Kirim && !item.Jam_Terima &&
+              {item.Jam_Kirim && !item.Jam_Terima &&
                 <View style={{ marginTop: 5 }}>
                   <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
-                    <Text style={styles.textInfoKirim}>Orderan sedang dalam pengiriman</Text>
+                    <Text style={[styles.textInfoKirim, { color: '#00b9f2' }]}>Orderan sedang dalam pengiriman</Text>
                     <Icons name="directions-bike" color={'#00b9f2'} size={20} style={{ alignSelf: 'center' }} />
                   </View>
                   <Text style={styles.textInfoAlamat}>Jam Kirim: {moment(item.Jam_Kirim, 'YYYY-MM-DD hh:mm:ss').format('DD MMM YYYY, hh:mm')}</Text>
                 </View>}
-                {item.Jam_Terima &&
+              {item.Jam_Terima &&
                 <View style={{ marginTop: 5 }}>
                   <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
-                    <Text style={styles.textInfoKirim}>Orderan sudah diterima</Text>
-                    <Icons name="check" color={'lightgreen'} size={20} style={{ alignSelf: 'center' }} />
+                    <Text style={[styles.textInfoKirim, { color: 'green' }]}>Orderan sudah diterima</Text>
+                    <Icons name="check" color={'green'} size={20} style={{ alignSelf: 'center' }} />
                   </View>
                   <Text style={styles.textInfoAlamat}>Jam Terima: {moment(item.Jam_Terima, 'YYYY-MM-DD hh:mm:ss').format('DD MMM YYYY, hh:mm')}</Text>
                 </View>}

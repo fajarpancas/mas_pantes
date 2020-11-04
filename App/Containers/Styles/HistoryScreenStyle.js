@@ -59,7 +59,7 @@ export default StyleSheet.create({
     elevation: 1
   },
   textInfo: {
-    fontFamily: Fonts.type.acuminProRegular,
+    fontFamily: Fonts.type.acuminProSemiBold,
     color: Colors.textBlack,
     lineHeight: 18
   },

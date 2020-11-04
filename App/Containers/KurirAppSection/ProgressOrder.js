@@ -9,11 +9,21 @@ import { CustomFlatList } from '../../Components'
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import moment from 'moment'
 import Scale from '../../Transforms/Scale'
+import Modal from 'react-native-modal'
+import { Method } from 'react-native-awesome-component'
 
 class ProgressOrderScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerShown: false
   })
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      itemBatal: undefined,
+      batalModal: false,
+    }
+  }
 
   componentDidMount() {
     this.onRefresh()
@@ -29,6 +39,30 @@ class ProgressOrderScreen extends Component {
 
       getOrderNextProcessRequest(params)
     }, 1000)
+  }
+
+  batalModalState = () => {
+    this.setState({ batalModal: !this.state.batalModal })
+  }
+
+  batalkanOrderan = (item) => {
+    this.setState({ itemBatal: item }, () => {
+      this.batalModalState()
+    })
+  }
+
+  onSubmitBatalOrder = (item) => {
+    const { No_Penjualan } = item
+    const { user, cancelPickRequest } = this.props
+    this.setState({ batalModal: false }, () => {
+      const param = {
+        Id_Kurir: user.Id_Kurir,
+        No_Penjualan
+      }
+
+      Method.LoadingHelper.showLoading()
+      cancelPickRequest(param)
+    })
   }
 
   renderList = ({ item, index }) => {
@@ -60,6 +94,12 @@ class ProgressOrderScreen extends Component {
               <Text style={styles.textKirim}>Selesai</Text>
             </View>
           </View>
+          <TouchableOpacity
+            onPress={() => this.batalkanOrderan(item)}
+            style={styles.batalkanWrapper}>
+            <Icons name="cancel" color={'white'} size={20} style={{ marginRight: 10 }} />
+            <Text style={styles.getLokasiText}>Batalkan</Text>
+          </TouchableOpacity>
         </View>
       </View>
     )
@@ -71,6 +111,13 @@ class ProgressOrderScreen extends Component {
 
     if (user && user.Nama_User) {
       name = user.Nama_User
+    }
+
+    const { itemBatal } = this.state
+    let noPenjualanBatal = ''
+   
+    if (itemBatal && itemBatal.No_Penjualan) {
+      noPenjualanBatal = itemBatal.No_Penjualan
     }
 
     return (
@@ -106,6 +153,25 @@ class ProgressOrderScreen extends Component {
           />
 
         </View>
+        <Modal
+          isVisible={this.state.batalModal}
+          onBackButtonPress={this.batalModalState}
+          onBackdropPress={this.batalModalState}
+          animationIn={'fadeIn'}
+          animationOut={'fadeOut'}
+        >
+          <View style={styles.storModalContainer}>
+            <Text style={styles.textStorconfirmTitle}>Batalkan Orderan</Text>
+            <Text style={styles.textStorconfirm}>Yakin akan membatalkan orderan {noPenjualanBatal}?</Text>
+
+            <TouchableOpacity onPress={() => this.onSubmitBatalOrder(itemBatal)} style={styles.batalkanButton}>
+              <Text style={styles.tandaiText}>Ya, Batalkan</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.batalModalState} style={styles.batalButton}>
+              <Text style={styles.batalText}>Kembali</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </View >
     )
   }
@@ -121,6 +187,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    cancelPickRequest: (params) => dispatch(OrderActions.cancelPickRequest(params)),
     getOrderNextProcessRequest: (params) => dispatch(OrderActions.getOrderNextProcessRequest(params))
   }
 }

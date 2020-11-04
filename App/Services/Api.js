@@ -63,6 +63,7 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
   const changeStatusKurir = (param) => api.post('api/status-kurir', param)
   const getListToko = () => api.get('/api/list-toko')
   const getListOrderHistory = (param) => api.post('/api/get-order-user', param)
+  const cancelPickUp = (param) => api.post('/api/cancel-pickup', param)
   // ------
   // STEP 3
   // ------
@@ -105,7 +106,8 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
     getListToko,
     cancelOrder,
     changeStatusKurir,
-    getListOrderHistory
+    getListOrderHistory,
+    cancelPickUp
   }
 }
 
