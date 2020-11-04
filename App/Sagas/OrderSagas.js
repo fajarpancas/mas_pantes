@@ -199,15 +199,19 @@ export function* createOrder(api, action) {
       DropDownHolder.alert('success', 'KEMAS BARANG BERHASIL', `list orderan yg telah di kemas pada screen LIST ORDER.`)
       NavigationService.navigate('HomeSales')
     } else {
-      DropDownHolder.alert('error', 'Gagal', `Kemas penjualan gagal`)
+      let message = 'Kemas penjualan gagal'
+      if(response.data && response.data.message){
+        message = response.data.message
+      }
+      DropDownHolder.alert('error', 'Kemas Gagal', message)
       Method.LoadingHelper.hideLoading()
       yield all([
         put(SessionActions.saveNoPenjualan(noPenjualan)),
         put(OrderActions.createOrderFailure())
       ])
     }
-  } catch {
-    DropDownHolder.alert('error', 'Gagal', `Kemas penjualan gagal`)
+  } catch (err){
+    DropDownHolder.alert('error', 'Kemas Gagal', `Kemas penjualan gagal, ${err.message}`)
     Method.LoadingHelper.hideLoading()
     yield all([
       put(SessionActions.saveNoPenjualan(noPenjualan)),
