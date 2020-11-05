@@ -14,6 +14,7 @@ const colors = {
   very_light_pink_five: '#bbbbbb',
   kermit_green: '#67c100',
   pastel_red: '#ea5f54',
+  charcoal: '#595959',
 
   alertSuccess: '#32A54A',
   alertError: '#cc3232',

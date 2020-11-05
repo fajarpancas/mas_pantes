@@ -170,7 +170,7 @@ class DownloadUpdateModal extends Component {
                   styleAttr="Horizontal"
                   indeterminate={false}
                   progress={progress}
-                  color={Colors.greenTea}
+                  color={Colors.charcoal}
                 />
               )}
           </View>
