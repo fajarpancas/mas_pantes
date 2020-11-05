@@ -7,6 +7,7 @@ import createStore from '../Redux'
 import { enableScreens } from 'react-native-screens';
 import DropdownAlert from 'react-native-dropdownalert';
 import { DropDownHolder } from '../Components'
+import DownloadUpdateModal from '../Components/DownloadUpdateModal';
 
 enableScreens();
 // create our store
@@ -27,6 +28,7 @@ const App = () => {
       <Provider store={store}>
         <RootContainer />
         <DropdownAlert ref={ref => DropDownHolder.setDropDown(ref)} />
+        <DownloadUpdateModal />
       </Provider>
     </Fragment>
   );
