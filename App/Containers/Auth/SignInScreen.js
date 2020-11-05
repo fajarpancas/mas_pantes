@@ -126,7 +126,7 @@ class SignInScreen extends Component {
       <KeyboardAwareScrollView extraScrollHeight={40} style={{ marginHorizontal: 25 }}>
         <Styled.Container padded style={{ borderRadius: 10 }}>
           <View style={{ padding: 15 }}>
-            <Text style={styles.titleSignIn}>Masuk ke Aplikasi (update codepush nicc 2)</Text>
+            <Text style={styles.titleSignIn}>Masuk ke Aplikasi</Text>
             {/* <View style={{ flexDirection: 'column', marginBottom: 15 }}>
               <Text style={styles.formLabelText}>Masuk sebagai</Text>
               <TouchableOpacity style={styles.chooseButton} onPress={this.showOffModal}>
