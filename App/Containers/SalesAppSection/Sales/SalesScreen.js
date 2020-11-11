@@ -79,7 +79,8 @@ class SalesScreen extends Component {
       haveAcc: true,
       customerId: null,
       namaToko: '',
-      errorToko: false
+      errorToko: false,
+      ongkirParse: ''
     }
 
     this.initialValue = {
@@ -151,6 +152,7 @@ class SalesScreen extends Component {
           No_Telepon: values.telephone,
           Id_Jenis_Pembayaran: values.jenisPembayaran,
           Nama_Toko: this.state.namaToko,
+          Kd_Toko: values.namaToko,
           Data_Barang: JSON.stringify(parseBarang)
         }
         Method.LoadingHelper.showLoading()
@@ -242,6 +244,26 @@ class SalesScreen extends Component {
 
   changeStateAcc = (state) => {
     this.setState({ haveAcc: state })
+  }
+
+  convertToRp = (value) => {
+    // var	number_string = bilangan.toString(),
+    var sisa = value.length % 3
+    var rupiah = value.substr(0, sisa)
+    var ribuan = value.substr(sisa).match(/\d{3}/g);
+
+    if (ribuan) {
+      var separator = sisa ? '.' : '';
+      rupiah += separator + ribuan.join('.');
+    }
+
+    this.setState({ ongkirParse: rupiah })
+  }
+
+  setOngkir = (name, text, props) => {
+    let value = text.replace(/[^0-9]+/g, "");
+    this.convertToRp(value.toString())
+    props.setFieldValue(name, value)
   }
 
   renderForm = (props) => {
@@ -509,8 +531,8 @@ class SalesScreen extends Component {
                       returnKeyType="go"
                       maxLength={15}
                       placeholder={'Ongkos kirim'}
-                      setFieldValue={props.setFieldValue}
-                      value={props.values.ongkir}
+                      setFieldValue={(name, text) => this.setOngkir(name, text, props)}
+                      value={this.state.ongkirParse}
                       error={props.errors.ongkir}
                       styleTitle={styles.formLabelText}
                       styleInputText={styles.formPlacholderText}

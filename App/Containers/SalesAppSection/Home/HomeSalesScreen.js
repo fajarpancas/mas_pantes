@@ -21,11 +21,13 @@ class HomeSalesScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      openList: [],
+      openList: [1, 2],
       itemStor: undefined,
       itemBatal: undefined,
+      itemClose: undefined,
       storModal: false,
       batalModal: false,
+      closeOrderModal: false,
       idKurir: '',
       confirmTrackingModal: false
     }
@@ -124,6 +126,16 @@ class HomeSalesScreen extends Component {
     })
   }
 
+  closeOrderan = (item) => {
+    this.setState({ itemClose: item }, () => {
+      this.closeOrderModalState()
+    })
+  }
+
+  closeOrderModalState = () => {
+    this.setState({ closeOrderModal: !this.state.closeOrderModal })
+  }
+
   onSubmitBatalOrder = (item) => {
     const { No_Penjualan } = item
     const { cancelOrderRequest, user } = this.props
@@ -135,6 +147,20 @@ class HomeSalesScreen extends Component {
 
       Method.LoadingHelper.showLoading()
       cancelOrderRequest(param)
+    })
+  }
+
+  onArsipOrder = (item) => {
+    const { No_Penjualan } = item
+    const { closeOrderRequest, user } = this.props
+    this.setState({ closeOrderModal: false }, () => {
+      const param = {
+        Id_Sales: user.Id_Sales,
+        No_Penjualan
+      }
+
+      Method.LoadingHelper.showLoading()
+      closeOrderRequest(param)
     })
   }
 
@@ -259,6 +285,13 @@ class HomeSalesScreen extends Component {
               style={styles.batalkanWrapper}>
               <Icons name="cancel" color={'white'} size={20} style={{ marginRight: 10 }} />
               <Text style={styles.getLokasiText}>Batalkan</Text>
+            </TouchableOpacity>}
+          {(item.Status === 2 || item.Jam_Setor) &&
+            <TouchableOpacity
+              onPress={() => this.closeOrderan(item)}
+              style={styles.closeOrderWrapper}>
+              <Icons name="archive" color={'white'} size={20} style={{ marginRight: 10 }} />
+              <Text style={styles.getLokasiText}>Artispkan Orderan</Text>
             </TouchableOpacity>}
         </View>
       </View>
@@ -388,8 +421,9 @@ class HomeSalesScreen extends Component {
       name = user.Nama_User
     }
 
-    const { itemBatal, itemStor } = this.state
+    const { itemBatal, itemStor, itemClose } = this.state
     let noPenjualan = ''
+    let noPenjualanClose = ''
     let noPenjualanBatal = ''
     if (itemStor && itemStor.No_Penjualan) {
       noPenjualan = itemStor.No_Penjualan
@@ -397,6 +431,10 @@ class HomeSalesScreen extends Component {
 
     if (itemBatal && itemBatal.No_Penjualan) {
       noPenjualanBatal = itemBatal.No_Penjualan
+    }
+
+    if (itemClose && itemClose.No_Penjualan) {
+      noPenjualanClose = itemClose.No_Penjualan
     }
 
     return (
@@ -476,6 +514,26 @@ class HomeSalesScreen extends Component {
               </TouchableOpacity>
             </View>
           </Modal>
+
+          <Modal
+            isVisible={this.state.closeOrderModal}
+            onBackButtonPress={this.closeOrderModalState}
+            onBackdropPress={this.closeOrderModalState}
+            animationIn={'fadeIn'}
+            animationOut={'fadeOut'}
+          >
+            <View style={styles.storModalContainer}>
+              <Text style={styles.textStorconfirmTitle}>Konfirmasi Pengarsipkan Orderan</Text>
+              <Text style={styles.textStorconfirm}>Orderan dengan nomor penjualan {noPenjualanClose} akan diarsipkan, orderan yang di arsipkan tidak akan ditampilkan lagi pada aplikasi, lanjutkan?</Text>
+
+              <TouchableOpacity onPress={() => this.onArsipOrder(itemClose)} style={styles.tandaiButton}>
+                <Text style={styles.tandaiText}>Ya, Lanjutkan</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.confirmTrackingOn} style={styles.batalButton}>
+                <Text style={styles.batalText}>Kembali</Text>
+              </TouchableOpacity>
+            </View>
+          </Modal>
         </View>
       </View >
     )
@@ -496,7 +554,8 @@ const mapDispatchToProps = (dispatch) => {
     setTrackingRequest: () => dispatch(TrackingActions.setTrackingRequest()),
     kurirSetorRequest: (param) => dispatch(OrderActions.kurirSetorRequest(param)),
     getSalesListOrderRequest: (param) => dispatch(OrderActions.getSalesListOrderRequest(param)),
-    cancelOrderRequest: (param) => dispatch(OrderActions.cancelOrderRequest(param))
+    cancelOrderRequest: (param) => dispatch(OrderActions.cancelOrderRequest(param)),
+    closeOrderRequest: (param) => dispatch(OrderActions.closeOrderRequest(param))
   }
 }
 

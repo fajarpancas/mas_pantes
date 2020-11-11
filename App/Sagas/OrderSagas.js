@@ -489,3 +489,27 @@ export function* cancelPick(api, action) {
     Method.LoadingHelper.hideLoading()
   }
 }
+
+export function* closeOrder(api, action) {
+  const { data } = action
+  const { Id_Sales } = data
+  const param = {
+    page: 1,
+    Id_Sales
+  }
+  try {
+    const response = yield call(api.closeOrder, data)
+    if (response.ok) {
+      yield put(OrderActions.closeOrderSuccess(response.data))
+      yield put(OrderActions.getSalesListOrderRequest(param))
+      DropDownHolder.alert('info', 'Berhasil', 'Orderan berhasil di arsipkan')
+      Method.LoadingHelper.hideLoading()
+    } else {
+      yield put(OrderActions.closeOrderFailure())
+      Method.LoadingHelper.hideLoading()
+    }
+  } catch {
+    yield put(OrderActions.closeOrderFailure())
+    Method.LoadingHelper.hideLoading()
+  }
+}

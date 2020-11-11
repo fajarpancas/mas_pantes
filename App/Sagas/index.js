@@ -22,6 +22,7 @@ import {
   cancelOrder,
   cancelPick,
   cekUSer,
+  closeOrder,
   createOrder,
   deleteBarang,
   editBarang,
@@ -79,6 +80,7 @@ export default function* root() {
     takeLatest(OrderTypes.CANCEL_ORDER_REQUEST, cancelOrder, api),
     takeLatest(OrderTypes.GET_LIST_HISTORY_REQUEST, getListHistory, api),
     takeLatest(OrderTypes.CANCEL_PICK_REQUEST, cancelPick, api),
+    takeLatest(OrderTypes.CLOSE_ORDER_REQUEST, closeOrder, api),
 
     takeLatest(MasterDataTypes.GET_LIST_USER_REQUEST, getListUser, api),
     takeLatest(MasterDataTypes.GET_LIST_KURIR_REQUEST, getListKurir, api),

@@ -516,5 +516,14 @@ export default StyleSheet.create({
     height: Scale(33),
     marginTop: 10,
     borderRadius: 4
+  },
+  closeOrderWrapper:{
+    backgroundColor: Colors.alertInfo,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    height: Scale(33),
+    marginTop: 10,
+    borderRadius: 4
   }
 })

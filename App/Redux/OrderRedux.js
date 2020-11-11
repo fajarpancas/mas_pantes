@@ -77,7 +77,11 @@ const { Types, Creators } = createActions({
 
   cancelPickRequest: ['data'],
   cancelPickSuccess: ['payload'],
-  cancelPickFailure: null
+  cancelPickFailure: null,
+
+  closeOrderRequest: ['data'],
+  closeOrderSuccess: ['payload'],
+  closeOrderFailure: null,
 })
 
 export const OrderTypes = Types
@@ -120,7 +124,8 @@ export const INITIAL_STATE = Immutable({
   cancelOrder: DEFAULT_STATE,
   getListHistory: DEFAULT_STATE,
   listHistory: [],
-  cancelPick: DEFAULT_STATE
+  cancelPick: DEFAULT_STATE,
+  closeOrder: DEFAULT_STATE
 })
 
 /* ------------- Selectors ------------- */
@@ -431,6 +436,17 @@ export const cancelPickSuccess = (state, { payload }) =>
 export const cancelPickFailure = state =>
   state.merge({ ...state, cancelPick: { fetching: false, error: true, payload: null } })
 
+export const closeOrderRequest = (state, { data }) =>
+  state.merge({ ...state, closeOrder: { fetching: true, data, payload: null } })
+
+// successful api lookup
+export const closeOrderSuccess = (state, { payload }) =>
+  state.merge({ ...state, closeOrder: { fetching: false, error: null, payload } })
+
+// Something went wrong somewhere.
+export const closeOrderFailure = state =>
+  state.merge({ ...state, closeOrder: { fetching: false, error: true, payload: null } })
+
 
 /* ------------- Hookup Reducers To Types ------------- */
 
@@ -504,4 +520,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.GET_LIST_HISTORY_REQUEST]: getListHistoryRequest,
   [Types.GET_LIST_HISTORY_SUCCESS]: getListHistorySuccess,
   [Types.GET_LIST_HISTORY_FAILURE]: getListHistoryFailure,
+
+  [Types.CLOSE_ORDER_REQUEST]: closeOrderRequest,
+  [Types.CLOSE_ORDER_SUCCESS]: closeOrderSuccess,
+  [Types.CLOSE_ORDER_FAILURE]: closeOrderFailure,
 })

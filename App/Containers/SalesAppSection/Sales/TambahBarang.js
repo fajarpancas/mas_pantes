@@ -46,7 +46,8 @@ class TambahBarang extends Component {
         this.state = {
             dataCamera: '',
             uri: '',
-            errorFoto: false
+            errorFoto: false,
+            hargaParse: ''
         }
     }
 
@@ -98,6 +99,26 @@ class TambahBarang extends Component {
         uploadFotoBarangRequest(param)
     }
 
+    convertToRp = (value) => {
+        // var	number_string = bilangan.toString(),
+        var sisa = value.length % 3
+        var rupiah = value.substr(0, sisa)
+        var ribuan = value.substr(sisa).match(/\d{3}/g);
+
+        if (ribuan) {
+            var separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+
+        this.setState({ hargaParse: rupiah })
+    }
+
+    setHarga = (name, text, props) => {
+        let value = text.replace(/[^0-9]+/g, "");
+        this.convertToRp(value.toString())
+        props.setFieldValue(name, value)
+    }
+
     renderForm = (props) => {
         const { uri } = this.state
         const { uploadFotoBarang } = this.props
@@ -128,8 +149,8 @@ class TambahBarang extends Component {
                                 returnKeyType="go"
                                 maxLength={15}
                                 placeholder={'Masukkan harga barang'}
-                                setFieldValue={props.setFieldValue}
-                                value={props.values.harga}
+                                setFieldValue={(name, text) => this.setHarga(name, text, props)}
+                                value={this.state.hargaParse}
                                 error={props.errors.harga}
                                 styleTitle={styles.formLabelTextTambah}
                                 styleInputText={styles.formPlacholderTextTambah}
