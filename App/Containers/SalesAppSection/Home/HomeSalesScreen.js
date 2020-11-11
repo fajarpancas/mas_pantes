@@ -21,7 +21,7 @@ class HomeSalesScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      openList: [1, 2],
+      openList: [],
       itemStor: undefined,
       itemBatal: undefined,
       itemClose: undefined,
