@@ -196,7 +196,8 @@ export const getOrderSuccess = (state, { payload, page }) => {
   if (page === 1) {
     newList = payload
   } else {
-    newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+    newList = payload
+    // newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
   }
   return state.merge({ ...state, getOrder: { fetching: false, error: null, payload }, listOrder: newList })
 }
@@ -214,7 +215,8 @@ export const getOrderProcessSuccess = (state, { payload, page }) => {
   if (page === 1) {
     newList = payload
   } else {
-    newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+    newList = payload
+    // newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
   }
   return state.merge({ ...state, getOrderProcess: { fetching: false, error: null, payload }, listOrderProcess: newList })
 }
@@ -232,7 +234,8 @@ export const getOrderNextProcessSuccess = (state, { payload, page }) => {
   if (page === 1) {
     newList = payload
   } else {
-    newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+    newList = payload
+    // newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
   }
   return state.merge({ ...state, getOrderNextProcess: { fetching: false, error: null, payload }, listOrderNextProcess: newList })
 }
@@ -251,7 +254,8 @@ export const getOrderFinishSuccess = (state, { payload, page }) => {
   if (page === 1) {
     newList = payload
   } else {
-    newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+    newList = payload
+    // newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
   }
   return state.merge({ ...state, getOrderFinish: { fetching: false, error: null, payload }, listOrderFinish: newList })
 }
@@ -315,7 +319,8 @@ export const getSalesListOrderSuccess = (state, { payload, page }) => {
   if (page === 1) {
     newList = mergeAndReplace([], payload, 'Row_Id', 'Tgl_Penjualan', 'asc', true)
   } else {
-    newList = mergeAndReplace(newList, payload, 'Row_Id', 'Tgl_Penjualan', 'asc', true)
+    newList = mergeAndReplace([], payload, 'Row_Id', 'Tgl_Penjualan', 'asc', true)
+    // newList = mergeAndReplace(newList, payload, 'Row_Id', 'Tgl_Penjualan', 'asc', true)
   }
   return state.merge({ ...state, getSalesListOrder: { fetching: false, error: null, payload }, salesListOrder: newList })
 }
@@ -355,7 +360,8 @@ export const kurirSetorListSuccess = (state, { payload, page }) => {
   if (page === 1) {
     newList = mergeAndReplace([], payload, 'Row_Id', 'Row_Id', 'asc', false)
   } else {
-    newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+    newList = mergeAndReplace([], payload, 'Row_Id', 'Row_Id', 'asc', false)
+    // newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
   }
   return state.merge({ ...state, kurirSetorList: { fetching: false, error: null, payload }, kurirSetorListData: newList })
 }
@@ -417,7 +423,8 @@ export const getListHistorySuccess = (state, { payload, page }) => {
   if (page === 1) {
     newList = payload
   } else {
-    newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
+    newList = payload
+    // newList = mergeAndReplace(newList, payload, 'Row_Id', 'Row_Id', 'asc', false)
   }
   return state.merge({ ...state, getListHistory: { fetching: false, error: null, payload }, listHistory: newList })
 }

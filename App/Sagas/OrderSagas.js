@@ -192,8 +192,8 @@ export function* createOrder(api, action) {
       yield all([
         put(SessionActions.saveNoPenjualan(noPenjualan)),
         put(OrderActions.createOrderSuccess(response.data.data)),
-        put(OrderActions.getSalesListOrderRequest(param))
-        // put(OrderActions.resetBarang())
+        put(OrderActions.getSalesListOrderRequest(param)),
+        put(OrderActions.resetBarang())
       ])
       Method.LoadingHelper.hideLoading()
       DropDownHolder.alert('success', 'KEMAS BARANG BERHASIL', `list orderan yg telah di kemas pada screen LIST ORDER.`)

@@ -169,7 +169,13 @@ class SalesScreen extends Component {
     props.setFieldValue('keterangan', '')
     props.setFieldValue('ongkir', '')
     props.setFieldValue('namaToko', '')
-    this.setState({ kurir: '', jenisPembayaran: '', customerName: '' })
+    this.setState({
+      kurir: '',
+      jenisPembayaran: '',
+      customerName: '',
+      namaToko: '',
+      ongkirParse: ''
+    })
   }
 
   componentDidMount() {
@@ -240,6 +246,9 @@ class SalesScreen extends Component {
     // }
 
     props.handleSubmit()
+    setTimeout(() => {
+      this.resetPropsValues(props)
+    }, 500)
   }
 
   changeStateAcc = (state) => {

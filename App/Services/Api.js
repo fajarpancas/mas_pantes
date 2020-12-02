@@ -1,5 +1,8 @@
 // a library to wrap and simplify api calls
 import apisauce from 'apisauce'
+import { DropDownHolder } from '../Components';
+import NavigationServices from './NavigationServices';
+import AuthActions from '../Redux/AuthRedux'
 
 // our "constructor"
 const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
@@ -19,6 +22,17 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
     // 10 second timeout...
     timeout: 10000
   })
+
+  api.addMonitor((response) => {
+    if (response.status === 400) {
+      DropDownHolder.alert(
+        'error',
+        'Token Exp',
+        'Token auth expired, silahkan login kembali'
+      );
+      NavigationServices.dispatch(AuthActions.logoutRequest());
+    }
+  });
 
   // ------
   // STEP 2

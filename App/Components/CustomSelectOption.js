@@ -73,7 +73,7 @@ export default class CustomSelectOption extends Component {
                         <View>
                             <EmptyContent />
                             <TouchableOpacity onPress={this.onRefresh} activeOpacity={0.8}>
-                                <Text style={styles.refreshText}>{I18n.t('auth.refresh')}</Text>
+                                <Text style={styles.refreshText}>{I18n.t('Refresh')}</Text>
                             </TouchableOpacity>
                         </View>
                     }
