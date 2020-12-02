@@ -179,10 +179,28 @@ class SalesScreen extends Component {
   }
 
   componentDidMount() {
-    const { getListUserRequest, getListKurirRequest, getListTokoRequest } = this.props
+    this.onRefresh()
+  }
+
+  onRefresh = () => {
+    this.getListKurir()
+    this.getListUser()
+    this.getListToko()
+  }
+
+  getListUser = () => {
+    const { getListUserRequest } = this.props
     getListUserRequest()
-    getListTokoRequest()
+  }
+
+  getListKurir = () => {
+    const { getListKurirRequest } = this.props
     getListKurirRequest()
+  }
+
+  getListToko = () => {
+    const { getListTokoRequest } = this.props
+    getListTokoRequest()
   }
 
   checkDataUser(text) {
@@ -523,6 +541,7 @@ class SalesScreen extends Component {
                     error={this.state.errorKurir}
                     selectTitle={'Pilih Kurir'}
                     errorMessage={'Nama Kurir diisi'}
+                    onRefresh={this.onRefresh}
                     onSelect={(value) => this.setState({ kurir: value })}
                     setFieldValue={(value) => props.setFieldValue('kurir', value)}
                   />
@@ -558,6 +577,7 @@ class SalesScreen extends Component {
                     title='Pilih Jenis Pembayaran'
                     data={pembayaran}
                     defaultValue={this.state.jenisPembayaran}
+                    onRefresh={this.onRefresh}
                     // error={errorPembayaran}
                     error={this.state.errorPembayaran}
                     selectTitle={'Pilih pembayaran'}
@@ -576,6 +596,7 @@ class SalesScreen extends Component {
                     title='Pilih Toko/Cabang'
                     data={toko}
                     defaultValue={this.state.namaToko}
+                    onRefresh={this.onRefresh}
                     // error={errorPembayaran}
                     error={this.state.errorToko}
                     selectTitle={'Pilih Toko/Cabang'}
