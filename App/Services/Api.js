@@ -2,7 +2,7 @@
 import apisauce from 'apisauce'
 import { DropDownHolder } from '../Components';
 import NavigationServices from './NavigationServices';
-import AuthActions from '../Redux/AuthRedux'
+import SessionActions from '../Redux/SessionRedux'
 
 // our "constructor"
 const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
@@ -30,7 +30,8 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
         'Token Exp',
         'Token auth expired, silahkan login kembali'
       );
-      NavigationServices.dispatch(AuthActions.logoutRequest());
+      NavigationServices.navigate('Auth');
+      NavigationServices.dispatch(SessionActions.logout())
     }
   });
 
