@@ -31,7 +31,6 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
         'Token auth expired, silahkan login kembali'
       );
       NavigationServices.navigate('Auth');
-      NavigationServices.dispatch(SessionActions.logout())
     }
   });
 
