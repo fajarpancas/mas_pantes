@@ -17,6 +17,10 @@ const schema = Yup.object().shape({
         .required("Nama barang harus diisi."),
     harga: Yup.string()
         .required("Harga barang harus diisi."),
+    gram: Yup.number().min(0, 'Jumlah gram minimal 0')
+        .required("Jumlah Gram harus diisi."),
+    qty: Yup.number()
+        .required("Qty harus diisi."),
 })
 
 const initialValue = {
@@ -83,6 +87,8 @@ class TambahBarang extends Component {
                 Nama_Barang: values.namaBarang,
                 harga: values.harga,
                 foto: url,
+                gram: values.gram,
+                qty: values.qty,
                 nameFoto: foto
             }
 
@@ -159,6 +165,34 @@ class TambahBarang extends Component {
                                         <Text style={styles.rupiah}>Rp. </Text>
                                     )
                                 }}
+                            />
+                            <CustomInput
+                                label
+                                name="gram"
+                                keyboardType={'numeric'}
+                                title={'Jumlah Gram'}
+                                returnKeyType="go"
+                                maxLength={15}
+                                placeholder={'Masukkan jumlah gram'}
+                                setFieldValue={props.setFieldValue}
+                                value={props.values.gram}
+                                error={props.errors.gram}
+                                styleTitle={styles.formLabelTextTambah}
+                                styleInputText={styles.formPlacholderTextTambah}
+                            />
+                            <CustomInput
+                                label
+                                name="qty"
+                                keyboardType={'numeric'}
+                                title={'Qty'}
+                                returnKeyType="go"
+                                maxLength={15}
+                                placeholder={'Masukkan qty barang'}
+                                setFieldValue={props.setFieldValue}
+                                value={props.values.qty}
+                                error={props.errors.qty}
+                                styleTitle={styles.formLabelTextTambah}
+                                styleInputText={styles.formPlacholderTextTambah}
                             />
                             <Text style={styles.formLabelTextTambah}>Foto Barang</Text>
                             <TouchableOpacity
