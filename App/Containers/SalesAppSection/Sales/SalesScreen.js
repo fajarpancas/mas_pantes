@@ -131,7 +131,7 @@ class SalesScreen extends Component {
             Nama_Barang: obj.Nama_Barang,
             Harga: obj.harga,
             Harga_Jual: obj.harga,
-            Gram: obj.gram,
+            Jml_Gram: obj.gram,
             Qty: obj.qty,
             Url_Foto_Barang: obj.nameFoto
           }

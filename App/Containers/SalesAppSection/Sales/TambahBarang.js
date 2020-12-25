@@ -17,9 +17,9 @@ const schema = Yup.object().shape({
         .required("Nama barang harus diisi."),
     harga: Yup.string()
         .required("Harga barang harus diisi."),
-    gram: Yup.number().min(0, 'Jumlah gram minimal 0')
+    gram: Yup.number().min(0, 'Jumlah gram minimal 0').typeError("Gunakan tanda .(titik) untuk pengkomaan angka")
         .required("Jumlah Gram harus diisi."),
-    qty: Yup.number()
+    qty: Yup.number().min(0, 'Jumlah qty minimal 0')
         .required("Qty harus diisi."),
 })
 
