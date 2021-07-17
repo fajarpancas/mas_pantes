@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import {
   StatusBar,
-  TouchableOpacity,
   ActivityIndicator,
   View,
   Text,
@@ -20,6 +19,7 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import Modal from 'react-native-modal'
 import AuthActions from '../../Redux/AuthRedux'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const schema = Yup.object().shape({
   phoneNumber: Yup.string()
@@ -51,7 +51,8 @@ class SignInScreen extends Component {
 
     const params = {
       email: values.phoneNumber,
-      password: values.password
+      password: values.password,
+      version_code: '2.0'
     }
 
     loginRequest(params)

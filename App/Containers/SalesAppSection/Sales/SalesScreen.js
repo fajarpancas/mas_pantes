@@ -22,6 +22,8 @@ import moment from 'moment'
 import { Method } from 'react-native-awesome-component';
 import _ from 'lodash'
 import Icons from 'react-native-vector-icons/MaterialIcons'
+import Modal from 'react-native-modal'
+import NavigationServices from '../../../Services/NavigationServices'
 
 const schema = Yup.object().shape({
   // noFaktur: Yup.string(),
@@ -80,7 +82,9 @@ class SalesScreen extends Component {
       customerId: null,
       namaToko: '',
       errorToko: false,
-      ongkirParse: ''
+      ongkirParse: '',
+      successModal: false,
+      message: ''
     }
 
     this.initialValue = {
@@ -125,8 +129,8 @@ class SalesScreen extends Component {
       if (barang.length > 0) {
         parseBarang = barang.map((obj) => {
           return {
-            No_Penjualan: noPenjualan,
-            No_Nota: noPenjualan,
+            // No_Penjualan: noPenjualan,
+            // No_Nota: noPenjualan,
             Kd_Barang: obj.id,
             Nama_Barang: obj.Nama_Barang,
             Harga: obj.harga,
@@ -141,7 +145,7 @@ class SalesScreen extends Component {
         }
 
         const params = {
-          No_Penjualan: noPenjualan,
+          // No_Penjualan: noPenjualan,
           Id_Sales: user.Id_Sales,
           Id_Member: null,
           User_Id: dataUserCustomer.User_Id ? dataUserCustomer.User_Id : null,
@@ -159,7 +163,10 @@ class SalesScreen extends Component {
         }
         Method.LoadingHelper.showLoading()
 
-        createOrderRequest(params)
+        createOrderRequest(params, (data) => {
+          const message = data && data.no_penjualan
+          this.setState({successModal: true, message})
+        })
       }
     }
   }
@@ -295,6 +302,84 @@ class SalesScreen extends Component {
     props.setFieldValue(name, value)
   }
 
+  successModal = () => {
+    const {successModal, message} = this.state
+    return (
+      <Modal isVisible={successModal}>
+        <View style={{
+          width: Scale(250),
+          alignSelf: 'center',
+          backgroundColor: Colors.white,
+          padding: Scale(10),
+          borderRadius: Scale(20)
+        }}>
+          <Text style={{
+            alignSelf: 'center',
+            fontFamily: Fonts.type.acuminProBold,
+            color: Colors.black,
+            fontSize: Scale(18),
+            marginTop: Scale(15)
+          }}>
+            SUCCESS!
+          </Text>
+
+          <View style={{
+            marginTop: Scale(10),
+            backgroundColor: '#4BB543',
+            width: Scale(40),
+            height: Scale(40),
+            borderRadius: Scale(40),
+            alignItems: 'center',
+            justifyContent: 'center',
+            alignSelf: 'center'
+          }}>
+            <Icons size={Scale(30)} color={'white'} name='done' />
+          </View>
+
+          <Text style={{
+            alignSelf: 'center',
+            fontFamily: Fonts.type.acuminProRegular,
+            textAlign: 'center',
+            color: Colors.black,
+            fontSize: Scale(14),
+            marginTop: Scale(15),
+            lineHeight: Scale(20)
+          }}>
+            Berhasil melakukan pengemasan barang dengan no penjualan (nota) :
+          </Text>
+          <Text style={{
+            alignSelf: 'center',
+            fontFamily: Fonts.type.acuminProBold,
+            textAlign: 'center',
+            color: Colors.black,
+            fontSize: Scale(16),
+            marginTop: Scale(15),
+            lineHeight: Scale(20)
+          }}>
+            {message}
+          </Text>
+
+          <TouchableOpacity onPress={() => {
+            this.setState({ successModal: false }, () => {
+              NavigationServices.navigate('HomeSales')
+            })
+          }}>
+            <Text style={{
+              alignSelf: 'center',
+              fontFamily: Fonts.type.acuminProRegular,
+              color: '#0099ff',
+              fontSize: Scale(18),
+              marginBottom: Scale(5),
+              marginTop: Scale(25)
+            }}>
+              Ok
+          </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    )
+  }
+
   renderForm = (props) => {
     const { barang, user, noPenjualan, cekUser, toko, kurirData, dataUserCustomer } = this.props
     const { fetching, error, payload } = cekUser
@@ -304,7 +389,7 @@ class SalesScreen extends Component {
           <KeyboardAwareScrollView extraScrollHeight={40}>
             <Styled.Container style={{ borderRadius: 10, marginHorizontal: 5, marginTop: 5 }}>
               <View style={{ paddingHorizontal: 15, paddingTop: 5 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={styles.labelStyle}>No. Nota </Text>
                     <Text style={styles.labelStyle2}>:</Text>
@@ -324,7 +409,7 @@ class SalesScreen extends Component {
                       styleInputText={styles.formPlacholderTextDisable}
                     />
                   </View>
-                </View>
+                </View> */}
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={styles.labelStyle}>No. Telepon </Text>
@@ -720,6 +805,7 @@ class SalesScreen extends Component {
             />
           </View>
         }
+        {this.successModal()}
       </View>
     )
   }
@@ -769,7 +855,7 @@ const mapDispatchToProps = (dispatch) => {
     getListTokoRequest: () => dispatch(OrderActions.getListTokoRequest()),
     getListUserRequest: () => dispatch(MasterDataActions.getListUserRequest()),
     getListKurirRequest: () => dispatch(MasterDataActions.getListKurirRequest()),
-    createOrderRequest: (param) => dispatch(OrderActions.createOrderRequest(param)),
+    createOrderRequest: (param, callback) => dispatch(OrderActions.createOrderRequest(param, callback)),
     getBarangRequest: (param) => dispatch(OrderActions.getBarangRequest(param)),
     deleteBarangRequest: (param) => dispatch(OrderActions.deleteBarangRequest(param)),
     resetBarangRequest: (param) => dispatch(OrderActions.resetBarang(param)),

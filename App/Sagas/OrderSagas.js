@@ -177,7 +177,7 @@ export function* getOrderListDiambil(api, action) {
 
 export function* createOrder(api, action) {
   try {
-    const { data } = action
+    const { data, callback } = action
     const { Id_Sales } = data
     const randomA = Math.floor(Math.random() * 100000) + 1
     const randomB = Math.floor(Math.random() * 100000) + 1
@@ -191,13 +191,16 @@ export function* createOrder(api, action) {
     if (response.ok) {
       yield all([
         put(SessionActions.saveNoPenjualan(noPenjualan)),
-        put(OrderActions.createOrderSuccess(response.data.data)),
+        put(OrderActions.createOrderSuccess(response.data)),
         put(OrderActions.getSalesListOrderRequest(param)),
         put(OrderActions.resetBarang())
       ])
       Method.LoadingHelper.hideLoading()
       DropDownHolder.alert('success', 'KEMAS BARANG BERHASIL', `list orderan yg telah di kemas pada screen LIST ORDER.`)
-      NavigationService.navigate('HomeSales')
+      if(callback && typeof callback === 'function'){
+        callback(response.data && response.data.data)
+      }
+      // NavigationService.navigate('HomeSales')
     } else {
       let message = 'Kemas penjualan gagal'
       if (response.data && response.data.message) {

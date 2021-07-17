@@ -28,6 +28,7 @@ const create = (baseURL = 'http://pantesgold.motekarindo.com/') => {
       DropDownHolder.alert(
         'error',
         'Token Exp',
+        response.data && response.data.message ||
         'Token auth expired, silahkan login kembali'
       );
       NavigationServices.navigate('Auth');

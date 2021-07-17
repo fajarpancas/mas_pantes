@@ -64,7 +64,7 @@ export function* login(api, action) {
       // DropDownHolder.alert('success', 'Login Berhasil', `hai ${data.Nama_User}, selamat datang di aplikasi pantes gold`)
 
     } else {
-      DropDownHolder.alert('error', 'Login Gagal', `maaf, nomor telepon dan kata sandi yang anda masukkan salah`)
+      DropDownHolder.alert('error', response.data && response.data.error || 'Login Gagal', `maaf, nomor telepon dan kata sandi yang anda masukkan salah`)
       yield put(AuthActions.loginFailure())
     }
   } catch (err) {

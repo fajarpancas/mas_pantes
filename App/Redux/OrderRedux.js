@@ -8,7 +8,7 @@ const { Types, Creators } = createActions({
   getBarangRequest: ['data'],
   getBarangSuccess: ['payload'],
   getBarangFailure: null,
-  createOrderRequest: ['data'],
+  createOrderRequest: ['data', 'callback'],
   createOrderSuccess: ['payload'],
   createOrderFailure: null,
   getOrderRequest: ['data'],
