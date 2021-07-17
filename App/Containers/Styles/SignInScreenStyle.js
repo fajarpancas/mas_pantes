@@ -67,6 +67,11 @@ export default StyleSheet.create({
     fontSize: Fonts.size.h9,
     color: '#222222',
   },
+  appVersion:{
+    fontFamily: Fonts.type.acuminProRegular,
+    fontSize: 12,
+    color: 'white',
+  },
   titleSignIn: {
     fontFamily: Fonts.type.acuminProSemiBold,
     fontSize: 15,

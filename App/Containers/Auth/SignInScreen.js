@@ -230,6 +230,9 @@ class SignInScreen extends Component {
             initialValues={initialValue}
           />
           {/* {this.renderForm()} */}
+          <View style={{ alignSelf: 'center', marginTop: 10 }}>
+            <Text style={styles.appVersion}>Aplikasi Versi (2.0)</Text>
+          </View>
         </View>
         {this.modalPickUser()}
       </View>
